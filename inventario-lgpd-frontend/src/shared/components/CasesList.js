@@ -1,7 +1,7 @@
 import React from "react";
 
 const CasesList = () => {
-  return <div>This is a list of cases!</div>;
+  return <div>a case list!</div>;
 };
 
 export default CasesList;
