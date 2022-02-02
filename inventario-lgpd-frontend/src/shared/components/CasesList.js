@@ -1,6 +1,6 @@
 import React from "react";
 
-const CasesList = () => {
+const CasesList = (props) => {
   return <div>a case list!</div>;
 };
 

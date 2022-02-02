@@ -1,6 +1,6 @@
 import React from "react";
 
-const CaseItem = () => {
+const CaseItem = (props) => {
   return <div>it's a case item</div>;
 };
 
