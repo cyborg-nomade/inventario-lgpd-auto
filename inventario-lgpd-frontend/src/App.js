@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-function App() {
+import NewCase from "./cases/pages/NewCase";
+import UserPage from "./users/pages/UserPage";
+import Login from "./users/pages/Login";
+import EditCase from "./cases/pages/EditCase";
+import CasesList from "./cases/pages/CasesList";
+import ApproveCaseList from "./cases/pages/ApproveCaseList";
+
+import "./App.css";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/:uid/cases" element={<UserPage />} />
+      <Route path="/cases/new" element={<NewCase />} />
+      <Route path="/cases/:cid" element={<EditCase />} />
+      <Route path="/cases/" element={<CasesList />} />
+      <Route path="/cases/approve" element={<ApproveCaseList />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
-}
+};
 
 export default App;
