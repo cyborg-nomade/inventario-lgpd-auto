@@ -4,5 +4,5 @@
 2- checkout develop (OK)
 3- checkout esqueleto-basico (OK)
 4- instalar router (OK)
-5- criar rotas (parcial)
-6- criar páginas
+5- criar rotas (OK)
+6- criar páginas (OK)
