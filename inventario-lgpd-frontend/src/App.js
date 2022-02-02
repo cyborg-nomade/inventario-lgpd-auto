@@ -1,12 +1,18 @@
-import "./App.css";
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import Button from "react-bootstrap/Button";
+import NewCase from "./cases/pages/NewCase";
+import Users from "./users/pages/Users";
+
+import "./App.css";
 
 const App = () => {
   return (
-    <div className="App">
-      <Button>Hi</Button>
-    </div>
+    <Routes>
+      <Route path="/" element={<Users />} />
+      <Route path="/cases/new" element={<NewCase />} />
+      <Route path="*" element={<Navigate to="/" />} />
+    </Routes>
   );
 };
 
