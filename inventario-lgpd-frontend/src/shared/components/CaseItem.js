@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 /**
  *
@@ -12,7 +13,9 @@ const CaseItem = (props) => {
 
   return (
     <tr>
-      <td>{props.item.nome}</td>
+      <td>
+        <Link to={`${props.item.id}`}>{props.item.nome}</Link>
+      </td>
       <td>{props.item.id}</td>
       <td>{props.item.area}</td>
       <td>{props.item.dataCriacao}</td>

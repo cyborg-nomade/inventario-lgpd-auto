@@ -9,14 +9,17 @@ import ApproveCaseList from "./cases/pages/ApproveCaseList";
 import AllCasesList from "./cases/pages/AllCasesList";
 
 import "./App.css";
+import UserCasesList from "./users/pages/UserCasesList";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/:uid/cases" element={<UserPage />} />
-      <Route path="/:uid/*" element={<Navigate to="/:uid/cases" />} />
+      <Route path="/:uid/cases" element={<UserPage />}>
+        <Route index element={<UserCasesList />} />
+        <Route path=":cid" element={<EditCase />} />
+      </Route>
       <Route path="/cases/new" element={<NewCase />} />
       <Route path="/cases/:cid" element={<EditCase />} />
       <Route path="/cases/" element={<AllCasesList />} />
