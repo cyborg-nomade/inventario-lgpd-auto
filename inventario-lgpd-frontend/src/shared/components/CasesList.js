@@ -26,7 +26,7 @@ const CasesList = (props) => {
   }
 
   return (
-    <Table striped bordered hover>
+    <Table striped bordered hover variant="dark">
       <thead>
         <tr>
           <th>Nome</th>
@@ -51,7 +51,7 @@ const CasesList = (props) => {
 CasesList.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string,
+      nome: PropTypes.string,
       id: PropTypes.number,
       area: PropTypes.string,
       dataCriacao: PropTypes.string,
