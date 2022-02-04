@@ -4,31 +4,38 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
+import { NavLink, Link } from "react-router-dom";
+
 const MainHeader = () => {
   return (
-    <Navbar bg="light" expand="lg">
-      <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+    <header>
+      <Navbar bg="dark" expand={"md"} collapseOnSelect>
+        <Container fluid>
+          <Navbar.Brand as={Link} to="/">
+            Inventário LGPD
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="justify-content-end flex-grow-1 pe-3">
+              <Nav.Link eventKey={1} as={NavLink} to="/">
+                Página Inicial
+              </Nav.Link>
+              <Nav.Link eventKey={2} as={NavLink} to="/cases/new">
+                Novo
+              </Nav.Link>
+              <Nav.Link eventKey={3} as={NavLink} to="/logout">
+                Sair
+              </Nav.Link>
+              <NavDropdown title="Ações do Comitê" id="offcanvasNavbarDropdown">
+                <NavDropdown.Item eventKey={4} as={NavLink} to="/cases/approve">
+                  Aprovações Pendentes
+                </NavDropdown.Item>
+              </NavDropdown>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </header>
   );
 };
 
