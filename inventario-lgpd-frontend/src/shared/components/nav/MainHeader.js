@@ -9,7 +9,7 @@ import NavLinks from "./NavLinks";
 const MainHeader = () => {
   return (
     <header>
-      <Navbar bg="dark" expand={"md"} collapseOnSelect>
+      <Navbar bg="light" expand={"md"} collapseOnSelect>
         <Container fluid>
           <Navbar.Brand as={Link} to="/">
             Inventário LGPD
@@ -18,7 +18,7 @@ const MainHeader = () => {
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav
               className="justify-content-end flex-grow-1 pe-3"
-              variant="pills"
+              variant="tabs"
             >
               <NavLinks />
             </Nav>
