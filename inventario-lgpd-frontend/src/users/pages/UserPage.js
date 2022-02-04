@@ -1,7 +1,12 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 
 const UserPage = () => {
-  return <div>User has a page!</div>;
+  return (
+    <React.Fragment>
+      <Outlet />
+    </React.Fragment>
+  );
 };
 
 export default UserPage;
