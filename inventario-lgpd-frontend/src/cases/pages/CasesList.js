@@ -59,6 +59,7 @@ CasesList.propTypes = {
       finalidade: PropTypes.string,
       hipoteseTratamento: PropTypes.string,
       dadosPessoaisSensiveis: PropTypes.bool,
+      criador: PropTypes.string,
     })
   ),
 };

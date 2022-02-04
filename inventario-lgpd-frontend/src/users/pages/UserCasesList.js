@@ -1,5 +1,6 @@
 import React from "react";
-import CasesList from "./../../shared/components/CasesList";
+import CasesList from "../../cases/pages/CasesList";
+import { useParams } from "react-router-dom";
 
 const UserCasesList = () => {
   const CASES = [
@@ -14,6 +15,7 @@ const UserCasesList = () => {
       hipoteseTratamento:
         "Cumprimento de obrigação legal ou regulatória pelo controlador.",
       dadosPessoaisSensiveis: true,
+      criador: "1",
     },
     {
       nome: "CREDENCIAMENTO DO TRABALHADOR DESEMPREGADO",
@@ -25,6 +27,7 @@ const UserCasesList = () => {
       hipoteseTratamento:
         "Cumprimento de obrigação legal ou regulatória pelo controlador.",
       dadosPessoaisSensiveis: false,
+      criador: "1",
     },
     {
       nome: "ACHADOS E PERDIDOS",
@@ -37,10 +40,14 @@ const UserCasesList = () => {
       hipoteseTratamento:
         "Cumprimento de obrigação legal ou regulatória pelo controlador.",
       dadosPessoaisSensiveis: false,
+      criador: "2",
     },
   ];
 
-  return <CasesList items={CASES} />;
+  const uid = useParams().uid;
+  const filteredCases = CASES.filter((item) => item.criador === uid);
+
+  return <CasesList items={filteredCases} />;
 };
 
 export default UserCasesList;

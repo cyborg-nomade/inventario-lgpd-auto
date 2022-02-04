@@ -9,4 +9,5 @@
  * @property {string} finalidade - Finalidade do tratamento dos dados pessoais.
  * @property {string} hipoteseTratamento - Hipóteses de Tratamento.
  * @property {boolean} dadosPessoaisSensiveis - Trata Dados Pessoais Sensíveis?.
+ * @property {string} criador - ID do usuário criador do item.
  */

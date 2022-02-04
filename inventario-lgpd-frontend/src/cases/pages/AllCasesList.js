@@ -1,5 +1,5 @@
 import React from "react";
-import CasesList from "../../shared/components/CasesList";
+import CasesList from "./CasesList";
 
 const AllCasesList = () => {
   const CASES = [];
