@@ -10,6 +10,6 @@
 8- adicionar component de item de casos (OK)
 9- estilização (OK)
 10- links de navegação da lista para os items (OK)
-11- adicionar barra de navegação
-12- tornar barra de navegação responsiva (side-drawer)
-13- inserir links apropriados na barra de navegação
+11- adicionar barra de navegação (OK)
+12- tornar barra de navegação responsiva (side-drawer) (OK)
+13- inserir links apropriados na barra de navegação (OK)
