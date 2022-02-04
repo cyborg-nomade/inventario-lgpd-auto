@@ -26,7 +26,7 @@ const CasesList = (props) => {
   }
 
   return (
-    <Table striped bordered hover variant="dark">
+    <Table striped bordered hover variant="light" responsive>
       <thead>
         <tr>
           <th>Nome</th>

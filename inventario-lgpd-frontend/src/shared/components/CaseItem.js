@@ -9,8 +9,6 @@ import { Link } from "react-router-dom";
  *
  */
 const CaseItem = (props) => {
-  console.log(props.item);
-
   return (
     <tr>
       <td>

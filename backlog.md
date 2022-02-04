@@ -1,4 +1,4 @@
-# lista-casos
+# navegação
 
 1- criar app de frontend (OK)
 2- checkout develop (OK)
@@ -10,3 +10,6 @@
 8- adicionar component de item de casos (OK)
 9- estilização (OK)
 10- links de navegação da lista para os items (OK)
+11- adicionar barra de navegação (OK)
+12- tornar barra de navegação responsiva (side-drawer) (OK)
+13- inserir links apropriados na barra de navegação (OK)
