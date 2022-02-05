@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 /**
  *
- *
  * @param {{item:CaseItemObject}} props
  *
  */

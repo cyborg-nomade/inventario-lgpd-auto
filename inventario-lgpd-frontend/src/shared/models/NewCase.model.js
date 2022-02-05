@@ -19,6 +19,16 @@
  */
 
 /**
+ * Objeto com as fases do ciclo de vida do tratamento de dados pessoais em que o operador do processo atua.
+ * @typedef {Object} FinalidadeTratamento
+ * @property {string} hipoteseTratamento - As hipóteses de tratamento estão descritas nos arts. 7º e 11 da LGPD.
+ * @property {string} descricaoFinalidade - Razão ou motivo pela qual se deseja tratar os dados pessoais.
+ * @property {string} previsaoLegal - Informar Lei, Decreto, normativo ou regulamento que respalda a finalidade do tratamento de dados pessoais realizado.
+ * @property {string} resultadosTitular - Resultados pretendidos para o titular de dados.
+ * @property {string} beneficiosEsperados - Benefícios esperados para o órgão, entidade ou para a sociedade como um todo.
+ */
+
+/**
  * Objeto completo de casos de uso de dados pessoais, para registro, edição e aprovação.
  * @typedef {Object} NewCaseItemObject
  * @property {string} nome - Nome do serviço/processo de negócio.
@@ -33,4 +43,7 @@
  * @property {AgenteTratamento} operador - Pessoa natural ou jurídica, de direito público ou privado, que realiza o tratamento de dados pessoais em nome do controlador
  * @property {FasesCicloTratamento} fasesCicloTratamento - Em qual fase  do ciclo de vida o  Operador atua
  * @property {string} descricaoFluxoTratamento - De que forma (como) os dados  pessoais são coletados, retidos/armazenados, processados/usados, compartilhados e eliminados.
+ * @property {string} abrangenciaGeografica - Abrangência da área geográfica do tratamento. Informar se a abrangência do dados tratados é nacional, estadual, distrital, municipal ou regional..
+ * @property {string} fonteDados - Fonte de dados utilizada para obtenção dos dados pessoais.
+ * @property {FinalidadeTratamento} finalidadeTratamento - Finalidade do Tratamento de Dados Pessoais.
  */
