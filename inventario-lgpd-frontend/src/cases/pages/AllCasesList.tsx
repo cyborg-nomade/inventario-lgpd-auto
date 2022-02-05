@@ -1,8 +1,8 @@
-import React from "react";
 import CasesList from "./CasesList";
+import { CaseItemObject } from './../../shared/models/CaseListItem.model';
 
 const AllCasesList = () => {
-  const CASES = [];
+  const CASES: CaseItemObject[] = [];
 
   return <CasesList items={CASES} />;
 };
