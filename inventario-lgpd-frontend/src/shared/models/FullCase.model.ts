@@ -1,8 +1,8 @@
 interface AgenteTratamento {
   nome: string;
-  area: string;
-  telefone: string;
-  email: string;
+  area?: string;
+  telefone?: string;
+  email?: string;
 }
 
 enum verbosTratamento {
