@@ -5,27 +5,27 @@ interface AgenteTratamento {
   email?: string;
 }
 
-enum verbosTratamento {
-  coleta,
-  producao,
-  recepcao,
-  classificacao,
-  utilizacao,
-  acesso,
-  reproducao,
-  transmissao,
-  distribuicao,
-  processamento,
-  arquivamento,
-  armazenamento,
-  eliminacao,
-  avaliacao,
-  controle,
-  modificacao,
-  comunicacao,
-  transferencia,
-  difusao,
-  extracao,
+export enum verbosTratamento {
+  coleta = "coleta",
+  producao = "producao",
+  recepcao = "recepcao",
+  classificacao = "classificacao",
+  utilizacao = "utilizacao",
+  acesso = "acesso",
+  reproducao = "reproducao",
+  transmissao = "transmissao",
+  distribuicao = "distribuicao",
+  processamento = "processamento",
+  arquivamento = "arquivamento",
+  armazenamento = "armazenamento",
+  eliminacao = "eliminacao",
+  avaliacao = "avaliacao",
+  controle = "controle",
+  modificacao = "modificacao",
+  comunicacao = "comunicacao",
+  transferencia = "transferencia",
+  difusao = "difusao",
+  extracao = "extracao",
 }
 
 interface itemCategoriaDadosPessoais {
@@ -81,9 +81,10 @@ interface itemObservacoesProcesso {
 export interface FullCaseObject {
   nome: string;
   id: number;
-  dataCriacao: Date;
-  dataAtualizacao: Date;
+  aprovado: boolean;
   criador: number;
+  dataCriacao: string;
+  dataAtualizacao: string;
   controlador: AgenteTratamento;
   encarregado: AgenteTratamento;
   extensaoEncarregado: AgenteTratamento;
@@ -95,7 +96,7 @@ export interface FullCaseObject {
     processamento: boolean;
     compartilhamento: boolean;
     eliminacao: boolean;
-    verbos: verbosTratamento;
+    verbos: verbosTratamento[];
   };
   descricaoFluxoTratamento: string;
   abrangenciaGeografica: string;
@@ -190,7 +191,7 @@ export interface FullCaseObject {
       voz?: itemCategoriaDadosPessoais;
     };
     outros: {
-      outros?: itemCategoriaDadosPessoais;
+      outros?: itemCategoriaDadosPessoais[];
     };
   };
   categoriaDadosPessoaisSensiveis: {
@@ -219,3 +220,160 @@ export interface FullCaseObject {
   riscosPrivacidade: itemRiscoPrivacidade[];
   observacoesProcesso: itemObservacoesProcesso[];
 }
+
+const emptyAgenteTratamento = (): AgenteTratamento => ({
+  nome: "",
+  area: "",
+  telefone: "",
+  email: "",
+});
+
+const emptyItemCategoriaDadosPessoais = (): itemCategoriaDadosPessoais => ({
+  descricao: "",
+  tempoRetencao: "",
+  fonteRetencao: "",
+  caminhoRedeSistema: "",
+});
+
+export const emptyFullCaseObject = (): FullCaseObject => ({
+  nome: "",
+  id: 0,
+  aprovado: false,
+  criador: 0,
+  dataCriacao: new Date().toDateString(),
+  dataAtualizacao: new Date().toDateString(),
+  controlador: emptyAgenteTratamento(),
+  encarregado: emptyAgenteTratamento(),
+  extensaoEncarregado: emptyAgenteTratamento(),
+  areaTratamentoDados: emptyAgenteTratamento(),
+  operador: emptyAgenteTratamento(),
+  fasesCicloTratamento: {
+    coleta: false,
+    retencao: false,
+    processamento: false,
+    compartilhamento: false,
+    eliminacao: false,
+    verbos: [],
+  },
+  descricaoFluxoTratamento: "",
+  abrangenciaGeografica: "",
+  fonteDados: "",
+  finalidadeTratamento: {
+    hipoteseTratamento: "",
+    descricaoFinalidade: "",
+    previsaoLegal: "",
+    resultadosTitular: "",
+    beneficiosEsperados: "",
+  },
+  categoriaDadosPessoais: {
+    identificacao: {
+      idPessoal: emptyItemCategoriaDadosPessoais(),
+      idGov: emptyItemCategoriaDadosPessoais(),
+      idEletronica: emptyItemCategoriaDadosPessoais(),
+      locEletronica: emptyItemCategoriaDadosPessoais(),
+    },
+    financeiros: {
+      idFin: emptyItemCategoriaDadosPessoais(),
+      recursosFin: emptyItemCategoriaDadosPessoais(),
+      dividasDespesas: emptyItemCategoriaDadosPessoais(),
+      solvencia: emptyItemCategoriaDadosPessoais(),
+      emprestimosHipotecaCredito: emptyItemCategoriaDadosPessoais(),
+      assistenciaFin: emptyItemCategoriaDadosPessoais(),
+      apoliceSeguro: emptyItemCategoriaDadosPessoais(),
+      planoPensao: emptyItemCategoriaDadosPessoais(),
+      transacaoFin: emptyItemCategoriaDadosPessoais(),
+      compensacao: emptyItemCategoriaDadosPessoais(),
+      atividadeProfissional: emptyItemCategoriaDadosPessoais(),
+      acordosAjustes: emptyItemCategoriaDadosPessoais(),
+      autorizacoesConsentimentos: emptyItemCategoriaDadosPessoais(),
+    },
+    caracteristicas: {
+      detalhesPessoais: emptyItemCategoriaDadosPessoais(),
+      detalhesMilitares: emptyItemCategoriaDadosPessoais(),
+      situacaoImigracao: emptyItemCategoriaDadosPessoais(),
+      descricaoFisica: emptyItemCategoriaDadosPessoais(),
+    },
+    habitos: {
+      habitos: emptyItemCategoriaDadosPessoais(),
+      estiloVida: emptyItemCategoriaDadosPessoais(),
+      viagensDeslocamento: emptyItemCategoriaDadosPessoais(),
+      contatosSociais: emptyItemCategoriaDadosPessoais(),
+      posses: emptyItemCategoriaDadosPessoais(),
+      denunciasIncidentesAcidentes: emptyItemCategoriaDadosPessoais(),
+      distincoes: emptyItemCategoriaDadosPessoais(),
+      usoMidia: emptyItemCategoriaDadosPessoais(),
+    },
+    caracteristicasPsicologicas: {
+      descricaoPsi: emptyItemCategoriaDadosPessoais(),
+    },
+    composicaoFamiliar: {
+      casamentoCoabitacao: emptyItemCategoriaDadosPessoais(),
+      historicoConjugal: emptyItemCategoriaDadosPessoais(),
+      membrosFamilia: emptyItemCategoriaDadosPessoais(),
+    },
+    interessesLazer: {
+      atividadesInteressesLaz: emptyItemCategoriaDadosPessoais(),
+    },
+    associacoes: {
+      outrasAssociacoesNaoSensiveis: emptyItemCategoriaDadosPessoais(),
+    },
+    processoJudAdmCrim: {
+      suspeitas: emptyItemCategoriaDadosPessoais(),
+      condenacoesSentencas: emptyItemCategoriaDadosPessoais(),
+      acoesJud: emptyItemCategoriaDadosPessoais(),
+      penalidadesAdm: emptyItemCategoriaDadosPessoais(),
+    },
+    habitosConsumo: {
+      dadosBensServicos: emptyItemCategoriaDadosPessoais(),
+    },
+    residenciais: {
+      dadosResidencia: emptyItemCategoriaDadosPessoais(),
+    },
+    educacaoTreinamento: {
+      academicosEscolares: emptyItemCategoriaDadosPessoais(),
+      registroFinanceiro: emptyItemCategoriaDadosPessoais(),
+      qualificacaoExperienciaProf: emptyItemCategoriaDadosPessoais(),
+    },
+    profissaoEmprego: {
+      empregoAtual: emptyItemCategoriaDadosPessoais(),
+      recrutamento: emptyItemCategoriaDadosPessoais(),
+      rescisao: emptyItemCategoriaDadosPessoais(),
+      carreira: emptyItemCategoriaDadosPessoais(),
+      absenteismoDisciplina: emptyItemCategoriaDadosPessoais(),
+      avaliacaoDesempenho: emptyItemCategoriaDadosPessoais(),
+    },
+    regVideoImgVoz: {
+      videoImagem: emptyItemCategoriaDadosPessoais(),
+      imagemVigilancia: emptyItemCategoriaDadosPessoais(),
+      voz: emptyItemCategoriaDadosPessoais(),
+    },
+    outros: {
+      outros: [],
+    },
+  },
+  categoriaDadosPessoaisSensiveis: {
+    origemRacialEtnica: emptyItemCategoriaDadosPessoais(),
+    conviccaoReligiosa: emptyItemCategoriaDadosPessoais(),
+    opiniaoPolitica: emptyItemCategoriaDadosPessoais(),
+    filiacaoSindicato: emptyItemCategoriaDadosPessoais(),
+    filiacaoOrganizacaoReligiosa: emptyItemCategoriaDadosPessoais(),
+    filiacaoCrencaFilosofica: emptyItemCategoriaDadosPessoais(),
+    filiacaoPreferenciaPolitica: emptyItemCategoriaDadosPessoais(),
+    saudeVidaSexual: emptyItemCategoriaDadosPessoais(),
+    geneticos: emptyItemCategoriaDadosPessoais(),
+    biometricos: emptyItemCategoriaDadosPessoais(),
+  },
+  frequenciaTratamento: "",
+  quantidadeDadosTratados: "",
+  categoriasTitulares: {
+    categorias: [],
+    criancasAdolescentes: [],
+    outrosGruposVulneraveis: [],
+  },
+  compartilhamentoDadosPessoais: [],
+  medidasSegurancaPrivacidade: [],
+  transferenciaInternacional: [],
+  contratoServicosTITratamentoDados: [],
+  riscosPrivacidade: [],
+  observacoesProcesso: [],
+});
