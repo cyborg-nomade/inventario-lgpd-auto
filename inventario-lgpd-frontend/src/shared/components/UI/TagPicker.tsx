@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { WithContext as ReactTags } from "react-tag-input";
 import { verbosTratamento } from "../../models/FullCase.model";
 
+import classes from "./TagPicker.module.css";
+
 const suggestions = Object.values(verbosTratamento).map((verbo) => {
   return { id: verbo, text: verbo };
 });
@@ -13,15 +15,20 @@ const KeyCodes = {
 
 const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
-const TagPicker = (props: { name: string }) => {
+const TagPicker = (props: {
+  name: string;
+  onChange: (tags: { id: string; text: string }[]) => void;
+}) => {
   const [tags, setTags] = useState<{ id: string; text: string }[]>([]);
 
   const handleDelete = (i: number) => {
     setTags(tags.filter((tag, index) => index !== i));
+    props.onChange(tags);
   };
 
   const handleAddition = (tag: { id: string; text: string }) => {
     setTags([...tags, tag]);
+    props.onChange(tags);
   };
 
   const handleDrag = (
@@ -57,10 +64,10 @@ const TagPicker = (props: { name: string }) => {
         autocomplete
         inputFieldPosition="top"
         classNames={{
-          tagInputField: "form-control",
+          tagInputField: "form-control " + classes["tag-picker-input"],
           tag: "btn btn-primary",
           remove: "btn btn-primary",
-          suggestions: "list-group list-group-flush text-light bg-dark",
+          suggestions: classes["tag-picker-suggestion"],
           activeSuggestion: "list-group-item active",
         }}
       />

@@ -65,6 +65,7 @@ const schema = yup.object().shape({
       .array()
       .of(yup.mixed<verbosTratamento>().oneOf(Object.values(verbosTratamento))),
   }),
+  descricaoFluxoTratamento: yup.string().required(),
 });
 
 const CaseForm = (props: {
@@ -160,7 +161,7 @@ const CaseForm = (props: {
                       Informar data de criação do inventário de dados pessoais.
                     </Form.Text>
                     <Form.Control.Feedback type="invalid">
-                      Esse campo é obrigatório
+                      Informe uma data válida
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Row>
@@ -182,7 +183,7 @@ const CaseForm = (props: {
                       Informar data da última atualização do inventário.
                     </Form.Text>
                     <Form.Control.Feedback type="invalid">
-                      Esse campo é obrigatório
+                      Informe uma data válida
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Row>
@@ -203,7 +204,7 @@ const CaseForm = (props: {
                 <Row className="mb-3">
                   <Col>
                     <OverlayTrigger
-                      placement="left"
+                      placement="right"
                       overlay={
                         <Tooltip className="text-muted">
                           Pessoa natural ou jurídica, de direito público ou
@@ -245,7 +246,7 @@ const CaseForm = (props: {
                 <Row className="mb-3">
                   <Col>
                     <OverlayTrigger
-                      placement="left"
+                      placement="right"
                       overlay={
                         <Tooltip className="text-muted">
                           Pessoa indicada pelo controlador e operador para atuar
@@ -287,7 +288,7 @@ const CaseForm = (props: {
                 <Row className="mb-3">
                   <Col>
                     <OverlayTrigger
-                      placement="left"
+                      placement="right"
                       overlay={
                         <Tooltip className="text-muted">
                           Pessoa indicada pelo controlador e operador para atuar
@@ -372,7 +373,7 @@ const CaseForm = (props: {
                 <Row className="mb-3">
                   <Col>
                     <OverlayTrigger
-                      placement="left"
+                      placement="right"
                       overlay={
                         <Tooltip className="text-muted">
                           Pessoa indicada pelo controlador e operador para atuar
@@ -457,7 +458,7 @@ const CaseForm = (props: {
                 <Row className="mb-3">
                   <Col>
                     <OverlayTrigger
-                      placement="left"
+                      placement="right"
                       overlay={
                         <Tooltip className="text-muted">
                           Pessoa natural ou jurídica, de direito público ou
@@ -511,7 +512,7 @@ const CaseForm = (props: {
                 <Row className="mb-3">
                   <Col>
                     <OverlayTrigger
-                      placement="left"
+                      placement="right"
                       overlay={
                         <Tooltip className="text-muted">
                           Informações sobre o ciclo de vida do tratamento de
@@ -521,7 +522,9 @@ const CaseForm = (props: {
                         </Tooltip>
                       }
                     >
-                      <Form.Label>Controlador</Form.Label>
+                      <Form.Label>
+                        Em qual fase do ciclo de vida o Operador atua?
+                      </Form.Label>
                     </OverlayTrigger>
                   </Col>
                   <Col>
@@ -579,13 +582,82 @@ const CaseForm = (props: {
                   <Col>
                     <Form.Label>Verbos de Tratamento</Form.Label>
                   </Col>
-                  <Col>
-                    <TagPicker name="fasesCicloTratamento.verbos" />
+                  <Col lg={10}>
+                    <TagPicker
+                      name="fasesCicloTratamento.verbos"
+                      onChange={(tags) =>
+                        setFieldValue("fasesCicloTratamento.verbos", tags)
+                      }
+                    />
                   </Col>
-                  <Col></Col>
-                  <Col></Col>
-                  <Col></Col>
-                  <Col></Col>
+                </Row>
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="3">
+              <Accordion.Header>
+                Fluxo de Tratamento de Dados Pessoais
+              </Accordion.Header>
+              <Accordion.Body>
+                <Row className="mb-3">
+                  <OverlayTrigger
+                    placement="right"
+                    overlay={
+                      <Tooltip className="text-muted">
+                        Descrever como (de que forma) os dados pessoais são
+                        coletados, retidos/armazenados, processados/ usados e
+                        eliminados. Nessa seção, pode até ser colocado um
+                        desenho com um fluxo de dados. Abaixo, segue exemplo de
+                        descrição do fluxo de dados.
+                      </Tooltip>
+                    }
+                  >
+                    <Form.Label as={Col}>Descrição do Fluxo</Form.Label>
+                  </OverlayTrigger>
+                  <Col lg={10}>
+                    <Form.Control
+                      as="textarea"
+                      rows={3}
+                      type="text"
+                      name="descricaoFluxoTratamento"
+                      value={values.descricaoFluxoTratamento}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      isValid={
+                        touched.descricaoFluxoTratamento &&
+                        !errors.descricaoFluxoTratamento
+                      }
+                      isInvalid={!!errors.descricaoFluxoTratamento}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Esse campo é obrigatório
+                    </Form.Control.Feedback>
+                  </Col>
+                </Row>
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="4">
+              <Accordion.Header>
+                Escopo e Natureza dos Dados Pessoais
+              </Accordion.Header>
+              <Accordion.Body>
+                <Row className="mb-3">
+                  <Form.Label as={Col}>
+                    Abrangência da área geográfica do tratamento
+                  </Form.Label>
+                  <Col lg={10}>
+                    <Form.Control
+                      type="text"
+                      name="abrangenciaGeografica"
+                      value={values.abrangenciaGeografica}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      isValid={
+                        touched.abrangenciaGeografica &&
+                        !errors.abrangenciaGeografica
+                      }
+                      isInvalid={!!errors.abrangenciaGeografica}
+                    />
+                  </Col>
                 </Row>
               </Accordion.Body>
             </Accordion.Item>
