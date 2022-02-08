@@ -28,10 +28,31 @@ export enum verbosTratamento {
   extracao = "extracao",
 }
 
+export enum hipotesesTratamento {
+  consentimento = "Consentimento do titular",
+  obrigacaoLegal = "Cumprimento de obrigação legal ou regulatória pelo controlador",
+  politicasPublicas = "Execução de políticas públicas",
+  estudoPesquisa = "Alguma espécie de estudo realizado por órgão de pesquisa",
+  execucaoContratoTitular = "Execução de contrato ou de procedimentos preliminares relacionados a contrato do qual seja parte o titular, a pedido do titular dos dados",
+  exercicioDireitos = "Exercício regular de direitos em processo judicial, administrativo ou arbitral",
+  protecaoVidaTitular = "Proteção da vida ou da incolumidade física do titular ou de terceiro",
+  tutelaSaude = "Tutela da saúde",
+  interessesLegitimosControlador = "Atender aos interesses legítimos do controlador ou de terceiro",
+  protecaoCredito = "Proteção do crédito",
+  prevencaoFraude = "Garantia da prevenção à fraude e à segurança do titular",
+}
+
+export enum fontesRetencao {
+  na = "Não se aplica",
+  docPapel = "Documento em Papel",
+  midiaEletronica = "Mídias Eletrônicas",
+  docPapelMidiasEletronica = "Documento em Papel e Mídias Eletrônicas",
+}
+
 interface itemCategoriaDadosPessoais {
   descricao: string;
   tempoRetencao: string;
-  fonteRetencao: string;
+  fonteRetencao: fontesRetencao;
   caminhoRedeSistema: string;
 }
 
@@ -102,7 +123,7 @@ export interface FullCaseObject {
   abrangenciaGeografica: string;
   fonteDados: string;
   finalidadeTratamento: {
-    hipoteseTratamento: string;
+    hipoteseTratamento: hipotesesTratamento;
     descricaoFinalidade: string;
     previsaoLegal: string;
     resultadosTitular: string;
@@ -115,7 +136,7 @@ export interface FullCaseObject {
       idEletronica?: itemCategoriaDadosPessoais;
       locEletronica?: itemCategoriaDadosPessoais;
     };
-    financeiros?: {
+    financeiros: {
       idFin?: itemCategoriaDadosPessoais;
       recursosFin?: itemCategoriaDadosPessoais;
       dividasDespesas?: itemCategoriaDadosPessoais;
@@ -229,9 +250,9 @@ const emptyAgenteTratamento = (): AgenteTratamento => ({
 });
 
 const emptyItemCategoriaDadosPessoais = (): itemCategoriaDadosPessoais => ({
-  descricao: "",
+  descricao: "Não se aplica",
   tempoRetencao: "",
-  fonteRetencao: "",
+  fonteRetencao: fontesRetencao.na,
   caminhoRedeSistema: "",
 });
 
@@ -259,7 +280,7 @@ export const emptyFullCaseObject = (): FullCaseObject => ({
   abrangenciaGeografica: "",
   fonteDados: "",
   finalidadeTratamento: {
-    hipoteseTratamento: "",
+    hipoteseTratamento: hipotesesTratamento.consentimento,
     descricaoFinalidade: "",
     previsaoLegal: "",
     resultadosTitular: "",

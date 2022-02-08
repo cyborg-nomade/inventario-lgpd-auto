@@ -18,17 +18,25 @@ const delimiters = [KeyCodes.comma, KeyCodes.enter];
 const TagPicker = (props: {
   name: string;
   onChange: (tags: { id: string; text: string }[]) => void;
+  value: verbosTratamento[];
+  disabled: boolean;
 }) => {
-  const [tags, setTags] = useState<{ id: string; text: string }[]>([]);
+  const [tags, setTags] = useState<{ id: string; text: string }[]>(
+    props.value.map((verbo) => ({ id: verbo, text: verbo }))
+  );
+
+  const handleInputChange = () => {
+    console.log(tags);
+
+    props.onChange(tags);
+  };
 
   const handleDelete = (i: number) => {
     setTags(tags.filter((tag, index) => index !== i));
-    props.onChange(tags);
   };
 
   const handleAddition = (tag: { id: string; text: string }) => {
     setTags([...tags, tag]);
-    props.onChange(tags);
   };
 
   const handleDrag = (
@@ -52,6 +60,7 @@ const TagPicker = (props: {
   return (
     <div>
       <ReactTags
+        readOnly={props.disabled}
         tags={tags}
         suggestions={suggestions}
         delimiters={delimiters}
@@ -59,6 +68,9 @@ const TagPicker = (props: {
         handleAddition={handleAddition}
         handleDrag={handleDrag}
         handleTagClick={handleTagClick}
+        handleInputChange={handleInputChange}
+        handleInputBlur={handleInputChange}
+        handleInputFocus={handleInputChange}
         placeholder="Escolha os verbos de tratamento adequados"
         name={props.name}
         autocomplete
