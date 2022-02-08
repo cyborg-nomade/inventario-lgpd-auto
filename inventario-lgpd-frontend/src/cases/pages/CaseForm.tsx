@@ -208,6 +208,64 @@ const schema = yup.object().shape({
         caminhoRedeSistema: yup.string().optional(),
       }),
     }),
+    habitos: yup.object().shape({
+      habitos: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      estiloVida: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      viagensDeslocamento: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      contatosSociais: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      posses: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      denunciasIncidentesAcidentes: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      distincoes: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      usoMidia: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+    }),
+    caracteristicasPsicologicas: yup.object().shape({
+      descricaoPsi: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+    }),
   }),
 });
 
@@ -1086,7 +1144,7 @@ const CaseForm = (props: {
             <Accordion.Item eventKey="6">
               <Accordion.Header>Categoria de Dados Pessoais</Accordion.Header>
               <Accordion.Body>
-                <Accordion defaultActiveKey="60" alwaysOpen>
+                <Accordion alwaysOpen>
                   <Accordion.Item eventKey="60">
                     <Accordion.Header>
                       Dados de Identificação Pessoal
@@ -6066,6 +6124,384 @@ const CaseForm = (props: {
                               !!getIn(
                                 errors,
                                 "categoriaDadosPessoais.habitos.usoMidia.caminhoRedeSistema"
+                              )
+                            }
+                          />
+                        </Col>
+                      </Row>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="64">
+                    <Accordion.Header>
+                      Características Psicológicas
+                    </Accordion.Header>
+                    <Accordion.Body>
+                      <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                        <Form.Label as={Col}></Form.Label>
+                        <Form.Label as={Col}>Descrição</Form.Label>
+                        <Form.Label as={Col}>
+                          Tempo Retenção dos Dados
+                        </Form.Label>
+                        <Form.Label as={Col}>Fonte Retenção</Form.Label>
+                        <Form.Label as={Col}>
+                          Caminho Rede e/ou Sistema CPTM
+                        </Form.Label>
+                      </Row>
+                      <Row className="mb-3 pt-2 pb-2">
+                        <OverlayTrigger
+                          placement="right"
+                          overlay={
+                            <Tooltip className="text-muted">
+                              Descrever se são tratados dados sobre
+                              personalidade ou caráter.
+                            </Tooltip>
+                          }
+                        >
+                          <Form.Label as={Col}>
+                            Descrição Psicológica
+                          </Form.Label>
+                        </OverlayTrigger>
+                        <Col>
+                          <Form.Control
+                            disabled={props.edit || props.approve || !isEditing}
+                            type="text"
+                            name="categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.descricao"
+                            value={
+                              values.categoriaDadosPessoais
+                                .caracteristicasPsicologicas.descricaoPsi
+                                ?.descricao
+                            }
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isValid={
+                              getIn(
+                                touched,
+                                "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.descricao"
+                              ) &&
+                              !getIn(
+                                errors,
+                                "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.descricao"
+                              )
+                            }
+                            isInvalid={
+                              !!getIn(
+                                errors,
+                                "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.descricao"
+                              )
+                            }
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            Esse campo é obrigatório
+                          </Form.Control.Feedback>
+                        </Col>
+                        <Col>
+                          <Form.Control
+                            disabled={
+                              props.edit ||
+                              props.approve ||
+                              !isEditing ||
+                              !(
+                                getIn(
+                                  values,
+                                  "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.descricao"
+                                ) !== "Não se aplica"
+                              )
+                            }
+                            type="text"
+                            name="categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.tempoRetencao"
+                            value={
+                              values.categoriaDadosPessoais
+                                .caracteristicasPsicologicas.descricaoPsi
+                                ?.tempoRetencao
+                            }
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isValid={
+                              getIn(
+                                touched,
+                                "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.tempoRetencao"
+                              ) &&
+                              !getIn(
+                                errors,
+                                "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.tempoRetencao"
+                              )
+                            }
+                            isInvalid={
+                              !!getIn(
+                                errors,
+                                "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.tempoRetencao"
+                              )
+                            }
+                          />
+                        </Col>
+                        <Col>
+                          <Form.Select
+                            disabled={
+                              props.edit ||
+                              props.approve ||
+                              !isEditing ||
+                              !(
+                                getIn(
+                                  values,
+                                  "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.descricao"
+                                ) !== "Não se aplica"
+                              )
+                            }
+                            name="categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.fonteRetencao"
+                            value={
+                              values.categoriaDadosPessoais
+                                .caracteristicasPsicologicas.descricaoPsi
+                                ?.fonteRetencao
+                            }
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isValid={
+                              getIn(
+                                touched,
+                                "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.fonteRetencao"
+                              ) &&
+                              !getIn(
+                                errors,
+                                "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.fonteRetencao"
+                              )
+                            }
+                            isInvalid={
+                              !!getIn(
+                                errors,
+                                "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.fonteRetencao"
+                              )
+                            }
+                          >
+                            {Object.values(fontesRetencao).map((fnt) => (
+                              <option value={fnt} key={fnt}>
+                                {fnt}
+                              </option>
+                            ))}
+                          </Form.Select>
+                        </Col>
+                        <Col>
+                          <Form.Control
+                            disabled={
+                              props.edit ||
+                              props.approve ||
+                              !isEditing ||
+                              !(
+                                getIn(
+                                  values,
+                                  "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.descricao"
+                                ) !== "Não se aplica"
+                              )
+                            }
+                            type="text"
+                            name="categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.caminhoRedeSistema"
+                            value={
+                              values.categoriaDadosPessoais
+                                .caracteristicasPsicologicas.descricaoPsi
+                                ?.caminhoRedeSistema
+                            }
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isValid={
+                              getIn(
+                                touched,
+                                "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.caminhoRedeSistema"
+                              ) &&
+                              !getIn(
+                                errors,
+                                "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.caminhoRedeSistema"
+                              )
+                            }
+                            isInvalid={
+                              !!getIn(
+                                errors,
+                                "categoriaDadosPessoais.caracteristicasPsicologicas.descricaoPsi.caminhoRedeSistema"
+                              )
+                            }
+                          />
+                        </Col>
+                      </Row>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="65">
+                    <Accordion.Header>Composição Familiar</Accordion.Header>
+                    <Accordion.Body>
+                      <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                        <Form.Label as={Col}></Form.Label>
+                        <Form.Label as={Col}>Descrição</Form.Label>
+                        <Form.Label as={Col}>
+                          Tempo Retenção dos Dados
+                        </Form.Label>
+                        <Form.Label as={Col}>Fonte Retenção</Form.Label>
+                        <Form.Label as={Col}>
+                          Caminho Rede e/ou Sistema CPTM
+                        </Form.Label>
+                      </Row>
+                      <Row className="mb-3 pt-2 pb-2">
+                        <OverlayTrigger
+                          placement="right"
+                          overlay={
+                            <Tooltip className="text-muted">
+                              Descrever se são tratados dados: Nome do cônjuge
+                              ou companheiro(a), nome de solteira do cônjuge ou
+                              companheira, data do casamento, data do contrato
+                              de coabitação, número de filhos, etc.
+                            </Tooltip>
+                          }
+                        >
+                          <Form.Label as={Col}>
+                            Casamento ou forma atual de coabitação
+                          </Form.Label>
+                        </OverlayTrigger>
+                        <Col>
+                          <Form.Control
+                            disabled={props.edit || props.approve || !isEditing}
+                            type="text"
+                            name="categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.descricao"
+                            value={
+                              values.categoriaDadosPessoais.composicaoFamiliar
+                                .casamentoCoabitacao?.descricao
+                            }
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isValid={
+                              getIn(
+                                touched,
+                                "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.descricao"
+                              ) &&
+                              !getIn(
+                                errors,
+                                "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.descricao"
+                              )
+                            }
+                            isInvalid={
+                              !!getIn(
+                                errors,
+                                "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.descricao"
+                              )
+                            }
+                          />
+                          <Form.Control.Feedback type="invalid">
+                            Esse campo é obrigatório
+                          </Form.Control.Feedback>
+                        </Col>
+                        <Col>
+                          <Form.Control
+                            disabled={
+                              props.edit ||
+                              props.approve ||
+                              !isEditing ||
+                              !(
+                                getIn(
+                                  values,
+                                  "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.descricao"
+                                ) !== "Não se aplica"
+                              )
+                            }
+                            type="text"
+                            name="categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.tempoRetencao"
+                            value={
+                              values.categoriaDadosPessoais.composicaoFamiliar
+                                .casamentoCoabitacao?.tempoRetencao
+                            }
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isValid={
+                              getIn(
+                                touched,
+                                "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.tempoRetencao"
+                              ) &&
+                              !getIn(
+                                errors,
+                                "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.tempoRetencao"
+                              )
+                            }
+                            isInvalid={
+                              !!getIn(
+                                errors,
+                                "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.tempoRetencao"
+                              )
+                            }
+                          />
+                        </Col>
+                        <Col>
+                          <Form.Select
+                            disabled={
+                              props.edit ||
+                              props.approve ||
+                              !isEditing ||
+                              !(
+                                getIn(
+                                  values,
+                                  "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.descricao"
+                                ) !== "Não se aplica"
+                              )
+                            }
+                            name="categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.fonteRetencao"
+                            value={
+                              values.categoriaDadosPessoais.composicaoFamiliar
+                                .casamentoCoabitacao?.fonteRetencao
+                            }
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isValid={
+                              getIn(
+                                touched,
+                                "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.fonteRetencao"
+                              ) &&
+                              !getIn(
+                                errors,
+                                "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.fonteRetencao"
+                              )
+                            }
+                            isInvalid={
+                              !!getIn(
+                                errors,
+                                "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.fonteRetencao"
+                              )
+                            }
+                          >
+                            {Object.values(fontesRetencao).map((fnt) => (
+                              <option value={fnt} key={fnt}>
+                                {fnt}
+                              </option>
+                            ))}
+                          </Form.Select>
+                        </Col>
+                        <Col>
+                          <Form.Control
+                            disabled={
+                              props.edit ||
+                              props.approve ||
+                              !isEditing ||
+                              !(
+                                getIn(
+                                  values,
+                                  "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.descricao"
+                                ) !== "Não se aplica"
+                              )
+                            }
+                            type="text"
+                            name="categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.caminhoRedeSistema"
+                            value={
+                              values.categoriaDadosPessoais.composicaoFamiliar
+                                .casamentoCoabitacao?.caminhoRedeSistema
+                            }
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            isValid={
+                              getIn(
+                                touched,
+                                "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.caminhoRedeSistema"
+                              ) &&
+                              !getIn(
+                                errors,
+                                "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.caminhoRedeSistema"
+                              )
+                            }
+                            isInvalid={
+                              !!getIn(
+                                errors,
+                                "categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao.caminhoRedeSistema"
                               )
                             }
                           />
