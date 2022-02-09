@@ -8,7 +8,6 @@ import Accordion from "react-bootstrap/Accordion";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
-import { BsNodeMinusFill, BsNodePlusFill } from "react-icons/bs";
 import { Formik, getIn, FieldArray } from "formik";
 import * as yup from "yup";
 
@@ -268,6 +267,165 @@ const schema = yup.object().shape({
         fonteRetencao: yup.string().optional(),
         caminhoRedeSistema: yup.string().optional(),
       }),
+    }),
+    composicaoFamiliar: yup.object().shape({
+      casamentoCoabitacao: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      historicoConjugal: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      membrosFamilia: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+    }),
+    interessesLazer: yup.object().shape({
+      atividadesInteressesLaz: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+    }),
+    associacoes: yup.object().shape({
+      outrasAssociacoesNaoSensiveis: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+    }),
+    processoJudAdmCrim: yup.object().shape({
+      suspeitas: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      condenacoesSentencas: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      acoesJud: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      penalidadesAdm: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+    }),
+    habitosConsumo: yup.object().shape({
+      dadosBensServicos: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+    }),
+    residenciais: yup.object().shape({
+      dadosResidencia: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+    }),
+    educacaoTreinamento: yup.object().shape({
+      academicosEscolares: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      registroFinanceiro: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      qualificacaoExperienciaProf: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+    }),
+    profissaoEmprego: yup.object().shape({
+      empregoAtual: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      recrutamento: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      rescisao: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      carreira: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      absenteismoDisciplina: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      avaliacaoDesempenho: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+    }),
+    regVideoImgVoz: yup.object().shape({
+      videoImagem: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      imagemVigilancia: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+      voz: yup.object().shape({
+        descricao: yup.string().required(),
+        tempoRetencao: yup.string().optional(),
+        fonteRetencao: yup.string().optional(),
+        caminhoRedeSistema: yup.string().optional(),
+      }),
+    }),
+    outros: yup.object().shape({
+      outros: yup.array(),
     }),
   }),
 });
