@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { WithContext as ReactTags } from "react-tag-input";
-import { verbosTratamento } from "../../models/FullCase.model";
+import { verbosTratamento, FullCaseObject } from "../../models/FullCase.model";
 
 import classes from "./TagPicker.module.css";
 
@@ -22,7 +22,10 @@ const TagPicker = (props: {
   disabled: boolean;
 }) => {
   const [tags, setTags] = useState<{ id: string; text: string }[]>(
-    props.value.map((verbo) => ({ id: verbo, text: verbo }))
+    props.value.map((verbo) => ({
+      id: verbo,
+      text: verbo,
+    }))
   );
 
   const handleInputChange = () => {

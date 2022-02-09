@@ -18,6 +18,7 @@ import {
   verbosTratamento,
 } from "./../../shared/models/FullCase.model";
 import TagPicker from "../../shared/components/UI/TagPicker";
+import Section6FormRow from "../components/form-items/Section6FormRow";
 
 type onSubmitFn = (item: FullCaseObject) => void;
 type onDeleteFn = (itemId: number) => void;
@@ -931,214 +932,82 @@ const CaseForm = (props: {
                 Finalidade do Tratamento de Dados Pessoais
               </Accordion.Header>
               <Accordion.Body>
-                <Row className="mb-3">
-                  <OverlayTrigger
-                    placement="right"
-                    overlay={
-                      <Tooltip className="text-muted">
-                        As hipóteses de tratamento estão descritas nos arts. 7º
-                        e 11 da LGPD.
-                        <br />
-                        <b>
-                          Os órgãos e entidades da administração pública tem a
-                          prerrogativa de tratar os dados pessoais para o
-                          exercício de suas competências legais ou execução de
-                          políticas públicas sem a necessidade de obter
-                          consentimento do titular dos dados pessoais.
-                        </b>
-                      </Tooltip>
-                    }
-                  >
-                    <Form.Label as={Col}>Hipótese de Tratamento</Form.Label>
-                  </OverlayTrigger>
-                  <Col lg={8}>
-                    <Form.Select
-                      disabled={props.edit || props.approve || !isEditing}
-                      name="finalidadeTratamento.hipoteseTratamento"
-                      value={values.finalidadeTratamento.hipoteseTratamento}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      isValid={
-                        getIn(
-                          touched,
-                          "finalidadeTratamento.hipoteseTratamento"
-                        ) &&
-                        !getIn(
-                          errors,
-                          "finalidadeTratamento.hipoteseTratamento"
-                        )
-                      }
-                      isInvalid={
-                        !!getIn(
-                          errors,
-                          "finalidadeTratamento.hipoteseTratamento"
-                        )
-                      }
-                    >
-                      {Object.values(hipotesesTratamento).map((hip) => (
-                        <option value={hip} key={hip}>
-                          {hip}
-                        </option>
-                      ))}
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      Esse campo é obrigatório
-                    </Form.Control.Feedback>
-                  </Col>
-                </Row>
-                <Row className="mb-3">
-                  <OverlayTrigger
-                    placement="right"
-                    overlay={
-                      <Tooltip className="text-muted">
-                        Razão ou motivo pela qual se deseja tratar os dados
-                        pessoais. É importantíssimo estabelecer claramente a
-                        finalidade, pois é ela que justifica o tratamento de
-                        dados pessoais e fornece os elementos para informar o
-                        titular dos dados.
-                      </Tooltip>
-                    }
-                  >
-                    <Form.Label as={Col}>Finalidade</Form.Label>
-                  </OverlayTrigger>
-                  <Col lg={8}>
-                    <Form.Control
-                      disabled={props.edit || props.approve || !isEditing}
-                      type="text"
-                      name="finalidadeTratamento.descricaoFinalidade"
-                      value={values.finalidadeTratamento.descricaoFinalidade}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      isValid={
-                        getIn(
-                          touched,
-                          "finalidadeTratamento.descricaoFinalidade"
-                        ) &&
-                        !getIn(
-                          errors,
-                          "finalidadeTratamento.descricaoFinalidade"
-                        )
-                      }
-                      isInvalid={
-                        !!getIn(
-                          errors,
-                          "finalidadeTratamento.descricaoFinalidade"
-                        )
-                      }
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      Esse campo é obrigatório
-                    </Form.Control.Feedback>
-                  </Col>
-                </Row>
-                <Row className="mb-3">
-                  <OverlayTrigger
-                    placement="right"
-                    overlay={
-                      <Tooltip className="text-muted">
-                        Informar Lei, Decreto, normativo ou regulamento que
-                        respalda a finalidade do tratamento de dados pessoais
-                        realizado.
-                        <br />
-                        <br />
-                        <b>
-                          Exemplo fícitício de previsão legal considerando o
-                          Programa de Localização de Desaparecidos:
-                        </b>
-                        <br />• Decreto nº 8.956, de 25 de janeiro de 2218,
-                        institui o Programa de Localização de Desaparecidos.
-                      </Tooltip>
-                    }
-                  >
-                    <Form.Label as={Col}>Previsão legal</Form.Label>
-                  </OverlayTrigger>
-                  <Col lg={8}>
-                    <Form.Control
-                      disabled={props.edit || props.approve || !isEditing}
-                      type="text"
-                      name="finalidadeTratamento.previsaoLegal"
-                      value={values.finalidadeTratamento.previsaoLegal}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      isValid={
-                        getIn(touched, "finalidadeTratamento.previsaoLegal") &&
-                        !getIn(errors, "finalidadeTratamento.previsaoLegal")
-                      }
-                      isInvalid={
-                        !!getIn(errors, "finalidadeTratamento.previsaoLegal")
-                      }
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      Esse campo é obrigatório
-                    </Form.Control.Feedback>
-                  </Col>
-                </Row>
-                <Row className="mb-3">
-                  <Form.Label as={Col}>
-                    Resultados pretendidos para o titular de dados
-                  </Form.Label>
-                  <Col lg={8}>
-                    <Form.Control
-                      disabled={props.edit || props.approve || !isEditing}
-                      type="text"
-                      name="finalidadeTratamento.resultadosTitular"
-                      value={values.finalidadeTratamento.resultadosTitular}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      isValid={
-                        getIn(
-                          touched,
-                          "finalidadeTratamento.resultadosTitular"
-                        ) &&
-                        !getIn(errors, "finalidadeTratamento.resultadosTitular")
-                      }
-                      isInvalid={
-                        !!getIn(
-                          errors,
-                          "finalidadeTratamento.resultadosTitular"
-                        )
-                      }
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      Esse campo é obrigatório
-                    </Form.Control.Feedback>
-                  </Col>
-                </Row>
-                <Row className="mb-3">
-                  <Form.Label as={Col}>
-                    Benefícios esperados para o órgão, entidade ou para a
-                    sociedade como um todo
-                  </Form.Label>
-                  <Col lg={8}>
-                    <Form.Control
-                      disabled={props.edit || props.approve || !isEditing}
-                      type="text"
-                      name="finalidadeTratamento.beneficiosEsperados"
-                      value={values.finalidadeTratamento.beneficiosEsperados}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      isValid={
-                        getIn(
-                          touched,
-                          "finalidadeTratamento.beneficiosEsperados"
-                        ) &&
-                        !getIn(
-                          errors,
-                          "finalidadeTratamento.beneficiosEsperados"
-                        )
-                      }
-                      isInvalid={
-                        !!getIn(
-                          errors,
-                          "finalidadeTratamento.beneficiosEsperados"
-                        )
-                      }
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      Esse campo é obrigatório
-                    </Form.Control.Feedback>
-                  </Col>
-                </Row>
+                <Section6FormRow
+                  label="Hipótese de Tratamento"
+                  tooltip={
+                    <p>
+                      As hipóteses de tratamento estão descritas nos arts. 7º e
+                      11 da LGPD.
+                      <br />
+                      <b>
+                        Os órgãos e entidades da administração pública tem a
+                        prerrogativa de tratar os dados pessoais para o
+                        exercício de suas competências legais ou execução de
+                        políticas públicas sem a necessidade de obter
+                        consentimento do titular dos dados pessoais.
+                      </b>
+                    </p>
+                  }
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="finalidadeTratamento.hipoteseTratamento"
+                  type="select"
+                  invalid="Esse campo é obrigatório"
+                />
+                <Section6FormRow
+                  label="Finalidade"
+                  tooltip={
+                    <p>
+                      Razão ou motivo pela qual se deseja tratar os dados
+                      pessoais. É importantíssimo estabelecer claramente a
+                      finalidade, pois é ela que justifica o tratamento de dados
+                      pessoais e fornece os elementos para informar o titular
+                      dos dados.
+                    </p>
+                  }
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="finalidadeTratamento.descricaoFinalidade"
+                  type="text"
+                  invalid="Esse campo é obrigatório"
+                />
+                <Section6FormRow
+                  label="Previsão legal"
+                  tooltip={
+                    <p>
+                      Informar Lei, Decreto, normativo ou regulamento que
+                      respalda a finalidade do tratamento de dados pessoais
+                      realizado.
+                      <br />
+                      <br />
+                      <b>
+                        Exemplo fícitício de previsão legal considerando o
+                        Programa de Localização de Desaparecidos:
+                      </b>
+                      <br />• Decreto nº 8.956, de 25 de janeiro de 2218,
+                      institui o Programa de Localização de Desaparecidos.
+                    </p>
+                  }
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="finalidadeTratamento.previsaoLegal"
+                  type="text"
+                  invalid="Esse campo é obrigatório"
+                />
+                <Section6FormRow
+                  label="Resultados pretendidos para o titular de dados"
+                  tooltip={<React.Fragment />}
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="finalidadeTratamento.resultadosTitular"
+                  type="text"
+                  invalid="Esse campo é obrigatório"
+                />
+                <Section6FormRow
+                  label="Benefícios esperados para o órgão, entidade ou para a
+                    sociedade como um todo"
+                  tooltip={<React.Fragment />}
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="finalidadeTratamento.beneficiosEsperados"
+                  type="text"
+                  invalid="Esse campo é obrigatório"
+                />
               </Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="6">
