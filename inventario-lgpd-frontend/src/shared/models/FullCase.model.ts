@@ -249,12 +249,13 @@ const emptyAgenteTratamento = (): AgenteTratamento => ({
   email: "",
 });
 
-const emptyItemCategoriaDadosPessoais = (): itemCategoriaDadosPessoais => ({
-  descricao: "Não se aplica",
-  tempoRetencao: "",
-  fonteRetencao: fontesRetencao.na,
-  caminhoRedeSistema: "",
-});
+export const emptyItemCategoriaDadosPessoais =
+  (): itemCategoriaDadosPessoais => ({
+    descricao: "Não se aplica",
+    tempoRetencao: "",
+    fonteRetencao: fontesRetencao.na,
+    caminhoRedeSistema: "",
+  });
 
 export const emptyFullCaseObject = (): FullCaseObject => ({
   nome: "",

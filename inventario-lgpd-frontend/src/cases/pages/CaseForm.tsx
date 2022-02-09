@@ -7,14 +7,15 @@ import Col from "react-bootstrap/Col";
 import Accordion from "react-bootstrap/Accordion";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
-import { Formik, getIn } from "formik";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import { BsNodeMinusFill, BsNodePlusFill } from "react-icons/bs";
+import { Formik, getIn, FieldArray } from "formik";
 import * as yup from "yup";
 
 import {
   emptyFullCaseObject,
-  fontesRetencao,
+  emptyItemCategoriaDadosPessoais,
   FullCaseObject,
-  hipotesesTratamento,
   verbosTratamento,
 } from "./../../shared/models/FullCase.model";
 import TagPicker from "../../shared/components/UI/TagPicker";
@@ -1526,6 +1527,524 @@ const CaseForm = (props: {
                         }
                         disabled={props.edit || props.approve || !isEditing}
                         name="categoriaDadosPessoais.composicaoFamiliar.casamentoCoabitacao"
+                      />
+                      <Section7FormRow
+                        className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                        label="Histórico conjugal"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre casamentos ou
+                            parcerias anteriores, divórcios, separações, nomes
+                            de parceiros anteriores.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.composicaoFamiliar.historicoConjugal"
+                      />
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Familiares ou membros da família"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre Detalhes de
+                            outros familiares ou membros da família do titular
+                            de dados.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.composicaoFamiliar.membrosFamilia"
+                      />
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="66">
+                    <Accordion.Header>Interesses de lazer</Accordion.Header>
+                    <Accordion.Body>
+                      <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                        <Form.Label as={Col}></Form.Label>
+                        <Form.Label as={Col}>Descrição</Form.Label>
+                        <Form.Label as={Col}>
+                          Tempo Retenção dos Dados
+                        </Form.Label>
+                        <Form.Label as={Col}>Fonte Retenção</Form.Label>
+                        <Form.Label as={Col}>
+                          Caminho Rede e/ou Sistema CPTM
+                        </Form.Label>
+                      </Row>
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Atividades e interesses de lazer"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre hobbies,
+                            esportes, outros interesses.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.interessesLazer.atividadesInteressesLaz"
+                      />
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="67">
+                    <Accordion.Header>Associações</Accordion.Header>
+                    <Accordion.Body>
+                      <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                        <Form.Label as={Col}></Form.Label>
+                        <Form.Label as={Col}>Descrição</Form.Label>
+                        <Form.Label as={Col}>
+                          Tempo Retenção dos Dados
+                        </Form.Label>
+                        <Form.Label as={Col}>Fonte Retenção</Form.Label>
+                        <Form.Label as={Col}>
+                          Caminho Rede e/ou Sistema CPTM
+                        </Form.Label>
+                      </Row>
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Associações (exceto profissionais, políticas, em sindicatos ou qualquer outra associação que se enquadre em dados pessoais sensíveis)"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre participação
+                            em organizações de caridade ou benevolentes, clubes,
+                            parcerias, organizações, grupos, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.associacoes.outrasAssociacoesNaoSensiveis"
+                      />
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="68">
+                    <Accordion.Header>
+                      Processo Judicial/Administrativo/Criminal
+                    </Accordion.Header>
+                    <Accordion.Body>
+                      <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                        <Form.Label as={Col}></Form.Label>
+                        <Form.Label as={Col}>Descrição</Form.Label>
+                        <Form.Label as={Col}>
+                          Tempo Retenção dos Dados
+                        </Form.Label>
+                        <Form.Label as={Col}>Fonte Retenção</Form.Label>
+                        <Form.Label as={Col}>
+                          Caminho Rede e/ou Sistema CPTM
+                        </Form.Label>
+                      </Row>
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Suspeitas"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre suspeitas de
+                            violações, conexões conspiratórias com criminosos
+                            conhecidos. Inquéritos ou ações judiciais (civis ou
+                            criminais) empreendidas por ou contra o titular dos
+                            dados, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.processoJudAdmCrim.suspeitas"
+                      />
+                      <Section7FormRow
+                        className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                        label="Condenações e sentenças"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre condenações e
+                            sentenças, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.processoJudAdmCrim.condenacoesSentencas"
+                      />
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Ações judiciais"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre tutela, guarda
+                            temporária ou definitiva, interdição, adoção, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.processoJudAdmCrim.acoesJud"
+                      />
+                      <Section7FormRow
+                        className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                        label="Penalidades Administrativas"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre multas,
+                            processo disciplinar, advertências, bem como
+                            qualquer outro tipo de penalidade ou sanção
+                            administrativa prevista em leis, normas e
+                            regulamentos.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.processoJudAdmCrim.penalidadesAdm"
+                      />
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="69">
+                    <Accordion.Header>Hábitos de Consumo</Accordion.Header>
+                    <Accordion.Body>
+                      <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                        <Form.Label as={Col}></Form.Label>
+                        <Form.Label as={Col}>Descrição</Form.Label>
+                        <Form.Label as={Col}>
+                          Tempo Retenção dos Dados
+                        </Form.Label>
+                        <Form.Label as={Col}>Fonte Retenção</Form.Label>
+                        <Form.Label as={Col}>
+                          Caminho Rede e/ou Sistema CPTM
+                        </Form.Label>
+                      </Row>
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Dados de bens e serviços"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre bens e
+                            serviços vendidos, alugados ou emprestados ao
+                            titular dos dados.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.habitosConsumo.dadosBensServicos"
+                      />
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="610">
+                    <Accordion.Header>Dados Residenciais</Accordion.Header>
+                    <Accordion.Body>
+                      <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                        <Form.Label as={Col}></Form.Label>
+                        <Form.Label as={Col}>Descrição</Form.Label>
+                        <Form.Label as={Col}>
+                          Tempo Retenção dos Dados
+                        </Form.Label>
+                        <Form.Label as={Col}>Fonte Retenção</Form.Label>
+                        <Form.Label as={Col}>
+                          Caminho Rede e/ou Sistema CPTM
+                        </Form.Label>
+                      </Row>
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Residência"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre natureza da
+                            residência, propriedade própria ou alugada, duração
+                            da residência nesse endereço, aluguel, custos,
+                            classificação da residência, detalhes sobre a
+                            avaliação, nomes das pessoas que possuem as chaves.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.residenciais.dadosResidencia"
+                      />
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="611">
+                    <Accordion.Header>Educação e Treinamento</Accordion.Header>
+                    <Accordion.Body>
+                      <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                        <Form.Label as={Col}></Form.Label>
+                        <Form.Label as={Col}>Descrição</Form.Label>
+                        <Form.Label as={Col}>
+                          Tempo Retenção dos Dados
+                        </Form.Label>
+                        <Form.Label as={Col}>Fonte Retenção</Form.Label>
+                        <Form.Label as={Col}>
+                          Caminho Rede e/ou Sistema CPTM
+                        </Form.Label>
+                      </Row>
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Dados acadêmicos/escolares"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre diplomas,
+                            certificados obtidos, resultados de exames,
+                            avaliação do progresso dos estudos, histórico
+                            escolar, grau de formação, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.educacaoTreinamento.academicosEscolares"
+                      />
+                      <Section7FormRow
+                        className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                        label="Registros financeiros do curso/treinamento"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre taxas de
+                            inscrição e custos pagos, financiamento, formas de
+                            pagamento, registros de pagamento, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.educacaoTreinamento.registroFinanceiro"
+                      />
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Qualificação e experiência profissional"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre certificações
+                            profissionais, interesses profissionais, interesses
+                            acadêmicos, interesses de pesquisam experiência de
+                            ensino, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.educacaoTreinamento.qualificacaoExperienciaProf"
+                      />
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="612">
+                    <Accordion.Header>Profissão e emprego</Accordion.Header>
+                    <Accordion.Body>
+                      <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                        <Form.Label as={Col}></Form.Label>
+                        <Form.Label as={Col}>Descrição</Form.Label>
+                        <Form.Label as={Col}>
+                          Tempo Retenção dos Dados
+                        </Form.Label>
+                        <Form.Label as={Col}>Fonte Retenção</Form.Label>
+                        <Form.Label as={Col}>
+                          Caminho Rede e/ou Sistema CPTM
+                        </Form.Label>
+                      </Row>
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Emprego atual"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre empregador,
+                            descrição do cargo e função, antiguidade, data de
+                            recrutamento, local de trabalho, especialização ou
+                            tipo de empresa, modos e condições de trabalho,
+                            cargos anteriores e experiência anterior de trabalho
+                            no mesmo empregador, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.profissaoEmprego.empregoAtual"
+                      />
+                      <Section7FormRow
+                        className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                        label="Recrutamento"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre data de
+                            recrutamento, método de recrutamento, fonte de
+                            recrutamento, referências, detalhes relacionados com
+                            o período de estágio, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.profissaoEmprego.recrutamento"
+                      />
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Rescisão de trabalho"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre data de
+                            rescisão, motivo, período de notificação, condições
+                            de rescisão, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.profissaoEmprego.rescisao"
+                      />
+                      <Section7FormRow
+                        className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                        label="Carreira"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre emprego
+                            anterior e empregadores, períodos sem emprego,
+                            serviço militar, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.profissaoEmprego.carreira"
+                      />
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Absentismo e disciplina"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre registos de
+                            absentismo, motivos de ausência, medidas
+                            disciplinares, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.profissaoEmprego.absenteismoDisciplina"
+                      />
+                      <Section7FormRow
+                        className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                        label="Avaliação de Desempenho"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados dados sobre avaliação de
+                            desempenho ou qualquer outro tipo de análise de
+                            qualificação ou habilidades profissionais, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.profissaoEmprego.avaliacaoDesempenho"
+                      />
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="613">
+                    <Accordion.Header>
+                      Registros/gravações de vídeo, imagem e voz
+                    </Accordion.Header>
+                    <Accordion.Body>
+                      <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                        <Form.Label as={Col}></Form.Label>
+                        <Form.Label as={Col}>Descrição</Form.Label>
+                        <Form.Label as={Col}>
+                          Tempo Retenção dos Dados
+                        </Form.Label>
+                        <Form.Label as={Col}>Fonte Retenção</Form.Label>
+                        <Form.Label as={Col}>
+                          Caminho Rede e/ou Sistema CPTM
+                        </Form.Label>
+                      </Row>
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Vídeo e imagem"
+                        tooltip={
+                          <p>
+                            Descrever se são tratados arquivos de vídeos, fotos
+                            digitais, fitas de vídeo, etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.regVideoImgVoz.videoImagem"
+                      />
+                      <Section7FormRow
+                        className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                        label="Imagem de Vigilância"
+                        tooltip={
+                          <p>
+                            Descrever se são tratadas imagens e/ou vídeos de
+                            câmeras de segurança/vigilância (ex: CFTV), etc.
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.regVideoImgVoz.imagemVigilancia"
+                      />
+                      <Section7FormRow
+                        className="mb-3 pt-2 pb-2"
+                        label="Voz"
+                        tooltip={
+                          <p>
+                            Descrever se são tratadas fitas e arquivos digitais
+                            de voz, bem como outros registros de gravações de
+                            voz , etc
+                          </p>
+                        }
+                        disabled={props.edit || props.approve || !isEditing}
+                        name="categoriaDadosPessoais.regVideoImgVoz.voz"
+                      />
+                    </Accordion.Body>
+                  </Accordion.Item>
+                  <Accordion.Item eventKey="613">
+                    <Accordion.Header>Outros</Accordion.Header>
+                    <Accordion.Body>
+                      <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                        <Form.Label as={Col}></Form.Label>
+                        <Form.Label as={Col}>Descrição</Form.Label>
+                        <Form.Label as={Col}>
+                          Tempo Retenção dos Dados
+                        </Form.Label>
+                        <Form.Label as={Col}>Fonte Retenção</Form.Label>
+                        <Form.Label as={Col}>
+                          Caminho Rede e/ou Sistema CPTM
+                        </Form.Label>
+                      </Row>
+                      <FieldArray
+                        name="categoriaDadosPessoais.outros.outros"
+                        render={(arrayHelpers) => (
+                          <React.Fragment>
+                            {values.categoriaDadosPessoais.outros.outros &&
+                            values.categoriaDadosPessoais.outros.outros.length >
+                              0 ? (
+                              values.categoriaDadosPessoais.outros.outros.map(
+                                (item, index) => (
+                                  <React.Fragment key={index}>
+                                    <Section7FormRow
+                                      className={`mb-3 pt-2 pb-2 ${
+                                        index % 2 === 0
+                                          ? "bg-primary bg-opacity-10"
+                                          : ""
+                                      }`}
+                                      label="Outros (Especificar)"
+                                      tooltip={<React.Fragment />}
+                                      disabled={
+                                        props.edit ||
+                                        props.approve ||
+                                        !isEditing
+                                      }
+                                      name={`categoriaDadosPessoais.outros.outros[${index}]`}
+                                    />
+                                    <Row className="justify-content-center">
+                                      <ButtonGroup
+                                        as={Col}
+                                        className="mt-1 mb-3"
+                                        lg={2}
+                                      >
+                                        <Button
+                                          variant="primary"
+                                          onClick={() =>
+                                            arrayHelpers.push(
+                                              emptyItemCategoriaDadosPessoais()
+                                            )
+                                          }
+                                        >
+                                          +
+                                        </Button>
+                                        <Button
+                                          variant="danger"
+                                          onClick={() =>
+                                            arrayHelpers.remove(index)
+                                          }
+                                        >
+                                          -
+                                        </Button>
+                                      </ButtonGroup>
+                                    </Row>
+                                  </React.Fragment>
+                                )
+                              )
+                            ) : (
+                              <Row className="justify-content-center">
+                                <ButtonGroup
+                                  as={Col}
+                                  className="mt-1 mb-3"
+                                  lg={2}
+                                >
+                                  <Button
+                                    variant="primary"
+                                    onClick={() =>
+                                      arrayHelpers.push(
+                                        emptyItemCategoriaDadosPessoais()
+                                      )
+                                    }
+                                  >
+                                    +
+                                  </Button>
+                                </ButtonGroup>
+                              </Row>
+                            )}
+                          </React.Fragment>
+                        )}
                       />
                     </Accordion.Body>
                   </Accordion.Item>
