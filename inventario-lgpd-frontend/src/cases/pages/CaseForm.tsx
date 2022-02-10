@@ -16,6 +16,7 @@ import {
   emptyItemCategoriaDadosPessoais,
   emptyItemCategoriaTitulares,
   emptyItemCompatilhamentoDados,
+  emptyItemMedidaSegurancaPrivacidade,
   FullCaseObject,
   verbosTratamento,
 } from "./../../shared/models/FullCase.model";
@@ -24,6 +25,7 @@ import Section6FormRow from "../components/form-items/Section6FormRow";
 import Section7FormRow from "../components/form-items/Section7FormRow";
 import Section10FormRow from "../components/form-items/Section10FormRow";
 import Section11FormRow from "../components/form-items/Section11FormRow";
+import Section12FormRow from "../components/form-items/Section12FormRow";
 
 type onSubmitFn = (item: FullCaseObject) => void;
 type onDeleteFn = (itemId: number) => void;
@@ -1193,8 +1195,10 @@ const CaseForm = (props: {
                       Razão ou motivo pela qual se deseja tratar os dados
                       pessoais. É importantíssimo estabelecer claramente a
                       finalidade, import Section11FormRow from
-                      './../components/form-items/Section11FormRow'; pois é ela
-                      que justifica o tratamento de dados pessoais e fornece os
+                      './../componimport Section12FormRow from
+                      './../components/form-items/Section12FormRow';
+                      ents/form-items/Section11FormRow'; pois é ela que
+                      justifica o tratamento de dados pessoais e fornece os
                       elementos para informar o titular dos dados.
                     </p>
                   }
@@ -2816,6 +2820,89 @@ const CaseForm = (props: {
                               onClick={() =>
                                 arrayHelpers.push(
                                   emptyItemCompatilhamentoDados()
+                                )
+                              }
+                            >
+                              +
+                            </Button>
+                          </ButtonGroup>
+                        </Row>
+                      )}
+                    </React.Fragment>
+                  )}
+                />
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="11">
+              <Accordion.Header>
+                Medidas de Segurança/Privacidade
+              </Accordion.Header>
+              <Accordion.Body>
+                <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                  <Form.Label as={Col}></Form.Label>
+                  <Form.Label as={Col}>
+                    Tipo de medida de segurança e privacidade
+                  </Form.Label>
+                  <Form.Label as={Col}>Descrição do(s) Controle(s)</Form.Label>
+                </Row>
+                <FieldArray
+                  name="medidasSegurancaPrivacidade"
+                  render={(arrayHelpers) => (
+                    <React.Fragment>
+                      {values.medidasSegurancaPrivacidade &&
+                      values.medidasSegurancaPrivacidade.length > 0 ? (
+                        values.medidasSegurancaPrivacidade.map(
+                          (item, index) => (
+                            <React.Fragment key={index}>
+                              <Section12FormRow
+                                className={`mb-3 pt-2 pb-2 ${
+                                  index % 2 === 0
+                                    ? "bg-primary bg-opacity-10"
+                                    : ""
+                                }`}
+                                label={`Medida de Segurança/Privacidade ${
+                                  index + 1
+                                }`}
+                                disabled={
+                                  props.edit || props.approve || !isEditing
+                                }
+                                name={`medidasSegurancaPrivacidade[${index}]`}
+                              />
+                              <Row className="justify-content-center">
+                                <ButtonGroup
+                                  as={Col}
+                                  className="mt-1 mb-3"
+                                  lg={2}
+                                >
+                                  <Button
+                                    variant="primary"
+                                    onClick={() =>
+                                      arrayHelpers.push(
+                                        emptyItemMedidaSegurancaPrivacidade()
+                                      )
+                                    }
+                                  >
+                                    +
+                                  </Button>
+                                  <Button
+                                    variant="danger"
+                                    onClick={() => arrayHelpers.remove(index)}
+                                  >
+                                    -
+                                  </Button>
+                                </ButtonGroup>
+                              </Row>
+                            </React.Fragment>
+                          )
+                        )
+                      ) : (
+                        <Row className="justify-content-center">
+                          <ButtonGroup as={Col} className="mt-1 mb-3" lg={2}>
+                            <Button
+                              variant="primary"
+                              onClick={() =>
+                                arrayHelpers.push(
+                                  emptyItemMedidaSegurancaPrivacidade()
                                 )
                               }
                             >

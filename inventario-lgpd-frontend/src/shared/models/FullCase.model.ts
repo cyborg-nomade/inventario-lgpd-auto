@@ -57,6 +57,32 @@ export enum categoriaTitulares {
   outros = "Outros (Especificar)",
 }
 
+export enum tipoMedidaSegurancaPrivacidade {
+  aberturaTransparenciaNotificacao = "Abertura, Transparência e Notificação",
+  compliance = "Compliance com a Privacidade",
+  consentimentoEscolha = "Consentimento e Escolha",
+  continuidadeNegocio = "Continuidade de Negócio",
+  controleCriptografico = "Controles Criptográficos",
+  controlesAcessoLógico = "Controles de Acesso Lógico",
+  controleAcessoPrivacidade = "Controle de Acesso e Privacidade",
+  controlesSeguranceRedeFisicaAmbiente = "Controles de Segurança em Redes, Proteção Física e do Ambiente",
+  copiaSeguranca = "Cópia de Segurança",
+  desenvolvimentoSeguro = "Desenvolvimento Seguro",
+  gestaoCapacidadeRedundancia = "Gestão de Capacidade e Redundância",
+  gestaoMudancas = "Gestão de Mudanças",
+  gestaoRiscos = "Gestão de Riscos",
+  legitimidadeEspecificacaoProposito = "Legitimidade e Especificação de Propósito",
+  limitacaoColeta = "Limitação de Coleta",
+  minimizacaoDados = "Minimização de Dados",
+  participacaoIndividualAcesso = "Participação Individual e Acesso",
+  precisaoQualidade = "Precisão e qualidade",
+  registroEventosRastreabilidadeLogs = "Registro de Eventos, Rastreabilidade e Salvaguarda de Logs",
+  responsabilizacao = "Responsabilização",
+  segurancaWeb = "Segurança Web",
+  usoRetencaoLimitacaoDivulgacao = "Uso, Retenção e Limitação de Divulgação",
+  respostaIncidente = "Resposta a Incidente",
+}
+
 interface AgenteTratamento {
   nome: string;
   area?: string;
@@ -83,8 +109,7 @@ interface itemCompartilhamentoDados {
 }
 
 interface itemMedidasSegurancaPrivacidade {
-  nome: string;
-  tipo: string;
+  tipo: tipoMedidaSegurancaPrivacidade;
   descricaoControles: string;
 }
 
@@ -281,6 +306,17 @@ export const emptyItemCompatilhamentoDados = (): itemCompartilhamentoDados => ({
   dadosCompartilhados: "",
   finalidadeCompartilhamento: "",
 });
+
+export const emptyItemMedidaSegurancaPrivacidade =
+  (): itemMedidasSegurancaPrivacidade => ({
+    tipo: tipoMedidaSegurancaPrivacidade.consentimentoEscolha,
+    descricaoControles: "",
+  });
+
+// interface itemMedidasSegurancaPrivacidade {
+//   tipo: tipoMedidaSegurancaPrivacidade;
+//   descricaoControles: string;
+// }
 
 export const emptyFullCaseObject = (): FullCaseObject => ({
   nome: "",
