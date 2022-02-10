@@ -457,7 +457,7 @@ const CaseForm = (props: {
         errors,
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
-          <Accordion defaultActiveKey="0" alwaysOpen>
+          <Accordion defaultActiveKey="0">
             <Accordion.Item eventKey="0">
               <Accordion.Header>Identificação</Accordion.Header>
               <Accordion.Body>
@@ -2293,6 +2293,109 @@ const CaseForm = (props: {
                   disabled={props.edit || props.approve || !isEditing}
                   name="categoriaDadosPessoaisSensiveis.biometricos"
                 />
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="8">
+              <Accordion.Header>
+                Frequência e totalização das categorias de dados pessoais
+                tratados
+              </Accordion.Header>
+              <Accordion.Body>
+                <Row className="mb-3">
+                  <OverlayTrigger
+                    placement="right"
+                    overlay={
+                      <Tooltip className="text-muted">
+                        Descrever em que frequência os dados são tratados. Isso
+                        representa a disponibilidade e horário de funcionamento
+                        do sistema automatizado ou processo manual que trata os
+                        dados pessoais. Abaixo segue exemplo fictício de
+                        descrição do Sistema Nacional de Desaparecidos -SND a
+                        ser preenchido no inventário.
+                        <br />
+                        <br />
+                        <b>Exemplo:</b> O SND está disponível no regime 24x7 (24
+                        horas por dia nos 7 dias da semana) para comunicação
+                        (coleta) dos dados do desaparecimentos e as demais fases
+                        e operações de tratamento são realizadas no horário
+                        comercial em dias úteis.
+                      </Tooltip>
+                    }
+                  >
+                    <Form.Label as={Col}>
+                      Frequência de tratamento dos dados pessoais
+                    </Form.Label>
+                  </OverlayTrigger>
+                  <Col lg={8}>
+                    <Form.Control
+                      disabled={props.edit || props.approve || !isEditing}
+                      type="text"
+                      name="frequenciaTratamento"
+                      value={values.frequenciaTratamento}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      isValid={
+                        touched.frequenciaTratamento &&
+                        !errors.frequenciaTratamento
+                      }
+                      isInvalid={!!errors.frequenciaTratamento}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Esse campo é obrigatório
+                    </Form.Control.Feedback>
+                  </Col>
+                </Row>
+                <Row className="mb-3">
+                  <OverlayTrigger
+                    placement="right"
+                    overlay={
+                      <Tooltip className="text-muted">
+                        Informar a quantidade total de dados pessoais e dados
+                        pessoais sensíveis descritos no invetário.
+                        <br />
+                        <b>Exemplo:</b>
+                        <br />
+                        Tratamento de dados pessoais de detalhes pessoais como
+                        Idade, sexo, data de nascimento, local de nascimento,
+                        estado civil, nacionalidade.
+                        <br />
+                        Tratamento de dados pessoais de saúde como CID10 e data
+                        de último exame médico
+                        <br />A informação que deve ser preenchida no inventário
+                        é:
+                        <br />
+                        <b>
+                          São tratados 6 dados pessoais e 2 dados pessoais
+                          sensíveis, totalizando 8 dados pessoais tratados pelo
+                          serviço.
+                        </b>
+                      </Tooltip>
+                    }
+                  >
+                    <Form.Label as={Col}>
+                      Quantidade de dados pessoais e dados pessoais sensíveis
+                      tratados
+                    </Form.Label>
+                  </OverlayTrigger>
+                  <Col lg={8}>
+                    <Form.Control
+                      disabled={props.edit || props.approve || !isEditing}
+                      type="text"
+                      name="quantidadeDadosTratados"
+                      value={values.quantidadeDadosTratados}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      isValid={
+                        touched.quantidadeDadosTratados &&
+                        !errors.quantidadeDadosTratados
+                      }
+                      isInvalid={!!errors.quantidadeDadosTratados}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Esse campo é obrigatório
+                    </Form.Control.Feedback>
+                  </Col>
+                </Row>
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
