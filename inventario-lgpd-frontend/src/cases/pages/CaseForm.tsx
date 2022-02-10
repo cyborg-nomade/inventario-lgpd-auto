@@ -14,12 +14,14 @@ import * as yup from "yup";
 import {
   emptyFullCaseObject,
   emptyItemCategoriaDadosPessoais,
+  emptyItemCategoriaTitulares,
   FullCaseObject,
   verbosTratamento,
 } from "./../../shared/models/FullCase.model";
 import TagPicker from "../../shared/components/UI/TagPicker";
 import Section6FormRow from "../components/form-items/Section6FormRow";
 import Section7FormRow from "../components/form-items/Section7FormRow";
+import Section10FormRow from "../components/form-items/Section10FormRow";
 
 type onSubmitFn = (item: FullCaseObject) => void;
 type onDeleteFn = (itemId: number) => void;
@@ -427,6 +429,75 @@ const schema = yup.object().shape({
     outros: yup.object().shape({
       outros: yup.array(),
     }),
+  }),
+  categoriaDadosPessoaisSensiveis: yup.object().shape({
+    origemRacialEtnica: yup.object().shape({
+      descricao: yup.string().required(),
+      tempoRetencao: yup.string().optional(),
+      fonteRetencao: yup.string().optional(),
+      caminhoRedeSistema: yup.string().optional(),
+    }),
+    conviccaoReligiosa: yup.object().shape({
+      descricao: yup.string().required(),
+      tempoRetencao: yup.string().optional(),
+      fonteRetencao: yup.string().optional(),
+      caminhoRedeSistema: yup.string().optional(),
+    }),
+    opiniaoPolitica: yup.object().shape({
+      descricao: yup.string().required(),
+      tempoRetencao: yup.string().optional(),
+      fonteRetencao: yup.string().optional(),
+      caminhoRedeSistema: yup.string().optional(),
+    }),
+    filiacaoSindicato: yup.object().shape({
+      descricao: yup.string().required(),
+      tempoRetencao: yup.string().optional(),
+      fonteRetencao: yup.string().optional(),
+      caminhoRedeSistema: yup.string().optional(),
+    }),
+    filiacaoOrganizacaoReligiosa: yup.object().shape({
+      descricao: yup.string().required(),
+      tempoRetencao: yup.string().optional(),
+      fonteRetencao: yup.string().optional(),
+      caminhoRedeSistema: yup.string().optional(),
+    }),
+    filiacaoCrencaFilosofica: yup.object().shape({
+      descricao: yup.string().required(),
+      tempoRetencao: yup.string().optional(),
+      fonteRetencao: yup.string().optional(),
+      caminhoRedeSistema: yup.string().optional(),
+    }),
+    filiacaoPreferenciaPolitica: yup.object().shape({
+      descricao: yup.string().required(),
+      tempoRetencao: yup.string().optional(),
+      fonteRetencao: yup.string().optional(),
+      caminhoRedeSistema: yup.string().optional(),
+    }),
+    saudeVidaSexual: yup.object().shape({
+      descricao: yup.string().required(),
+      tempoRetencao: yup.string().optional(),
+      fonteRetencao: yup.string().optional(),
+      caminhoRedeSistema: yup.string().optional(),
+    }),
+    geneticos: yup.object().shape({
+      descricao: yup.string().required(),
+      tempoRetencao: yup.string().optional(),
+      fonteRetencao: yup.string().optional(),
+      caminhoRedeSistema: yup.string().optional(),
+    }),
+    biometricos: yup.object().shape({
+      descricao: yup.string().required(),
+      tempoRetencao: yup.string().optional(),
+      fonteRetencao: yup.string().optional(),
+      caminhoRedeSistema: yup.string().optional(),
+    }),
+  }),
+  frequenciaTratamento: yup.string().required(),
+  quantidadeDadosTratados: yup.string().required(),
+  categoriasTitulares: yup.object().shape({
+    categorias: yup.array(),
+    criancasAdolescentes: yup.array(),
+    outrosGruposVulneraveis: yup.array(),
   }),
 });
 
@@ -1173,7 +1244,7 @@ const CaseForm = (props: {
             <Accordion.Item eventKey="6">
               <Accordion.Header>Categoria de Dados Pessoais</Accordion.Header>
               <Accordion.Body>
-                <Accordion alwaysOpen>
+                <Accordion>
                   <Accordion.Item eventKey="60">
                     <Accordion.Header>
                       Dados de Identificação Pessoal
@@ -2396,6 +2467,215 @@ const CaseForm = (props: {
                     </Form.Control.Feedback>
                   </Col>
                 </Row>
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="9">
+              <Accordion.Header>
+                Categorias dos titulares de dados pessoais
+              </Accordion.Header>
+              <Accordion.Body>
+                <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                  <Form.Label as={Col}></Form.Label>
+                  <Form.Label as={Col}>Tipo de Categoria</Form.Label>
+                  <Form.Label as={Col}>Descrição</Form.Label>
+                </Row>
+                <FieldArray
+                  name="categoriasTitulares.categorias"
+                  render={(arrayHelpers) => (
+                    <React.Fragment>
+                      {values.categoriasTitulares.categorias &&
+                      values.categoriasTitulares.categorias.length > 0 ? (
+                        values.categoriasTitulares.categorias.map(
+                          (item, index) => (
+                            <React.Fragment key={index}>
+                              <Section10FormRow
+                                className={`mb-3 pt-2 pb-2 ${
+                                  index % 2 === 0
+                                    ? "bg-primary bg-opacity-10"
+                                    : ""
+                                }`}
+                                label="Outros (Especificar)"
+                                disabled={
+                                  props.edit || props.approve || !isEditing
+                                }
+                                name={`categoriasTitulares.categorias[${index}]`}
+                              />
+                              <Row className="justify-content-center">
+                                <ButtonGroup
+                                  as={Col}
+                                  className="mt-1 mb-3"
+                                  lg={2}
+                                >
+                                  <Button
+                                    variant="primary"
+                                    onClick={() =>
+                                      arrayHelpers.push(
+                                        emptyItemCategoriaTitulares()
+                                      )
+                                    }
+                                  >
+                                    +
+                                  </Button>
+                                  <Button
+                                    variant="danger"
+                                    onClick={() => arrayHelpers.remove(index)}
+                                  >
+                                    -
+                                  </Button>
+                                </ButtonGroup>
+                              </Row>
+                            </React.Fragment>
+                          )
+                        )
+                      ) : (
+                        <Row className="justify-content-center">
+                          <ButtonGroup as={Col} className="mt-1 mb-3" lg={2}>
+                            <Button
+                              variant="primary"
+                              onClick={() =>
+                                arrayHelpers.push(emptyItemCategoriaTitulares())
+                              }
+                            >
+                              +
+                            </Button>
+                          </ButtonGroup>
+                        </Row>
+                      )}
+                    </React.Fragment>
+                  )}
+                />
+                <FieldArray
+                  name="categoriasTitulares.criancasAdolescentes"
+                  render={(arrayHelpers) => (
+                    <React.Fragment>
+                      {values.categoriasTitulares.criancasAdolescentes &&
+                      values.categoriasTitulares.criancasAdolescentes.length >
+                        0 ? (
+                        values.categoriasTitulares.criancasAdolescentes.map(
+                          (item, index) => (
+                            <React.Fragment key={index}>
+                              <Section10FormRow
+                                className={`mb-3 pt-2 pb-2 ${
+                                  index % 2 === 0
+                                    ? "bg-primary bg-opacity-10"
+                                    : ""
+                                }`}
+                                label="Outros (Especificar)"
+                                disabled={
+                                  props.edit || props.approve || !isEditing
+                                }
+                                name={`categoriasTitulares.criancasAdolescentes[${index}]`}
+                              />
+                              <Row className="justify-content-center">
+                                <ButtonGroup
+                                  as={Col}
+                                  className="mt-1 mb-3"
+                                  lg={2}
+                                >
+                                  <Button
+                                    variant="primary"
+                                    onClick={() =>
+                                      arrayHelpers.push(
+                                        emptyItemCategoriaTitulares()
+                                      )
+                                    }
+                                  >
+                                    +
+                                  </Button>
+                                  <Button
+                                    variant="danger"
+                                    onClick={() => arrayHelpers.remove(index)}
+                                  >
+                                    -
+                                  </Button>
+                                </ButtonGroup>
+                              </Row>
+                            </React.Fragment>
+                          )
+                        )
+                      ) : (
+                        <Row className="justify-content-center">
+                          <ButtonGroup as={Col} className="mt-1 mb-3" lg={2}>
+                            <Button
+                              variant="primary"
+                              onClick={() =>
+                                arrayHelpers.push(emptyItemCategoriaTitulares())
+                              }
+                            >
+                              +
+                            </Button>
+                          </ButtonGroup>
+                        </Row>
+                      )}
+                    </React.Fragment>
+                  )}
+                />
+                <FieldArray
+                  name="categoriasTitulares.outrosGruposVulneraveis"
+                  render={(arrayHelpers) => (
+                    <React.Fragment>
+                      {values.categoriasTitulares.outrosGruposVulneraveis &&
+                      values.categoriasTitulares.outrosGruposVulneraveis
+                        .length > 0 ? (
+                        values.categoriasTitulares.outrosGruposVulneraveis.map(
+                          (item, index) => (
+                            <React.Fragment key={index}>
+                              <Section10FormRow
+                                className={`mb-3 pt-2 pb-2 ${
+                                  index % 2 === 0
+                                    ? "bg-primary bg-opacity-10"
+                                    : ""
+                                }`}
+                                label="Outros (Especificar)"
+                                disabled={
+                                  props.edit || props.approve || !isEditing
+                                }
+                                name={`categoriasTitulares.outrosGruposVulneraveis[${index}]`}
+                              />
+                              <Row className="justify-content-center">
+                                <ButtonGroup
+                                  as={Col}
+                                  className="mt-1 mb-3"
+                                  lg={2}
+                                >
+                                  <Button
+                                    variant="primary"
+                                    onClick={() =>
+                                      arrayHelpers.push(
+                                        emptyItemCategoriaTitulares()
+                                      )
+                                    }
+                                  >
+                                    +
+                                  </Button>
+                                  <Button
+                                    variant="danger"
+                                    onClick={() => arrayHelpers.remove(index)}
+                                  >
+                                    -
+                                  </Button>
+                                </ButtonGroup>
+                              </Row>
+                            </React.Fragment>
+                          )
+                        )
+                      ) : (
+                        <Row className="justify-content-center">
+                          <ButtonGroup as={Col} className="mt-1 mb-3" lg={2}>
+                            <Button
+                              variant="primary"
+                              onClick={() =>
+                                arrayHelpers.push(emptyItemCategoriaTitulares())
+                              }
+                            >
+                              +
+                            </Button>
+                          </ButtonGroup>
+                        </Row>
+                      )}
+                    </React.Fragment>
+                  )}
+                />
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>

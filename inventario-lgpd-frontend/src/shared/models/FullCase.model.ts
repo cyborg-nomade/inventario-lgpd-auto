@@ -1,10 +1,3 @@
-interface AgenteTratamento {
-  nome: string;
-  area?: string;
-  telefone?: string;
-  email?: string;
-}
-
 export enum verbosTratamento {
   coleta = "coleta",
   producao = "producao",
@@ -49,6 +42,28 @@ export enum fontesRetencao {
   docPapelMidiasEletronica = "Documento em Papel e Mídias Eletrônicas",
 }
 
+export enum categoriaTitulares {
+  beneficiarios = "Beneficiários",
+  clientes = "Clientes",
+  contribuintes = "Contribuintes",
+  dependentes = "Dependentes",
+  eleitores = "Eleitores",
+  empregados = "Empregados",
+  estudantes = "Estudantes",
+  motoristas = "Motoristas",
+  pacientes = "Pacientes",
+  pessoas = "Pessoas",
+  servidores = "Servidores",
+  outros = "Outros (Especificar)",
+}
+
+interface AgenteTratamento {
+  nome: string;
+  area?: string;
+  telefone?: string;
+  email?: string;
+}
+
 interface itemCategoriaDadosPessoais {
   descricao: string;
   tempoRetencao: string;
@@ -57,8 +72,7 @@ interface itemCategoriaDadosPessoais {
 }
 
 interface itemCategoriaTitulares {
-  nomeCategoria: string;
-  tipoCategoria: string;
+  tipoCategoria: categoriaTitulares;
   descricao: string;
 }
 
@@ -257,6 +271,11 @@ export const emptyItemCategoriaDadosPessoais =
     caminhoRedeSistema: "",
   });
 
+export const emptyItemCategoriaTitulares = (): itemCategoriaTitulares => ({
+  tipoCategoria: categoriaTitulares.pessoas,
+  descricao: "",
+});
+
 export const emptyFullCaseObject = (): FullCaseObject => ({
   nome: "",
   id: 0,
@@ -388,7 +407,7 @@ export const emptyFullCaseObject = (): FullCaseObject => ({
   frequenciaTratamento: "",
   quantidadeDadosTratados: "",
   categoriasTitulares: {
-    categorias: [],
+    categorias: [emptyItemCategoriaTitulares()],
     criancasAdolescentes: [],
     outrosGruposVulneraveis: [],
   },
