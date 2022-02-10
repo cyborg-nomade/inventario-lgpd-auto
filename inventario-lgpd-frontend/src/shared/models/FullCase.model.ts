@@ -83,6 +83,25 @@ export enum tipoMedidaSegurancaPrivacidade {
   respostaIncidente = "Resposta a Incidente",
 }
 
+export enum tipoGarantiaTranferenciaInternacional {
+  acordoCooperacaoInt = "Acordo de cooperação internacional",
+  certificacao = "Certificação regularmente emitida",
+  clausulasContratuaisEspecificas = "Cláusulas contratuais específicas para determinada transferência",
+  clausulasContratuaisPadrao = "Cláusulas-padrão contratuais",
+  codigoConduta = "Código de conduta regularmente emitido",
+  cooperacaoJuridicaInt = "Cooperação jurídica internacional entre órgãos públicos de inteligência, de investigação e de persecução, de acordo com os instrumentos de direito internacional",
+  cumprimentObrigacaoLegalRegulatorioa = "Cumprimento de obrigação legal ou regulatória pelo controlador",
+  execucaoContratoTitular = "Execução de contrato ou de procedimentos preliminares relacionados a contrato do qual seja parte o titular",
+  execucaoPoliticaPublica = "Execução de política pública ou atribuição legal do serviço público",
+  exercicioDireitos = "Exercício regular de direitos em processo judicial, administrativo ou arbitral",
+  consentimentoEspecificoTitular = "Fornecimento de consentimento específico pelo titular dos dados pessoais",
+  normasCorporativasGlobais = "Normas corporativas globais",
+  nivelAdequadoProtecaoPais = "País que fornece um nível adequado de proteção",
+  protecaoVidaTitular = "Proteção da vida ou da incolumidade física do titular ou de terceiro",
+  selo = "Selo regularmente emitido",
+  autorizadaANPD = "Transferência autorizada pela ANPD",
+}
+
 interface AgenteTratamento {
   nome: string;
   area?: string;
@@ -117,7 +136,7 @@ interface itemTransferenciaInternacional {
   nomeOrganizacao: string;
   pais: string;
   dadosTransferidos: string;
-  tipoGarantia: string;
+  tipoGarantia: tipoGarantiaTranferenciaInternacional;
 }
 
 interface itemContratoTI {
@@ -313,10 +332,14 @@ export const emptyItemMedidaSegurancaPrivacidade =
     descricaoControles: "",
   });
 
-// interface itemMedidasSegurancaPrivacidade {
-//   tipo: tipoMedidaSegurancaPrivacidade;
-//   descricaoControles: string;
-// }
+export const emptyItemTransferenciaInternacional =
+  (): itemTransferenciaInternacional => ({
+    nomeOrganizacao: "",
+    pais: "",
+    dadosTransferidos: "",
+    tipoGarantia:
+      tipoGarantiaTranferenciaInternacional.consentimentoEspecificoTitular,
+  });
 
 export const emptyFullCaseObject = (): FullCaseObject => ({
   nome: "",

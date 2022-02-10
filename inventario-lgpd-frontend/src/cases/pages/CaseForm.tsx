@@ -17,6 +17,7 @@ import {
   emptyItemCategoriaTitulares,
   emptyItemCompatilhamentoDados,
   emptyItemMedidaSegurancaPrivacidade,
+  emptyItemTransferenciaInternacional,
   FullCaseObject,
   verbosTratamento,
 } from "./../../shared/models/FullCase.model";
@@ -26,6 +27,7 @@ import Section7FormRow from "../components/form-items/Section7FormRow";
 import Section10FormRow from "../components/form-items/Section10FormRow";
 import Section11FormRow from "../components/form-items/Section11FormRow";
 import Section12FormRow from "../components/form-items/Section12FormRow";
+import Section13FormRow from "../components/form-items/Section13FormRow";
 
 type onSubmitFn = (item: FullCaseObject) => void;
 type onDeleteFn = (itemId: number) => void;
@@ -1196,7 +1198,9 @@ const CaseForm = (props: {
                       pessoais. É importantíssimo estabelecer claramente a
                       finalidade, import Section11FormRow from
                       './../componimport Section12FormRow from
-                      './../components/form-items/Section12FormRow';
+                      './../componimport Section13FormRow from
+                      './../components/form-items/Section13FormRow';
+                      ents/form-items/Section12FormRow';
                       ents/form-items/Section11FormRow'; pois é ela que
                       justifica o tratamento de dados pessoais e fornece os
                       elementos para informar o titular dos dados.
@@ -2903,6 +2907,87 @@ const CaseForm = (props: {
                               onClick={() =>
                                 arrayHelpers.push(
                                   emptyItemMedidaSegurancaPrivacidade()
+                                )
+                              }
+                            >
+                              +
+                            </Button>
+                          </ButtonGroup>
+                        </Row>
+                      )}
+                    </React.Fragment>
+                  )}
+                />
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="12">
+              <Accordion.Header>
+                Transferência Internacional de Dados Pessoais
+              </Accordion.Header>
+              <Accordion.Body>
+                <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                  <Form.Label as={Col}>
+                    Nome da Organização Receptora
+                  </Form.Label>
+                  <Form.Label as={Col}>País</Form.Label>
+                  <Form.Label as={Col}>Dados pessoais transferidos</Form.Label>
+                  <Form.Label as={Col}>
+                    Tipo de garantia para transferência
+                  </Form.Label>
+                </Row>
+                <FieldArray
+                  name="transferenciaInternacional"
+                  render={(arrayHelpers) => (
+                    <React.Fragment>
+                      {values.transferenciaInternacional &&
+                      values.transferenciaInternacional.length > 0 ? (
+                        values.transferenciaInternacional.map((item, index) => (
+                          <React.Fragment key={index}>
+                            <Section13FormRow
+                              className={`mb-3 pt-2 pb-2 ${
+                                index % 2 === 0
+                                  ? "bg-primary bg-opacity-10"
+                                  : ""
+                              }`}
+                              disabled={
+                                props.edit || props.approve || !isEditing
+                              }
+                              name={`transferenciaInternacional[${index}]`}
+                            />
+                            <Row className="justify-content-center">
+                              <ButtonGroup
+                                as={Col}
+                                className="mt-1 mb-3"
+                                lg={2}
+                              >
+                                <Button
+                                  variant="primary"
+                                  onClick={() =>
+                                    arrayHelpers.push(
+                                      emptyItemTransferenciaInternacional()
+                                    )
+                                  }
+                                >
+                                  +
+                                </Button>
+                                <Button
+                                  variant="danger"
+                                  onClick={() => arrayHelpers.remove(index)}
+                                >
+                                  -
+                                </Button>
+                              </ButtonGroup>
+                            </Row>
+                          </React.Fragment>
+                        ))
+                      ) : (
+                        <Row className="justify-content-center">
+                          <ButtonGroup as={Col} className="mt-1 mb-3" lg={2}>
+                            <Button
+                              variant="primary"
+                              onClick={() =>
+                                arrayHelpers.push(
+                                  emptyItemTransferenciaInternacional()
                                 )
                               }
                             >
