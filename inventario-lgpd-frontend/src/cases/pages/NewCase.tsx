@@ -1,13 +1,16 @@
 import { FullCaseObject } from "../../shared/models/FullCase.model";
 
 import CaseForm from "./CaseForm";
+import { emptyFullCaseObject } from "./../../shared/models/FullCase.model";
 
 const NewCase = () => {
   const submitFormHandler = (item: FullCaseObject) => {
     console.log(item);
   };
 
-  return <CaseForm new={true} onSubmit={submitFormHandler} />;
+  const emptyItem = emptyFullCaseObject();
+
+  return <CaseForm new={true} onSubmit={submitFormHandler} item={emptyItem} />;
 };
 
 export default NewCase;

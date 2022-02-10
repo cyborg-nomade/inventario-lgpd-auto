@@ -10,6 +10,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import { Formik, getIn, FieldArray } from "formik";
 import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 import {
   emptyFullCaseObject,
@@ -514,20 +515,29 @@ const schema = yup.object().shape({
 });
 
 const CaseForm = (props: {
-  item?: FullCaseObject;
+  item: FullCaseObject;
   new?: boolean;
   edit?: boolean;
   approve?: boolean;
   onSubmit: onSubmitFn;
   onDelete?: onDeleteFn;
 }) => {
-  const isEditing = props.new || false;
+  let isEditing = props.new || false;
+  let navigate = useNavigate();
+
+  const onStartEditing = () => {
+    isEditing = true;
+  };
+
+  const onCancel = () => {
+    navigate(`/`);
+  };
 
   return (
     <Formik
       validationSchema={schema}
       onSubmit={props.onSubmit!}
-      initialValues={emptyFullCaseObject()}
+      initialValues={props.item}
     >
       {({
         handleSubmit,
@@ -3099,7 +3109,7 @@ const CaseForm = (props: {
                       values.riscosPrivacidade.length > 0 ? (
                         values.riscosPrivacidade.map((item, index) => (
                           <React.Fragment key={index}>
-                            <Section12FormRow
+                            <Section15FormRow
                               className={`mb-3 pt-2 pb-2 ${
                                 index % 2 === 0
                                   ? "bg-primary bg-opacity-10"
@@ -3170,7 +3180,7 @@ const CaseForm = (props: {
                       values.observacoesProcesso.length > 0 ? (
                         values.observacoesProcesso.map((item, index) => (
                           <React.Fragment key={index}>
-                            <Section12FormRow
+                            <Section16FormRow
                               className={`mb-3 pt-2 pb-2 ${
                                 index % 2 === 0
                                   ? "bg-primary bg-opacity-10"
@@ -3230,9 +3240,36 @@ const CaseForm = (props: {
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>
-          <Button type="submit" className="float-end mt-3">
-            Submit form
-          </Button>
+          {props.new && (
+            <Button type="submit" className="float-end mt-3">
+              Registrar Novo
+            </Button>
+          )}
+          {props.approve && (
+            <Button type="submit" className="float-end mt-3">
+              Aprovar
+            </Button>
+          )}
+          {props.edit && isEditing && (
+            <Button type="button" className="float-end mt-3">
+              Salvar Alterações
+            </Button>
+          )}
+          {props.edit && !isEditing && (
+            <Row className="justify-content-end">
+              <ButtonGroup as={Col} className="mt-1 mb-3" lg={2}>
+                <Button variant="outline-secondary" onClick={() => onCancel}>
+                  Cancelar
+                </Button>
+                <Button variant="danger" onClick={() => props.onDelete}>
+                  Remover
+                </Button>
+                <Button variant="primary" onClick={() => onStartEditing}>
+                  Editar
+                </Button>
+              </ButtonGroup>
+            </Row>
+          )}
         </Form>
       )}
     </Formik>

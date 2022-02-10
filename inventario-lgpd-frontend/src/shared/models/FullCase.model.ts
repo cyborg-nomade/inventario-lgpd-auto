@@ -315,7 +315,7 @@ export interface FullCaseObject {
   observacoesProcesso: itemObservacoesProcesso[];
 }
 
-const emptyAgenteTratamento = (): AgenteTratamento => ({
+export const emptyAgenteTratamento = (): AgenteTratamento => ({
   nome: "",
   area: "",
   telefone: "",
