@@ -2209,6 +2209,92 @@ const CaseForm = (props: {
                 </Accordion>
               </Accordion.Body>
             </Accordion.Item>
+            <Accordion.Item eventKey="7">
+              <Accordion.Header>
+                Categorias de Dados Pessoais Sensíveis
+              </Accordion.Header>
+              <Accordion.Body>
+                <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                  <Form.Label as={Col}></Form.Label>
+                  <Form.Label as={Col}>Descrição</Form.Label>
+                  <Form.Label as={Col}>Tempo Retenção dos Dados</Form.Label>
+                  <Form.Label as={Col}>Fonte Retenção</Form.Label>
+                  <Form.Label as={Col}>
+                    Caminho Rede e/ou Sistema CPTM
+                  </Form.Label>
+                </Row>
+                <Section7FormRow
+                  className="mb-3 pt-2 pb-2"
+                  label="Dados que revelam origem racial ou étnica"
+                  tooltip={<React.Fragment />}
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="categoriaDadosPessoaisSensiveis.origemRacialEtnica"
+                />
+                <Section7FormRow
+                  className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                  label="Dados que revelam convicção religiosa"
+                  tooltip={<React.Fragment />}
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="categoriaDadosPessoaisSensiveis.conviccaoReligiosa"
+                />
+                <Section7FormRow
+                  className="mb-3 pt-2 pb-2"
+                  label="Dados que revelam opinião política"
+                  tooltip={<React.Fragment />}
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="categoriaDadosPessoaisSensiveis.opiniaoPolitica"
+                />
+                <Section7FormRow
+                  className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                  label="Dados que revelam filiação a sindicato"
+                  tooltip={<React.Fragment />}
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="categoriaDadosPessoaisSensiveis.filiacaoSindicato"
+                />
+                <Section7FormRow
+                  className="mb-3 pt-2 pb-2"
+                  label="Dados que revelam filiação a organização de caráter religioso"
+                  tooltip={<React.Fragment />}
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="categoriaDadosPessoaisSensiveis.filiacaoOrganizacaoReligiosa"
+                />
+                <Section7FormRow
+                  className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                  label="Dados que revelam filiação ou crença filosófica"
+                  tooltip={<React.Fragment />}
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="categoriaDadosPessoaisSensiveis.filiacaoCrencaFilosofica"
+                />
+                <Section7FormRow
+                  className="mb-3 pt-2 pb-2"
+                  label="Dados que revelam filiação ou preferências política"
+                  tooltip={<React.Fragment />}
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="categoriaDadosPessoaisSensiveis.filiacaoPreferenciaPolitica"
+                />
+                <Section7FormRow
+                  className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                  label="Dados referentes à saúde ou à vida sexual"
+                  tooltip={<React.Fragment />}
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="categoriaDadosPessoaisSensiveis.saudeVidaSexual"
+                />
+                <Section7FormRow
+                  className="mb-3 pt-2 pb-2"
+                  label="Dados genéticos"
+                  tooltip={<React.Fragment />}
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="categoriaDadosPessoaisSensiveis.geneticos"
+                />
+                <Section7FormRow
+                  className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2"
+                  label="Dados biométricos"
+                  tooltip={<React.Fragment />}
+                  disabled={props.edit || props.approve || !isEditing}
+                  name="categoriaDadosPessoaisSensiveis.biometricos"
+                />
+              </Accordion.Body>
+            </Accordion.Item>
           </Accordion>
           <Button type="submit" className="float-end mt-3">
             Submit form
