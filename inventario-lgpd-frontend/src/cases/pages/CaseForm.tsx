@@ -16,6 +16,7 @@ import {
   emptyItemCategoriaDadosPessoais,
   emptyItemCategoriaTitulares,
   emptyItemCompatilhamentoDados,
+  emptyItemContratoTI,
   emptyItemMedidaSegurancaPrivacidade,
   emptyItemTransferenciaInternacional,
   FullCaseObject,
@@ -28,6 +29,7 @@ import Section10FormRow from "../components/form-items/Section10FormRow";
 import Section11FormRow from "../components/form-items/Section11FormRow";
 import Section12FormRow from "../components/form-items/Section12FormRow";
 import Section13FormRow from "../components/form-items/Section13FormRow";
+import Section14FormRow from "../components/form-items/Section14FormRow";
 
 type onSubmitFn = (item: FullCaseObject) => void;
 type onDeleteFn = (itemId: number) => void;
@@ -2989,6 +2991,82 @@ const CaseForm = (props: {
                                 arrayHelpers.push(
                                   emptyItemTransferenciaInternacional()
                                 )
+                              }
+                            >
+                              +
+                            </Button>
+                          </ButtonGroup>
+                        </Row>
+                      )}
+                    </React.Fragment>
+                  )}
+                />
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="13">
+              <Accordion.Header>
+                Contrato(s) de serviços e/ou soluções de TI que trata(m) dados
+                pessoais do serviço/processo de negócio
+              </Accordion.Header>
+              <Accordion.Body>
+                <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                  <Form.Label as={Col}>Número do Contrato</Form.Label>
+                  <Form.Label as={Col}>Nº Processo Contratação</Form.Label>
+                  <Form.Label as={Col}>Objeto do Contrato</Form.Label>
+                  <Form.Label as={Col}>E-mail do Gestor do Contrato</Form.Label>
+                </Row>
+                <FieldArray
+                  name="contratoServicosTITratamentoDados"
+                  render={(arrayHelpers) => (
+                    <React.Fragment>
+                      {values.contratoServicosTITratamentoDados &&
+                      values.contratoServicosTITratamentoDados.length > 0 ? (
+                        values.contratoServicosTITratamentoDados.map(
+                          (item, index) => (
+                            <React.Fragment key={index}>
+                              <Section14FormRow
+                                className={`mb-3 pt-2 pb-2 ${
+                                  index % 2 === 0
+                                    ? "bg-primary bg-opacity-10"
+                                    : ""
+                                }`}
+                                disabled={
+                                  props.edit || props.approve || !isEditing
+                                }
+                                name={`contratoServicosTITratamentoDados[${index}]`}
+                              />
+                              <Row className="justify-content-center">
+                                <ButtonGroup
+                                  as={Col}
+                                  className="mt-1 mb-3"
+                                  lg={2}
+                                >
+                                  <Button
+                                    variant="primary"
+                                    onClick={() =>
+                                      arrayHelpers.push(emptyItemContratoTI())
+                                    }
+                                  >
+                                    +
+                                  </Button>
+                                  <Button
+                                    variant="danger"
+                                    onClick={() => arrayHelpers.remove(index)}
+                                  >
+                                    -
+                                  </Button>
+                                </ButtonGroup>
+                              </Row>
+                            </React.Fragment>
+                          )
+                        )
+                      ) : (
+                        <Row className="justify-content-center">
+                          <ButtonGroup as={Col} className="mt-1 mb-3" lg={2}>
+                            <Button
+                              variant="primary"
+                              onClick={() =>
+                                arrayHelpers.push(emptyItemContratoTI())
                               }
                             >
                               +

@@ -140,8 +140,8 @@ interface itemTransferenciaInternacional {
 }
 
 interface itemContratoTI {
-  nomeContrato: string;
-  numeroProcessoContratacao: number;
+  numeroContrato: string;
+  numeroProcessoContratacao: string;
   objetoContrato: string;
   emailGestorContrato: string;
 }
@@ -340,6 +340,13 @@ export const emptyItemTransferenciaInternacional =
     tipoGarantia:
       tipoGarantiaTranferenciaInternacional.consentimentoEspecificoTitular,
   });
+
+export const emptyItemContratoTI = (): itemContratoTI => ({
+  numeroContrato: "",
+  numeroProcessoContratacao: "",
+  objetoContrato: "",
+  emailGestorContrato: "",
+});
 
 export const emptyFullCaseObject = (): FullCaseObject => ({
   nome: "",
