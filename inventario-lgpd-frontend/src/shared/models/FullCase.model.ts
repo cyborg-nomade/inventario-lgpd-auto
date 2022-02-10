@@ -276,6 +276,12 @@ export const emptyItemCategoriaTitulares = (): itemCategoriaTitulares => ({
   descricao: "",
 });
 
+export const emptyItemCompatilhamentoDados = (): itemCompartilhamentoDados => ({
+  nomeInstituicao: "",
+  dadosCompartilhados: "",
+  finalidadeCompartilhamento: "",
+});
+
 export const emptyFullCaseObject = (): FullCaseObject => ({
   nome: "",
   id: 0,
