@@ -18,6 +18,7 @@ import {
   emptyItemCompatilhamentoDados,
   emptyItemContratoTI,
   emptyItemMedidaSegurancaPrivacidade,
+  emptyItemObservacoesProcesso,
   emptyItemRiscoPrivacidade,
   emptyItemTransferenciaInternacional,
   FullCaseObject,
@@ -32,6 +33,7 @@ import Section12FormRow from "../components/form-items/Section12FormRow";
 import Section13FormRow from "../components/form-items/Section13FormRow";
 import Section14FormRow from "../components/form-items/Section14FormRow";
 import Section15FormRow from "../components/form-items/Section15FormRow";
+import Section16FormRow from "../components/form-items/Section16FormRow";
 
 type onSubmitFn = (item: FullCaseObject) => void;
 type onDeleteFn = (itemId: number) => void;
@@ -3142,6 +3144,79 @@ const CaseForm = (props: {
                               variant="primary"
                               onClick={() =>
                                 arrayHelpers.push(emptyItemRiscoPrivacidade())
+                              }
+                            >
+                              +
+                            </Button>
+                          </ButtonGroup>
+                        </Row>
+                      )}
+                    </React.Fragment>
+                  )}
+                />
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="15">
+              <Accordion.Header>Observações sobre o Processo</Accordion.Header>
+              <Accordion.Body>
+                <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                  <Form.Label as={Col}>Observação</Form.Label>
+                </Row>
+                <FieldArray
+                  name="observacoesProcesso"
+                  render={(arrayHelpers) => (
+                    <React.Fragment>
+                      {values.observacoesProcesso &&
+                      values.observacoesProcesso.length > 0 ? (
+                        values.observacoesProcesso.map((item, index) => (
+                          <React.Fragment key={index}>
+                            <Section12FormRow
+                              className={`mb-3 pt-2 pb-2 ${
+                                index % 2 === 0
+                                  ? "bg-primary bg-opacity-10"
+                                  : ""
+                              }`}
+                              label={`Observação ${index + 1}`}
+                              disabled={
+                                props.edit || props.approve || !isEditing
+                              }
+                              name={`observacoesProcesso[${index}]`}
+                            />
+                            <Row className="justify-content-center">
+                              <ButtonGroup
+                                as={Col}
+                                className="mt-1 mb-3"
+                                lg={2}
+                              >
+                                <Button
+                                  variant="primary"
+                                  onClick={() =>
+                                    arrayHelpers.push(
+                                      emptyItemObservacoesProcesso()
+                                    )
+                                  }
+                                >
+                                  +
+                                </Button>
+                                <Button
+                                  variant="danger"
+                                  onClick={() => arrayHelpers.remove(index)}
+                                >
+                                  -
+                                </Button>
+                              </ButtonGroup>
+                            </Row>
+                          </React.Fragment>
+                        ))
+                      ) : (
+                        <Row className="justify-content-center">
+                          <ButtonGroup as={Col} className="mt-1 mb-3" lg={2}>
+                            <Button
+                              variant="primary"
+                              onClick={() =>
+                                arrayHelpers.push(
+                                  emptyItemObservacoesProcesso()
+                                )
                               }
                             >
                               +

@@ -50,7 +50,7 @@ const Section15FormRow = (props: {
           onBlur={handleBlur}
           isValid={
             getIn(touched, `${props.name}.observacoes`) &&
-            !getIn(errors, `${props.name}observacoestipoRisco`)
+            !getIn(errors, `${props.name}.observacoes`)
           }
           isInvalid={!!getIn(errors, `${props.name}.observacoes`)}
         />

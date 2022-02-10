@@ -169,7 +169,6 @@ interface itemRiscoPrivacidade {
 }
 
 interface itemObservacoesProcesso {
-  nomeObs: string;
   descricaoObs: string;
 }
 
@@ -367,6 +366,10 @@ export const emptyItemContratoTI = (): itemContratoTI => ({
 export const emptyItemRiscoPrivacidade = (): itemRiscoPrivacidade => ({
   tipoRisco: tipoRiscoPrivacidade.tratamentoSemConsentimento,
   observacoes: "",
+});
+
+export const emptyItemObservacoesProcesso = (): itemObservacoesProcesso => ({
+  descricaoObs: "",
 });
 
 export const emptyFullCaseObject = (): FullCaseObject => ({
