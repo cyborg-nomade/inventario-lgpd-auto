@@ -102,6 +102,23 @@ export enum tipoGarantiaTranferenciaInternacional {
   autorizadaANPD = "Transferência autorizada pela ANPD",
 }
 
+export enum tipoRiscoPrivacidade {
+  acessoNaoAutorizado = "Acesso não autorizado",
+  modificacaoNaoAutorizada = "Modificação não autorizada",
+  perda = "Perda",
+  roubo = "Roubo",
+  remocaoNaoAutorizada = "Remoção não autorizada",
+  colecaoExcessiva = "Coleção excessiva",
+  informacaoInsuficienteFinalidadeTratamento = "Informação insuficiente sobre a finalidade do tratamento",
+  tratamentoSemConsentimento = "Tratamento sem consentimento do titular dos dados pessoais (Caso o tratamento não esteja previsto em legislação ou regulação pertinente)",
+  falhaConsiderarDireitos = "Falha em considerar os direitos do titular dos dados pessoais (Ex.: perda do direito de acesso)",
+  compartilharDistribuirSemConsentimento = "Compartilhar ou distribuir dados pessoais com terceiros fora da administração pública federal sem o consentimento do titular dos dados pessoais",
+  retencaoProlongadaSemNecessidade = "Retenção prolongada de dados pessoais sem necessidade",
+  vinculacaoAssociacaoIndevida = "Vinculação ou associação indevida, direta ou indireta, dos dados pessoais ao titular",
+  falhaErroProcessamento = "Falha ou erro de processamento (Ex.: execução de script de banco de dados que atualiza dado pessoal com informação equivocada, ausência de validação dos dados de entrada, etc.)",
+  reidentificacaoPsudonimizados = "Reidentificação de dados pseudonimizados",
+}
+
 interface AgenteTratamento {
   nome: string;
   area?: string;
@@ -147,8 +164,7 @@ interface itemContratoTI {
 }
 
 interface itemRiscoPrivacidade {
-  nomeRisco: string;
-  descricaoRisco: string;
+  tipoRisco: tipoRiscoPrivacidade;
   observacoes: string;
 }
 
@@ -346,6 +362,11 @@ export const emptyItemContratoTI = (): itemContratoTI => ({
   numeroProcessoContratacao: "",
   objetoContrato: "",
   emailGestorContrato: "",
+});
+
+export const emptyItemRiscoPrivacidade = (): itemRiscoPrivacidade => ({
+  tipoRisco: tipoRiscoPrivacidade.tratamentoSemConsentimento,
+  observacoes: "",
 });
 
 export const emptyFullCaseObject = (): FullCaseObject => ({

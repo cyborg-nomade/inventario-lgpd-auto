@@ -18,6 +18,7 @@ import {
   emptyItemCompatilhamentoDados,
   emptyItemContratoTI,
   emptyItemMedidaSegurancaPrivacidade,
+  emptyItemRiscoPrivacidade,
   emptyItemTransferenciaInternacional,
   FullCaseObject,
   verbosTratamento,
@@ -30,6 +31,7 @@ import Section11FormRow from "../components/form-items/Section11FormRow";
 import Section12FormRow from "../components/form-items/Section12FormRow";
 import Section13FormRow from "../components/form-items/Section13FormRow";
 import Section14FormRow from "../components/form-items/Section14FormRow";
+import Section15FormRow from "../components/form-items/Section15FormRow";
 
 type onSubmitFn = (item: FullCaseObject) => void;
 type onDeleteFn = (itemId: number) => void;
@@ -3067,6 +3069,79 @@ const CaseForm = (props: {
                               variant="primary"
                               onClick={() =>
                                 arrayHelpers.push(emptyItemContratoTI())
+                              }
+                            >
+                              +
+                            </Button>
+                          </ButtonGroup>
+                        </Row>
+                      )}
+                    </React.Fragment>
+                  )}
+                />
+              </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="14">
+              <Accordion.Header>Risco de Privacidade</Accordion.Header>
+              <Accordion.Body>
+                <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
+                  <Form.Label as={Col}></Form.Label>
+                  <Form.Label as={Col}>Tipo de Risco de Privacidade</Form.Label>
+                  <Form.Label as={Col}>Observações</Form.Label>
+                </Row>
+                <FieldArray
+                  name="riscosPrivacidade"
+                  render={(arrayHelpers) => (
+                    <React.Fragment>
+                      {values.riscosPrivacidade &&
+                      values.riscosPrivacidade.length > 0 ? (
+                        values.riscosPrivacidade.map((item, index) => (
+                          <React.Fragment key={index}>
+                            <Section12FormRow
+                              className={`mb-3 pt-2 pb-2 ${
+                                index % 2 === 0
+                                  ? "bg-primary bg-opacity-10"
+                                  : ""
+                              }`}
+                              label={`Risco ${index + 1}`}
+                              disabled={
+                                props.edit || props.approve || !isEditing
+                              }
+                              name={`riscosPrivacidade[${index}]`}
+                            />
+                            <Row className="justify-content-center">
+                              <ButtonGroup
+                                as={Col}
+                                className="mt-1 mb-3"
+                                lg={2}
+                              >
+                                <Button
+                                  variant="primary"
+                                  onClick={() =>
+                                    arrayHelpers.push(
+                                      emptyItemRiscoPrivacidade()
+                                    )
+                                  }
+                                >
+                                  +
+                                </Button>
+                                <Button
+                                  variant="danger"
+                                  onClick={() => arrayHelpers.remove(index)}
+                                >
+                                  -
+                                </Button>
+                              </ButtonGroup>
+                            </Row>
+                          </React.Fragment>
+                        ))
+                      ) : (
+                        <Row className="justify-content-center">
+                          <ButtonGroup as={Col} className="mt-1 mb-3" lg={2}>
+                            <Button
+                              variant="primary"
+                              onClick={() =>
+                                arrayHelpers.push(emptyItemRiscoPrivacidade())
                               }
                             >
                               +
