@@ -1,8 +1,8 @@
 # Roadmap de versões
 
 - v0: app de frontend criado (OK)
-  - v0.1: esqueleto básico criado (navegação + main)
-  - v0.2: formulário de registro criado
+  - v0.1: esqueleto básico criado (navegação + main) (OK)
+  - v0.2: formulário de registro criado (OK)
   - v0.3: lista de registros criada (dummy data)
   - v0.4: tela de login criada
   - v0.5: lógica de login no frontend

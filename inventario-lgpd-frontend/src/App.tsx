@@ -2,17 +2,19 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
-import NewCase from "./cases/pages/NewCase";
-import UserPage from "./users/pages/UserPage";
-import Login from "./users/pages/Login";
-import EditCase from "./cases/pages/EditCase";
-import ApproveCaseList from "./cases/pages/ApproveCaseList";
 import AllCasesList from "./cases/pages/AllCasesList";
-import UserCasesList from "./users/pages/UserCasesList";
+import ApproveCaseList from "./cases/pages/ApproveCaseList";
+import EditCase from "./cases/pages/EditCase";
+import NewCase from "./cases/pages/NewCase";
+import Login from "./users/pages/Login";
 import Logout from "./users/pages/Logout";
+import UserCasesList from "./users/pages/UserCasesList";
+import UserPage from "./users/pages/UserPage";
+
 import MainHeader from "./shared/components/nav/MainHeader";
 
 import "./App.css";
+import ApproveCase from "./cases/pages/ApproveCase";
 
 const App = () => {
   return (
@@ -31,6 +33,7 @@ const App = () => {
           <Route path="/cases/:cid" element={<EditCase />} />
           <Route path="/cases/" element={<AllCasesList />} />
           <Route path="/cases/approve" element={<ApproveCaseList />} />
+          <Route path="/cases/approve/:cid" element={<ApproveCase />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Container>

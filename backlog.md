@@ -1,4 +1,4 @@
-# navegação
+# cases form
 
 1- criar app de frontend (OK)
 2- checkout develop (OK)
@@ -13,3 +13,6 @@
 11- adicionar barra de navegação (OK)
 12- tornar barra de navegação responsiva (side-drawer) (OK)
 13- inserir links apropriados na barra de navegação (OK)
+14 - formulário criado (OK)
+15 - ações de novo, editar e aprovar implementadas (OK)
+16 - otimização de performance (OK)
