@@ -126,7 +126,7 @@ interface AgenteTratamento {
   email?: string;
 }
 
-interface itemCategoriaDadosPessoais {
+export interface itemCategoriaDadosPessoais {
   descricao: string;
   tempoRetencao: string;
   fonteRetencao: fontesRetencao;

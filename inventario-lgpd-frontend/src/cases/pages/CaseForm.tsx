@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -13,7 +13,6 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 
 import {
-  emptyFullCaseObject,
   emptyItemCategoriaDadosPessoais,
   emptyItemCategoriaTitulares,
   emptyItemCompatilhamentoDados,
@@ -522,11 +521,11 @@ const CaseForm = (props: {
   onSubmit: onSubmitFn;
   onDelete?: onDeleteFn;
 }) => {
-  let isEditing = props.new || false;
+  const [isEditing, setIsEditing] = useState(props.new || false);
   let navigate = useNavigate();
 
   const onStartEditing = () => {
-    isEditing = true;
+    setIsEditing(true);
   };
 
   const onCancel = () => {

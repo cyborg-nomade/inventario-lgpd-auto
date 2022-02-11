@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -10,8 +12,67 @@ const Section11FormRow = (props: {
   name: string;
   className: string;
 }) => {
-  const { values, touched, errors, handleChange, handleBlur } =
+  const { values, touched, errors, handleBlur, setFieldValue } =
     useFormikContext<FullCaseObject>();
+
+  const [nomeInstituicao, setNomeInstituicao] = useState(
+    getIn(values, `${props.name}.nomeInstituicao`)
+  );
+
+  const [dadosCompartilhados, setDadosCompartilhados] = useState(
+    getIn(values, `${props.name}.dadosCompartilhados`)
+  );
+
+  const [finalidadeCompartilhamento, setFinalidadeCompartilhamento] = useState(
+    getIn(values, `${props.name}.finalidadeCompartilhamento`)
+  );
+
+  const handleChangeNomeInstituicao = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNomeInstituicao(event.currentTarget.value);
+  };
+
+  const handleChangeDadosCompartilhados = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDadosCompartilhados(event.currentTarget.value);
+  };
+
+  const handleChangeFinalidadeCompartilhamento = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFinalidadeCompartilhamento(event.currentTarget.value);
+  };
+
+  const handleBlurNomeInstituicao = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(`${props.name}.nomeInstituicao`, nomeInstituicao, true);
+  };
+
+  const handleBlurDadosCompartilhados = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(
+      `${props.name}.dadosCompartilhados`,
+      dadosCompartilhados,
+      true
+    );
+  };
+
+  const handleBlurFinalidadeCompartilhamento = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(
+      `${props.name}.finalidadeCompartilhamento`,
+      finalidadeCompartilhamento,
+      true
+    );
+  };
 
   return (
     <Row className={props.className}>
@@ -20,9 +81,9 @@ const Section11FormRow = (props: {
           disabled={props.disabled}
           type="text"
           name={`${props.name}.nomeInstituicao`}
-          value={getIn(values, `${props.name}.nomeInstituicao`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={nomeInstituicao}
+          onChange={handleChangeNomeInstituicao}
+          onBlur={handleBlurNomeInstituicao}
           isValid={
             getIn(touched, `${props.name}.nomeInstituicao`) &&
             !getIn(errors, `${props.name}.nomeInstituicao`)
@@ -35,9 +96,9 @@ const Section11FormRow = (props: {
           disabled={props.disabled}
           type="text"
           name={`${props.name}.dadosCompartilhados`}
-          value={getIn(values, `${props.name}.dadosCompartilhados`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={dadosCompartilhados}
+          onChange={handleChangeDadosCompartilhados}
+          onBlur={handleBlurDadosCompartilhados}
           isValid={
             getIn(touched, `${props.name}.dadosCompartilhados`) &&
             !getIn(errors, `${props.name}.dadosCompartilhados`)
@@ -50,9 +111,9 @@ const Section11FormRow = (props: {
           disabled={props.disabled}
           type="text"
           name={`${props.name}.finalidadeCompartilhamento`}
-          value={getIn(values, `${props.name}.finalidadeCompartilhamento`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={finalidadeCompartilhamento}
+          onChange={handleChangeFinalidadeCompartilhamento}
+          onBlur={handleBlurFinalidadeCompartilhamento}
           isValid={
             getIn(touched, `${props.name}.finalidadeCompartilhamento`) &&
             !getIn(errors, `${props.name}.finalidadeCompartilhamento`)

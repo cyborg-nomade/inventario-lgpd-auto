@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -16,8 +16,25 @@ const Section12FormRow = (props: {
   name: string;
   className: string;
 }) => {
-  const { values, touched, errors, handleChange, handleBlur } =
+  const { values, touched, errors, handleChange, handleBlur, setFieldValue } =
     useFormikContext<FullCaseObject>();
+
+  const [descricaoControles, setDescricaoControles] = useState(
+    getIn(values, `${props.name}.descricaoControles`)
+  );
+
+  const handleChangeDescricaoControles = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDescricaoControles(event.currentTarget.value);
+  };
+
+  const handleBlurDescricaoControles = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(`${props.name}.descricaoControles`, descricaoControles, true);
+  };
 
   return (
     <Row className={props.className}>
@@ -47,9 +64,9 @@ const Section12FormRow = (props: {
           disabled={props.disabled}
           type="text"
           name={`${props.name}.descricaoControles`}
-          value={getIn(values, `${props.name}.descricaoControles`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={descricaoControles}
+          onChange={handleChangeDescricaoControles}
+          onBlur={handleBlurDescricaoControles}
           isValid={
             getIn(touched, `${props.name}.descricaoControles`) &&
             !getIn(errors, `${props.name}.descricaoControles`)

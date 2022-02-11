@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -18,8 +20,19 @@ const Section6FormRow = (props: {
   type: string;
   invalid: string;
 }) => {
-  const { values, touched, errors, handleChange, handleBlur } =
+  const { values, touched, errors, setFieldValue, handleChange, handleBlur } =
     useFormikContext<FullCaseObject>();
+
+  const [propNameState, setPropNameState] = useState(getIn(values, props.name));
+
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPropNameState(event.currentTarget.value);
+  };
+
+  const handleBlurInput = (event: React.FocusEvent<HTMLInputElement>) => {
+    handleBlur(event);
+    setFieldValue(props.name, propNameState, true);
+  };
 
   return (
     <Row className="mb-3">
@@ -52,9 +65,9 @@ const Section6FormRow = (props: {
             disabled={props.disabled}
             type="text"
             name={props.name}
-            value={getIn(values, props.name)}
-            onChange={handleChange}
-            onBlur={handleBlur}
+            value={propNameState}
+            onChange={handleChangeInput}
+            onBlur={handleBlurInput}
             isValid={getIn(touched, props.name) && !getIn(errors, props.name)}
             isInvalid={!!getIn(errors, props.name)}
           />

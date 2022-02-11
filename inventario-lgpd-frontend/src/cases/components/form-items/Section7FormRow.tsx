@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -8,6 +10,7 @@ import { useFormikContext, getIn } from "formik";
 import {
   fontesRetencao,
   FullCaseObject,
+  itemCategoriaDadosPessoais,
 } from "../../../shared/models/FullCase.model";
 
 const Section7FormRow = (props: {
@@ -17,8 +20,57 @@ const Section7FormRow = (props: {
   name: string;
   className: string;
 }) => {
-  const { values, touched, errors, handleChange, handleBlur } =
+  const { values, touched, errors, handleChange, handleBlur, setFieldValue } =
     useFormikContext<FullCaseObject>();
+
+  const [descricao, setDescricao] = useState(
+    getIn(values, `${props.name}.descricao`)
+  );
+
+  const [tempoRetencao, setTempoRetencao] = useState(
+    getIn(values, `${props.name}.tempoRetencao`)
+  );
+
+  const [caminhoRedeSistema, setCaminhoRedeSistema] = useState(
+    getIn(values, `${props.name}.caminhoRedeSistema`)
+  );
+
+  const handleChangeDescricao = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDescricao(event.currentTarget.value);
+  };
+
+  const handleChangeTempoRetencao = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setTempoRetencao(event.currentTarget.value);
+  };
+
+  const handleChangeCaminhoRedeSistema = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCaminhoRedeSistema(event.currentTarget.value);
+  };
+
+  const handleBlurDescricao = (event: React.FocusEvent<HTMLInputElement>) => {
+    handleBlur(event);
+    setFieldValue(`${props.name}.descricao`, descricao, true);
+  };
+
+  const handleBlurTempoRetencao = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(`${props.name}.tempoRetencao`, tempoRetencao, true);
+  };
+
+  const handleBlurCaminhoRedeSistema = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(`${props.name}.caminhoRedeSistema`, caminhoRedeSistema, true);
+  };
 
   return (
     <Row className={props.className}>
@@ -33,9 +85,9 @@ const Section7FormRow = (props: {
           disabled={props.disabled}
           type="text"
           name={`${props.name}.descricao`}
-          value={getIn(values, `${props.name}.descricao`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={descricao}
+          onChange={handleChangeDescricao}
+          onBlur={handleBlurDescricao}
           isValid={
             getIn(touched, `${props.name}.descricao`) &&
             !getIn(errors, `${props.name}.descricao`)
@@ -48,15 +100,12 @@ const Section7FormRow = (props: {
       </Col>
       <Col>
         <Form.Control
-          disabled={
-            props.disabled ||
-            !(getIn(values, `${props.name}.descricao`) !== "Não se aplica")
-          }
+          disabled={props.disabled || !(descricao !== "Não se aplica")}
           type="text"
           name={`${props.name}.tempoRetencao`}
-          value={getIn(values, `${props.name}.tempoRetencao`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={tempoRetencao}
+          onChange={handleChangeTempoRetencao}
+          onBlur={handleBlurTempoRetencao}
           isValid={
             getIn(touched, `${props.name}.tempoRetencao`) &&
             !getIn(errors, `${props.name}.tempoRetencao`)
@@ -66,10 +115,7 @@ const Section7FormRow = (props: {
       </Col>
       <Col>
         <Form.Select
-          disabled={
-            props.disabled ||
-            !(getIn(values, `${props.name}.descricao`) !== "Não se aplica")
-          }
+          disabled={props.disabled || !(descricao !== "Não se aplica")}
           name={`${props.name}.fonteRetencao`}
           value={getIn(values, `${props.name}.fonteRetencao`)}
           onChange={handleChange}
@@ -89,15 +135,12 @@ const Section7FormRow = (props: {
       </Col>
       <Col>
         <Form.Control
-          disabled={
-            props.disabled ||
-            !(getIn(values, `${props.name}.descricao`) !== "Não se aplica")
-          }
+          disabled={props.disabled || !(descricao !== "Não se aplica")}
           type="text"
           name={`${props.name}.caminhoRedeSistema`}
-          value={getIn(values, `${props.name}.caminhoRedeSistema`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={caminhoRedeSistema}
+          onChange={handleChangeCaminhoRedeSistema}
+          onBlur={handleBlurCaminhoRedeSistema}
           isValid={
             getIn(touched, `${props.name}.caminhoRedeSistema`) &&
             !getIn(errors, `${props.name}.caminhoRedeSistema`)
