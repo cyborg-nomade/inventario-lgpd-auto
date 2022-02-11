@@ -4,7 +4,6 @@ import {
   categoriaTitulares,
   emptyAgenteTratamento,
   emptyItemCategoriaDadosPessoais,
-  emptyItemCategoriaTitulares,
   fontesRetencao,
   FullCaseObject,
   hipotesesTratamento,
@@ -13,7 +12,7 @@ import {
 } from "../../shared/models/FullCase.model";
 import CaseForm from "../components/CaseForm";
 
-const EditCase = () => {
+const ApproveCase = () => {
   const cid = useParams().cid || 0;
 
   const testItem: FullCaseObject = {
@@ -300,11 +299,14 @@ const EditCase = () => {
   let navigate = useNavigate();
 
   const submitFormHandler = (item: FullCaseObject) => {
+    item.aprovado = true;
     console.log(item);
     navigate(`/`);
   };
 
-  return <CaseForm item={testItem} edit={true} onSubmit={submitFormHandler} />;
+  return (
+    <CaseForm item={testItem} approve={true} onSubmit={submitFormHandler} />
+  );
 };
 
-export default EditCase;
+export default ApproveCase;

@@ -175,8 +175,9 @@ interface itemObservacoesProcesso {
 export interface FullCaseObject {
   nome: string;
   id: number;
+  ref: string;
   aprovado: boolean;
-  criador: number;
+  criador: string;
   dataCriacao: string;
   dataAtualizacao: string;
   controlador: AgenteTratamento;
@@ -375,8 +376,9 @@ export const emptyItemObservacoesProcesso = (): itemObservacoesProcesso => ({
 export const emptyFullCaseObject = (): FullCaseObject => ({
   nome: "",
   id: 0,
+  ref: "",
   aprovado: false,
-  criador: 0,
+  criador: "u1",
   dataCriacao: new Date().toDateString(),
   dataAtualizacao: new Date().toDateString(),
   controlador: emptyAgenteTratamento(),

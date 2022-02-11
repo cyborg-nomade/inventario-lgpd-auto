@@ -14,6 +14,7 @@ import UserPage from "./users/pages/UserPage";
 import MainHeader from "./shared/components/nav/MainHeader";
 
 import "./App.css";
+import ApproveCase from "./cases/pages/ApproveCase";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/cases/:cid" element={<EditCase />} />
           <Route path="/cases/" element={<AllCasesList />} />
           <Route path="/cases/approve" element={<ApproveCaseList />} />
+          <Route path="/cases/approve/:cid" element={<ApproveCase />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Container>
