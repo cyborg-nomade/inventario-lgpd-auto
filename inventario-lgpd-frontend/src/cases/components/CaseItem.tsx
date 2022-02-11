@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CaseItemObject } from "./../../shared/models/CaseListItem.model";
+import { CaseItemObject } from "../../shared/models/CaseListItem.model";
 
 const CaseItem = (props: { item: CaseItemObject }) => {
   return (

@@ -1,6 +1,6 @@
 import { FullCaseObject } from "../../shared/models/FullCase.model";
 
-import CaseForm from "./CaseForm";
+import CaseForm from "../components/CaseForm";
 import { emptyFullCaseObject } from "./../../shared/models/FullCase.model";
 
 const NewCase = () => {

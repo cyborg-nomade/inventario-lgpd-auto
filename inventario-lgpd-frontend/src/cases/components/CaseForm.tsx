@@ -23,17 +23,17 @@ import {
   emptyItemTransferenciaInternacional,
   FullCaseObject,
   verbosTratamento,
-} from "./../../shared/models/FullCase.model";
+} from "../../shared/models/FullCase.model";
 import TagPicker from "../../shared/components/UI/TagPicker";
-import Section6FormRow from "../components/form-items/Section6FormRow";
-import Section7FormRow from "../components/form-items/Section7FormRow";
-import Section10FormRow from "../components/form-items/Section10FormRow";
-import Section11FormRow from "../components/form-items/Section11FormRow";
-import Section12FormRow from "../components/form-items/Section12FormRow";
-import Section13FormRow from "../components/form-items/Section13FormRow";
-import Section14FormRow from "../components/form-items/Section14FormRow";
-import Section15FormRow from "../components/form-items/Section15FormRow";
-import Section16FormRow from "../components/form-items/Section16FormRow";
+import Section6FormRow from "./form-items/Section6FormRow";
+import Section7FormRow from "./form-items/Section7FormRow";
+import Section10FormRow from "./form-items/Section10FormRow";
+import Section11FormRow from "./form-items/Section11FormRow";
+import Section12FormRow from "./form-items/Section12FormRow";
+import Section13FormRow from "./form-items/Section13FormRow";
+import Section14FormRow from "./form-items/Section14FormRow";
+import Section15FormRow from "./form-items/Section15FormRow";
+import Section16FormRow from "./form-items/Section16FormRow";
 
 type onSubmitFn = (item: FullCaseObject) => void;
 type onDeleteFn = (itemId: number) => void;

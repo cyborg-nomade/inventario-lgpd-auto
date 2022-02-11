@@ -7,7 +7,7 @@ import {
   FullCaseObject,
   hipotesesTratamento,
 } from "../../shared/models/FullCase.model";
-import CaseForm from "./CaseForm";
+import CaseForm from "../components/CaseForm";
 
 const EditCase = () => {
   const cid = useParams().cid || 0;

@@ -2,7 +2,7 @@ import Table from "react-bootstrap/Table";
 import Alert from "react-bootstrap/Alert";
 
 import CaseItem from "./CaseItem";
-import { CaseItemObject } from "./../../shared/models/CaseListItem.model";
+import { CaseItemObject } from "../../shared/models/CaseListItem.model";
 
 const CasesList = (props: { items: CaseItemObject[] }) => {
   if (props.items.length === 0) {

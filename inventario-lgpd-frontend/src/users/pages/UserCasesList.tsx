@@ -1,4 +1,4 @@
-import CasesList from "../../cases/pages/CasesList";
+import CasesList from "../../cases/components/CasesList";
 import { useParams } from "react-router-dom";
 import { CaseItemObject } from "./../../shared/models/CaseListItem.model";
 
