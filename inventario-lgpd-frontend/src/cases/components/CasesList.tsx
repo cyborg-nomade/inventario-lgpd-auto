@@ -1,18 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-
 import Table from "react-bootstrap/Table";
 import Alert from "react-bootstrap/Alert";
 
 import CaseItem from "./CaseItem";
+import { CaseItemObject } from "../../shared/models/CaseListItem.model";
 
-/**
- *
- *
- * @param {{items:CaseItemObject[]}} props
- *
- */
-const CasesList = (props) => {
+const CasesList = (props: { items: CaseItemObject[] }) => {
   if (props.items.length === 0) {
     return (
       <Alert variant="warning">
@@ -46,21 +38,6 @@ const CasesList = (props) => {
       </tbody>
     </Table>
   );
-};
-
-CasesList.propTypes = {
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      nome: PropTypes.string,
-      id: PropTypes.number,
-      area: PropTypes.string,
-      dataCriacao: PropTypes.string,
-      dataAtualizacao: PropTypes.string,
-      finalidade: PropTypes.string,
-      hipoteseTratamento: PropTypes.string,
-      dadosPessoaisSensiveis: PropTypes.bool,
-    })
-  ),
 };
 
 export default CasesList;
