@@ -9,8 +9,8 @@ const CaseItem = (props: { item: CaseItemObject }) => {
       </td>
       <td>{props.item.id}</td>
       <td>{props.item.area}</td>
-      <td>{props.item.dataCriacao.toDateString()}</td>
-      <td>{props.item.dataAtualizacao.toDateString()}</td>
+      {/* <td>{props.item.dataCriacao.toDateString()}</td>
+      <td>{props.item.dataAtualizacao.toDateString()}</td> */}
       <td>{props.item.finalidade}</td>
       <td>{props.item.hipoteseTratamento}</td>
       <td>{props.item.dadosPessoaisSensiveis ? "SIM" : "NÃO"}</td>
