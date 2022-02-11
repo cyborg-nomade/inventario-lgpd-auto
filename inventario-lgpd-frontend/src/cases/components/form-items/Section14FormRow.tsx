@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -10,8 +12,84 @@ const Section14FormRow = (props: {
   name: string;
   className: string;
 }) => {
-  const { values, touched, errors, handleChange, handleBlur } =
+  const { values, touched, errors, handleChange, handleBlur, setFieldValue } =
     useFormikContext<FullCaseObject>();
+
+  const [numeroContrato, setNumeroContrato] = useState(
+    getIn(values, `${props.name}.numeroContrato`)
+  );
+
+  const [numeroProcessoContratacao, setNumeroProcessoContratacao] = useState(
+    getIn(values, `${props.name}.numeroProcessoContratacao`)
+  );
+
+  const [objetoContrato, setObjetoContrato] = useState(
+    getIn(values, `${props.name}.objetoContrato`)
+  );
+
+  const [emailGestorContrato, setEmailGestorContrato] = useState(
+    getIn(values, `${props.name}.emailGestorContrato`)
+  );
+
+  const handleChangeNumeroContrato = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNumeroContrato(event.currentTarget.value);
+  };
+
+  const handleChangeNumeroProcessoContratacao = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNumeroProcessoContratacao(event.currentTarget.value);
+  };
+
+  const handleChangeObjetoContrato = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setObjetoContrato(event.currentTarget.value);
+  };
+
+  const handleChangeEmailGestorContrato = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setEmailGestorContrato(event.currentTarget.value);
+  };
+
+  const handleBlurNumeroContrato = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(`${props.name}.numeroContrato`, numeroContrato, true);
+  };
+
+  const handleBlurNumeroProcessoContratacao = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(
+      `${props.name}.numeroProcessoContratacao`,
+      numeroProcessoContratacao,
+      true
+    );
+  };
+
+  const handleBlurObjetoContrato = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(`${props.name}.objetoContrato`, objetoContrato, true);
+  };
+
+  const handleBlurEmailGestorContrato = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(
+      `${props.name}.emailGestorContrato`,
+      emailGestorContrato,
+      true
+    );
+  };
 
   return (
     <Row className={props.className}>
@@ -20,9 +98,9 @@ const Section14FormRow = (props: {
           disabled={props.disabled}
           type="text"
           name={`${props.name}.numeroContrato`}
-          value={getIn(values, `${props.name}.numeroContrato`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={numeroContrato}
+          onChange={handleChangeNumeroContrato}
+          onBlur={handleBlurNumeroContrato}
           isValid={
             getIn(touched, `${props.name}.numeroContrato`) &&
             !getIn(errors, `${props.name}.numeroContrato`)
@@ -35,9 +113,9 @@ const Section14FormRow = (props: {
           disabled={props.disabled}
           type="text"
           name={`${props.name}.numeroProcessoContratacao`}
-          value={getIn(values, `${props.name}.numeroProcessoContratacao`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={numeroProcessoContratacao}
+          onChange={handleChangeNumeroProcessoContratacao}
+          onBlur={handleBlurNumeroProcessoContratacao}
           isValid={
             getIn(touched, `${props.name}.numeroProcessoContratacao`) &&
             !getIn(errors, `${props.name}.numeroProcessoContratacao`)
@@ -50,9 +128,9 @@ const Section14FormRow = (props: {
           disabled={props.disabled}
           type="text"
           name={`${props.name}.objetoContrato`}
-          value={getIn(values, `${props.name}.objetoContrato`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={objetoContrato}
+          onChange={handleChangeObjetoContrato}
+          onBlur={handleBlurObjetoContrato}
           isValid={
             getIn(touched, `${props.name}.objetoContrato`) &&
             !getIn(errors, `${props.name}.objetoContrato`)
@@ -65,9 +143,9 @@ const Section14FormRow = (props: {
           disabled={props.disabled}
           type="email"
           name={`${props.name}.emailGestorContrato`}
-          value={getIn(values, `${props.name}.emailGestorContrato`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={emailGestorContrato}
+          onChange={handleChangeEmailGestorContrato}
+          onBlur={handleBlurEmailGestorContrato}
           isValid={
             getIn(touched, `${props.name}.emailGestorContrato`) &&
             !getIn(errors, `${props.name}.emailGestorContrato`)

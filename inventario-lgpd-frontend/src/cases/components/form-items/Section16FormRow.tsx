@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -14,8 +16,25 @@ const Section16FormRow = (props: {
   name: string;
   className: string;
 }) => {
-  const { values, touched, errors, handleChange, handleBlur } =
+  const { values, touched, errors, handleChange, handleBlur, setFieldValue } =
     useFormikContext<FullCaseObject>();
+
+  const [descricaoObs, setDescricaoObs] = useState(
+    getIn(values, `${props.name}.descricaoObs`)
+  );
+
+  const handleChangeDescricaoObs = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDescricaoObs(event.currentTarget.value);
+  };
+
+  const handleBlurDescricaoObs = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(`${props.name}.descricaoObs`, descricaoObs, true);
+  };
 
   return (
     <Row className={props.className}>
@@ -25,9 +44,9 @@ const Section16FormRow = (props: {
           disabled={props.disabled}
           type="text"
           name={`${props.name}.descricaoObs`}
-          value={getIn(values, `${props.name}.descricaoObs`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={descricaoObs}
+          onChange={handleChangeDescricaoObs}
+          onBlur={handleBlurDescricaoObs}
           isValid={
             getIn(touched, `${props.name}.descricaoObs`) &&
             !getIn(errors, `${props.name}descricaoObs`)

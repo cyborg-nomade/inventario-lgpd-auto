@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -13,8 +15,53 @@ const Section13FormRow = (props: {
   name: string;
   className: string;
 }) => {
-  const { values, touched, errors, handleChange, handleBlur } =
+  const { values, touched, errors, handleChange, handleBlur, setFieldValue } =
     useFormikContext<FullCaseObject>();
+
+  const [nomeOrganizacao, setNomeOrganizacao] = useState(
+    getIn(values, `${props.name}.nomeOrganizacao`)
+  );
+
+  const [pais, setPais] = useState(getIn(values, `${props.name}.pais`));
+
+  const [dadosTransferidos, setDadosTransferidos] = useState(
+    getIn(values, `${props.name}.dadosTransferidos`)
+  );
+
+  const handleChangeNomeOrganizacao = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNomeOrganizacao(event.currentTarget.value);
+  };
+
+  const handleChangePais = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPais(event.currentTarget.value);
+  };
+
+  const handleChangeDadosTransferidos = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDadosTransferidos(event.currentTarget.value);
+  };
+
+  const handleBlurNomeOrganizacao = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(`${props.name}.nomeOrganizacao`, nomeOrganizacao, true);
+  };
+
+  const handleBlurPais = (event: React.FocusEvent<HTMLInputElement>) => {
+    handleBlur(event);
+    setFieldValue(`${props.name}.pais`, pais, true);
+  };
+
+  const handleBlurDadosTransferidos = (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    handleBlur(event);
+    setFieldValue(`${props.name}.dadosTransferidos`, dadosTransferidos, true);
+  };
 
   return (
     <Row className={props.className}>
@@ -23,9 +70,9 @@ const Section13FormRow = (props: {
           disabled={props.disabled}
           type="text"
           name={`${props.name}.nomeOrganizacao`}
-          value={getIn(values, `${props.name}.nomeOrganizacao`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={nomeOrganizacao}
+          onChange={handleChangeNomeOrganizacao}
+          onBlur={handleBlurNomeOrganizacao}
           isValid={
             getIn(touched, `${props.name}.nomeOrganizacao`) &&
             !getIn(errors, `${props.name}.nomeOrganizacao`)
@@ -38,9 +85,9 @@ const Section13FormRow = (props: {
           disabled={props.disabled}
           type="text"
           name={`${props.name}.pais`}
-          value={getIn(values, `${props.name}.pais`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={pais}
+          onChange={handleChangePais}
+          onBlur={handleBlurPais}
           isValid={
             getIn(touched, `${props.name}.pais`) &&
             !getIn(errors, `${props.name}.pais`)
@@ -53,9 +100,9 @@ const Section13FormRow = (props: {
           disabled={props.disabled}
           type="text"
           name={`${props.name}.dadosTransferidos`}
-          value={getIn(values, `${props.name}.dadosTransferidos`)}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          value={dadosTransferidos}
+          onChange={handleChangeDadosTransferidos}
+          onBlur={handleBlurDadosTransferidos}
           isValid={
             getIn(touched, `${props.name}.dadosTransferidos`) &&
             !getIn(errors, `${props.name}.dadosTransferidos`)
