@@ -1,3 +1,4 @@
+import { useContext, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -7,6 +8,7 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { User } from "./../../shared/models/User.model";
+import { AuthContext } from "./../../shared/context/auth-context";
 
 const schema = yup.object().shape({
   username: yup.string().required(),
@@ -19,11 +21,17 @@ const schema = yup.object().shape({
 const initialValues: User = {
   username: "",
   password: "",
+  userCode: "1",
+  isComite: false,
 };
 
 const Login = () => {
+  const authContext = useContext(AuthContext);
+  let navigate = useNavigate();
+
   const submitLoginHandler = (user: User) => {
     console.log(user);
+    authContext.login(user.userCode, user.isComite);
   };
 
   return (

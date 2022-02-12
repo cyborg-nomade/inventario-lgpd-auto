@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
@@ -16,20 +16,39 @@ import MainHeader from "./shared/components/nav/MainHeader";
 import "./App.css";
 import ApproveCase from "./cases/pages/ApproveCase";
 import { AuthContext } from "./shared/context/auth-context";
+import ApprovePage from "./cases/pages/ApprovePage";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isComite, setIsComite] = useState(false);
+  const [userCode, setUserCode] = useState("");
 
-  const login = useCallback(() => {
+  const authContext = useContext(AuthContext);
+
+  const login = useCallback((uc, ic) => {
     setIsLoggedIn(true);
+    setUserCode(uc);
+    setIsComite(ic);
   }, []);
 
   const logout = useCallback(() => {
     setIsLoggedIn(false);
+    setIsComite(false);
+    setUserCode("");
   }, []);
 
+  let routes;
+
+  if (authContext.isLoggedIn) {
+    routes = <React.Fragment></React.Fragment>;
+  } else {
+    routes = <React.Fragment></React.Fragment>;
+  }
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, login, logout, isComite, userCode }}
+    >
       <MainHeader />
       <Container className="mt-5">
         <Routes>
@@ -43,8 +62,10 @@ const App = () => {
           <Route path="/cases/new" element={<NewCase />} />
           <Route path="/cases/:cid" element={<EditCase />} />
           <Route path="/cases/" element={<AllCasesList />} />
-          <Route path="/cases/approve" element={<ApproveCaseList />} />
-          <Route path="/cases/approve/:cid" element={<ApproveCase />} />
+          <Route path="/cases/approve" element={<ApprovePage />}>
+            <Route index element={<ApproveCaseList />} />
+            <Route path=":cid" element={<ApproveCase />} />
+          </Route>
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Container>
