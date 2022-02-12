@@ -662,6 +662,7 @@ const CaseForm = (props: {
           touched,
           isValid,
           errors,
+          dirty,
         }) => (
           <Form noValidate onSubmit={handleSubmit}>
             <Accordion defaultActiveKey="0">
@@ -3349,7 +3350,11 @@ const CaseForm = (props: {
               </Accordion.Item>
             </Accordion>
             {props.new && (
-              <Button type="submit" className="float-end mt-3">
+              <Button
+                type="submit"
+                className="float-end mt-3"
+                disabled={!(isValid && dirty)}
+              >
                 Registrar Novo
               </Button>
             )}
@@ -3358,8 +3363,12 @@ const CaseForm = (props: {
                 Aprovar
               </Button>
             )}
-            {props.edit && isEditing && (
-              <Button type="submit" className="float-end mt-3">
+            {props.edit && isEditing && isValid && (
+              <Button
+                type="submit"
+                className="float-end mt-3"
+                disabled={!(isValid && dirty)}
+              >
                 Salvar Alterações
               </Button>
             )}
