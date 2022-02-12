@@ -15,7 +15,7 @@ import {
 import CaseItem from "./CaseItem";
 import {
   CaseItemObject,
-  headersCaseItemObject,
+  headersCaseItemObjectReduced,
 } from "../../shared/models/CaseListItem.model";
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +23,7 @@ const headers: {
   title: string;
   isFilterable: boolean;
   isSortable: boolean;
-  prop: headersCaseItemObject;
+  prop: headersCaseItemObjectReduced;
 }[] = [
   { title: "Nome", prop: "nome", isFilterable: true, isSortable: true },
   { title: "ID", prop: "id", isFilterable: true, isSortable: true },
@@ -58,18 +58,6 @@ const headers: {
     isSortable: true,
     isFilterable: false,
   },
-  {
-    title: "Usuário Criador",
-    prop: "criador",
-    isSortable: true,
-    isFilterable: false,
-  },
-  {
-    title: "Aprovado",
-    prop: "aprovado",
-    isSortable: true,
-    isFilterable: false,
-  },
 ];
 
 const CasesList = (props: { items: CaseItemObject[] }) => {
@@ -87,13 +75,21 @@ const CasesList = (props: { items: CaseItemObject[] }) => {
     );
   }
 
+  const bodyItems = props.items.map(({ aprovado, criador, ...rest }) => {
+    if (rest.dadosPessoaisSensiveis) {
+      return { ...rest, dadosPessoaisSensiveis: "SIM" };
+    } else {
+      return { ...rest, dadosPessoaisSensiveis: "NÃO" };
+    }
+  });
+
   const handleRowClick = (row: CaseItemObject) => {
     navigate(`${row.id}`);
   };
 
   return (
     <DatatableWrapper
-      body={props.items}
+      body={bodyItems}
       headers={headers}
       paginationOptionsProps={{
         initialState: {
