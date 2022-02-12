@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
@@ -15,10 +15,21 @@ import MainHeader from "./shared/components/nav/MainHeader";
 
 import "./App.css";
 import ApproveCase from "./cases/pages/ApproveCase";
+import { AuthContext } from "./shared/context/auth-context";
 
 const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const login = useCallback(() => {
+    setIsLoggedIn(true);
+  }, []);
+
+  const logout = useCallback(() => {
+    setIsLoggedIn(false);
+  }, []);
+
   return (
-    <React.Fragment>
+    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
       <MainHeader />
       <Container className="mt-5">
         <Routes>
@@ -37,7 +48,7 @@ const App = () => {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Container>
-    </React.Fragment>
+    </AuthContext.Provider>
   );
 };
 
