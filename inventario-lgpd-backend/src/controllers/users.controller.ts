@@ -46,7 +46,6 @@ export const updateUser = async (req: Request, res: Response) => {
 
   try {
     const userUpdate: User = req.body;
-    console.log(userUpdate);
 
     const existingUser: User = await UserService.find(id);
 

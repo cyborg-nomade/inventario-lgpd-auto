@@ -69,7 +69,6 @@ export const update = async (
   }
 
   storedUser = { ...userUpdate, id };
-  console.log(storedUser);
 
   users[storedUserIndex] = storedUser;
 
