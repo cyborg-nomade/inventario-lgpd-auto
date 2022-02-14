@@ -1,6 +1,5 @@
 import CasesList from "../../cases/components/CasesList";
 import { useParams } from "react-router-dom";
-import { CaseItemObject } from "./../../shared/models/CaseListItem.model";
 import { CASES } from "../../cases/pages/AllCasesList";
 
 const UserCasesList = () => {

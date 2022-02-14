@@ -10,7 +10,6 @@ import { useFormikContext, getIn } from "formik";
 import {
   fontesRetencao,
   FullCaseObject,
-  itemCategoriaDadosPessoais,
 } from "../../../shared/models/FullCase.model";
 
 const Section7FormRow = (props: {

@@ -12,7 +12,6 @@ import {
   TableHeader,
 } from "react-bs-datatable";
 
-import CaseItem from "./CaseItem";
 import {
   CaseItemObject,
   headersCaseItemObjectReduced,

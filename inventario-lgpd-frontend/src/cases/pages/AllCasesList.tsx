@@ -1,5 +1,5 @@
 import CasesList from "../components/CasesList";
-import { CaseItemObject } from "./../../shared/models/CaseListItem.model";
+import { CaseItemObject } from "../../shared/models/CaseListItem.model";
 
 export const CASES: CaseItemObject[] = [
   {
