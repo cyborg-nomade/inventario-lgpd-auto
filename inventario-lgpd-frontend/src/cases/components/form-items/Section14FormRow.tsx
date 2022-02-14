@@ -12,7 +12,7 @@ const Section14FormRow = (props: {
   name: string;
   className: string;
 }) => {
-  const { values, touched, errors, handleChange, handleBlur, setFieldValue } =
+  const { values, touched, errors, handleBlur, setFieldValue } =
     useFormikContext<FullCaseObject>();
 
   const [numeroContrato, setNumeroContrato] = useState(
