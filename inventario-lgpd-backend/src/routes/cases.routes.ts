@@ -35,6 +35,17 @@ casesRouter.get("/", async (req: Request, res: Response) => {
 // - GET cases/user/:uid
 //   - retorna todos os usos cadastrados pelo usuário especificado
 
+casesRouter.get("/user/:uid", async (req: Request, res: Response) => {
+  try {
+    const uid: string = req.params.uid;
+    const userCases: CaseItemObject[] = await CaseService.findByUser(uid);
+
+    res.status(500).send(userCases);
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+});
+
 // - GET cases/:cid
 //   - retorna o caso de uso de dados especificado
 

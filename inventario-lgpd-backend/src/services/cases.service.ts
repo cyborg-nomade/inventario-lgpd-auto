@@ -18,8 +18,8 @@ import {
 /**
  * In-Memory Store
  */
-let cases: FullCaseObjectBundle = {
-  1: {
+let cases: FullCaseObject[] = [
+  {
     nome: "0800 - Relacionamento com o passageiro",
     id: 1,
     ref: "Não se aplica",
@@ -301,27 +301,80 @@ let cases: FullCaseObjectBundle = {
       },
     ],
   },
-};
+];
 
 /**
  * Service Methods
  */
-export const findAll = async (): Promise<CaseItemObject[]> =>
-  Object.values(cases);
+export const findAll = async (): Promise<CaseItemObject[]> => {
+  const reducedCases: CaseItemObject[] = cases.map((c) => {
+    const { hipoteseTratamento, descricaoFinalidade } = c.finalidadeTratamento;
 
-export const find = async (id: number): Promise<FullCaseObject> => cases[id];
+    const reducedCase: CaseItemObject = {
+      nome: c.nome,
+      ref: c.ref,
+      area: c.area,
+      dataCriacao: c.dataCriacao,
+      dataAtualizacao: c.dataAtualizacao,
+      finalidadeTratamento: { hipoteseTratamento, descricaoFinalidade },
+      dadosPessoaisSensiveis: c.dadosPessoaisSensiveis,
+      criador: c.criador,
+      aprovado: c.aprovado,
+      id: c.id,
+    };
+
+    return reducedCase;
+  });
+
+  return reducedCases;
+};
+
+export const find = async (id: number): Promise<FullCaseObject> => {
+  const foundCase = cases.find((c) => c.id === id);
+
+  if (foundCase === undefined) {
+    throw new TypeError("Caso não encontrado!");
+  }
+
+  return foundCase;
+};
+
+export const findByUser = async (uid: string): Promise<CaseItemObject[]> => {
+  const filteredCases: CaseItemObject[] = cases
+    .map((c) => {
+      const { hipoteseTratamento, descricaoFinalidade } =
+        c.finalidadeTratamento;
+
+      const reducedCase: CaseItemObject = {
+        nome: c.nome,
+        ref: c.ref,
+        area: c.area,
+        dataCriacao: c.dataCriacao,
+        dataAtualizacao: c.dataAtualizacao,
+        finalidadeTratamento: { hipoteseTratamento, descricaoFinalidade },
+        dadosPessoaisSensiveis: c.dadosPessoaisSensiveis,
+        criador: c.criador,
+        aprovado: c.aprovado,
+        id: c.id,
+      };
+
+      return reducedCase;
+    })
+    .filter((c) => c.criador === uid);
+
+  return filteredCases;
+};
 
 export const create = async (
-  newItem: BaseFullCaseObject
+  recCase: BaseFullCaseObject
 ): Promise<FullCaseObject> => {
   const id = new Date().valueOf();
 
-  cases[id] = {
-    id,
-    ...newItem,
-  };
+  const newCase = { id, ...recCase };
 
-  return cases[id];
+  cases.push(newCase);
+
+  return newCase;
 };
 
 export const update = async (
