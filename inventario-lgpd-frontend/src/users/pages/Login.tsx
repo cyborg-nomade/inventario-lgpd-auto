@@ -21,7 +21,7 @@ const schema = yup.object().shape({
 const initialValues: User = {
   username: "",
   password: "",
-  userCode: "1",
+  userCode: "",
   isComite: false,
 };
 
@@ -31,7 +31,22 @@ const Login = () => {
 
   const submitLoginHandler = (user: User) => {
     console.log(user);
-    authContext.login(user.userCode, user.isComite);
+    if (user.username === "user1") {
+      authContext.login("1", false);
+      navigate(`/1/cases`);
+      return;
+    }
+    if (user.username === "user2") {
+      authContext.login("2", false);
+      navigate(`/2/cases`);
+      return;
+    }
+    if (user.username === "comite") {
+      authContext.login("100", true);
+      navigate(`/comite/cases`);
+      return;
+    }
+    alert("Usuário não encontrado, tente novamente");
   };
 
   return (

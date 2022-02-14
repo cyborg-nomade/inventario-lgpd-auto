@@ -4,7 +4,9 @@ import CasesList from "./../components/CasesList";
 import { CASES } from "./AllCasesList";
 
 const ApproveCaseList = () => {
-  return <CasesList items={CASES} />;
+  const notApprovedCases = CASES.filter((item) => !item.aprovado);
+
+  return <CasesList items={notApprovedCases} />;
 };
 
 export default ApproveCaseList;
