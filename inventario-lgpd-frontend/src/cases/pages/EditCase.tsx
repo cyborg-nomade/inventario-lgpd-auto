@@ -4,7 +4,6 @@ import {
   categoriaTitulares,
   emptyAgenteTratamento,
   emptyItemCategoriaDadosPessoais,
-  emptyItemCategoriaTitulares,
   fontesRetencao,
   FullCaseObject,
   hipotesesTratamento,
