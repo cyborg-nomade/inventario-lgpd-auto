@@ -26,7 +26,7 @@ casesRouter.get("/", async (req: Request, res: Response) => {
   try {
     const cases: CaseItemObject[] = await CaseService.findAll();
 
-    res.status(500).send(cases);
+    res.status(200).send(cases);
   } catch (error: any) {
     res.status(500).send(error.message);
   }
@@ -40,7 +40,7 @@ casesRouter.get("/user/:uid", async (req: Request, res: Response) => {
     const uid: string = req.params.uid;
     const userCases: CaseItemObject[] = await CaseService.findByUser(uid);
 
-    res.status(500).send(userCases);
+    res.status(200).send(userCases);
   } catch (error: any) {
     res.status(500).send(error.message);
   }
