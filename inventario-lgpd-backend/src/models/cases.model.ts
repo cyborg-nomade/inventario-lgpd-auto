@@ -1,3 +1,6 @@
+import { v4 as uuidv4 } from "uuid";
+import { emptyUser, User } from "./users.model";
+
 export enum verbosTratamento {
   coleta = "coleta",
   producao = "producao",
@@ -183,12 +186,12 @@ export interface BaseCaseItemObject {
     descricaoFinalidade: string;
   };
   dadosPessoaisSensiveis: boolean;
-  criador: string;
+  criador: User;
   aprovado: boolean;
 }
 
 export interface CaseItemObject extends BaseCaseItemObject {
-  id: number;
+  id: string;
 }
 
 export interface BaseFullCaseObject extends BaseCaseItemObject {
@@ -329,11 +332,7 @@ export interface BaseFullCaseObject extends BaseCaseItemObject {
 }
 
 export interface FullCaseObject extends BaseFullCaseObject {
-  id: number;
-}
-
-export interface FullCaseObjectBundle {
-  [key: number]: FullCaseObject;
+  id: string;
 }
 
 export const emptyAgenteTratamento = (): AgenteTratamento => ({
@@ -395,11 +394,11 @@ export const emptyItemObservacoesProcesso = (): itemObservacoesProcesso => ({
 
 export const emptyFullCaseObject = (): FullCaseObject => ({
   nome: "",
-  id: 0,
+  id: uuidv4(),
   ref: "",
   area: "",
   aprovado: false,
-  criador: "u1",
+  criador: emptyUser(),
   dataCriacao: new Date().toDateString(),
   dataAtualizacao: new Date().toDateString(),
   controlador: emptyAgenteTratamento(),

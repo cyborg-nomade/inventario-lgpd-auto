@@ -29,7 +29,7 @@ export const getCasesByUser = async (req: Request, res: Response) => {
 };
 
 export const getCasesById = async (req: Request, res: Response) => {
-  const id: number = parseInt(req.params.cid, 10);
+  const id: string = req.params.cid;
 
   try {
     const reqCase: FullCaseObject = await CaseService.find(id);
@@ -57,7 +57,7 @@ export const registerCase = async (req: Request, res: Response) => {
 };
 
 export const updateCase = async (req: Request, res: Response) => {
-  const id: number = parseInt(req.params.cid, 10);
+  const id: string = req.params.cid;
 
   try {
     const caseUpdate: FullCaseObject = req.body;
@@ -69,9 +69,9 @@ export const updateCase = async (req: Request, res: Response) => {
       return res.status(200).json(updatedCase);
     }
 
-    const newItem = await CaseService.create(caseUpdate);
+    const newCase = await CaseService.create(caseUpdate);
 
-    res.status(201).json(newItem);
+    res.status(201).json(newCase);
   } catch (error: any) {
     res.status(500).send(error.message);
   }
@@ -79,10 +79,10 @@ export const updateCase = async (req: Request, res: Response) => {
 
 export const removeCase = async (req: Request, res: Response) => {
   try {
-    const id: number = parseInt(req.params.cid, 10);
+    const id: string = req.params.cid;
     await CaseService.remove(id);
 
-    res.sendStatus(204);
+    res.status(200).send("Caso removido com sucesso");
   } catch (error: any) {
     res.status(500).send(error.message);
   }

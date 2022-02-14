@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 /**
  * Data Model Interfaces
  */
@@ -9,7 +11,6 @@ import {
   emptyItemCategoriaDadosPessoais,
   fontesRetencao,
   FullCaseObject,
-  FullCaseObjectBundle,
   hipotesesTratamento,
   tipoMedidaSegurancaPrivacidade,
   tipoRiscoPrivacidade,
@@ -21,13 +22,19 @@ import {
 let cases: FullCaseObject[] = [
   {
     nome: "0800 - Relacionamento com o passageiro",
-    id: 1,
+    id: uuidv4(),
     ref: "Não se aplica",
     area: "DRMP",
     dataCriacao: new Date("2021-04-19").toISOString().substring(0, 10),
     dataAtualizacao: new Date("2021-04-19").toISOString().substring(0, 10),
     aprovado: false,
-    criador: "u1",
+    criador: {
+      id: "u1",
+      username: "User1",
+      password: "Anarchy!19",
+      userCode: "u1",
+      isComite: false,
+    },
     controlador: { nome: "CPTM" },
     encarregado: { nome: "Olivia Shibata Nishiyama" },
     extensaoEncarregado: {
@@ -329,7 +336,7 @@ export const findAll = async (): Promise<CaseItemObject[]> => {
   return reducedCases;
 };
 
-export const find = async (id: number): Promise<FullCaseObject> => {
+export const find = async (id: string): Promise<FullCaseObject> => {
   const foundCase = cases.find((c) => c.id === id);
 
   if (foundCase === undefined) {
@@ -360,7 +367,7 @@ export const findByUser = async (uid: string): Promise<CaseItemObject[]> => {
 
       return reducedCase;
     })
-    .filter((c) => c.criador === uid);
+    .filter((c) => c.criador.id === uid);
 
   return filteredCases;
 };
@@ -368,7 +375,7 @@ export const findByUser = async (uid: string): Promise<CaseItemObject[]> => {
 export const create = async (
   recCase: BaseFullCaseObject
 ): Promise<FullCaseObject> => {
-  const id = new Date().valueOf();
+  const id = uuidv4();
 
   const newCase = { id, ...recCase };
 
@@ -378,26 +385,22 @@ export const create = async (
 };
 
 export const update = async (
-  id: number,
+  id: string,
   caseUpdate: BaseFullCaseObject
 ): Promise<FullCaseObject | null> => {
-  const storedCase = await find(id);
+  let storedCase = { ...(await find(id)) };
+  const storedCaseIndex = cases.findIndex((c) => c.id === id);
 
   if (!storedCase) {
     return null;
   }
 
-  cases[id] = { id, ...caseUpdate };
+  storedCase = { ...caseUpdate, id };
+  cases[storedCaseIndex] = storedCase;
 
-  return cases[id];
+  return cases[storedCaseIndex];
 };
 
-export const remove = async (id: number): Promise<null | void> => {
-  const storedCase = await find(id);
-
-  if (!storedCase) {
-    return null;
-  }
-
-  delete cases[id];
+export const remove = async (id: string): Promise<null | void> => {
+  cases = cases.filter((c) => c.id === id);
 };

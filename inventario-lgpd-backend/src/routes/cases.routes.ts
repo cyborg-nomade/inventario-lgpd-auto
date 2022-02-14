@@ -2,13 +2,7 @@
  * Required External Modules and Interfaces
  */
 
-import express, { Request, Response } from "express";
-import * as CaseService from "../services/cases.service";
-import {
-  BaseFullCaseObject,
-  CaseItemObject,
-  FullCaseObject,
-} from "../models/cases.model";
+import express from "express";
 import {
   getCases,
   getCasesById,
