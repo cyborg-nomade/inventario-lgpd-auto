@@ -9,6 +9,14 @@ import {
   CaseItemObject,
   FullCaseObject,
 } from "../models/cases.model";
+import {
+  getCases,
+  getCasesById,
+  getCasesByUser,
+  registerCase,
+  removeCase,
+  updateCase,
+} from "../controllers/cases.controller";
 
 /**
  * Router Definition
@@ -22,98 +30,29 @@ export const casesRouter = express.Router();
 // - GET cases/
 //   - retorna todos os casos de uso de dados cadastrados
 
-casesRouter.get("/", async (req: Request, res: Response) => {
-  try {
-    const cases: CaseItemObject[] = await CaseService.findAll();
-
-    res.status(200).send(cases);
-  } catch (error: any) {
-    res.status(500).send(error.message);
-  }
-});
+casesRouter.get("/", getCases);
 
 // - GET cases/user/:uid
 //   - retorna todos os usos cadastrados pelo usuário especificado
 
-casesRouter.get("/user/:uid", async (req: Request, res: Response) => {
-  try {
-    const uid: string = req.params.uid;
-    const userCases: CaseItemObject[] = await CaseService.findByUser(uid);
-
-    res.status(200).send(userCases);
-  } catch (error: any) {
-    res.status(500).send(error.message);
-  }
-});
+casesRouter.get("/user/:uid", getCasesByUser);
 
 // - GET cases/:cid
 //   - retorna o caso de uso de dados especificado
 
-casesRouter.get("/:cid", async (req: Request, res: Response) => {
-  const id: number = parseInt(req.params.cid, 10);
-
-  try {
-    const reqCase: FullCaseObject = await CaseService.find(id);
-
-    if (reqCase) {
-      return res.status(200).send(reqCase);
-    }
-
-    res.status(404).send("Caso de Uso não encontrado");
-  } catch (error: any) {
-    res.status(500).send(error.message);
-  }
-});
+casesRouter.get("/:cid", getCasesById);
 
 // - POST cases/
 //   - registra um novo caso de uso de dados
 
-casesRouter.post("/", async (req: Request, res: Response) => {
-  try {
-    const receivedCase: BaseFullCaseObject = req.body;
-
-    const newCase = await CaseService.create(receivedCase);
-
-    res.status(201).json(newCase);
-  } catch (error: any) {
-    res.status(500).send(error.message);
-  }
-});
+casesRouter.post("/", registerCase);
 
 // - PUT cases/:cid
 //   - edita o caso de uso de dados especificado
 
-casesRouter.put("/:cid", async (req: Request, res: Response) => {
-  const id: number = parseInt(req.params.cid, 10);
-
-  try {
-    const caseUpdate: FullCaseObject = req.body;
-
-    const existingCase: FullCaseObject = await CaseService.find(id);
-
-    if (existingCase) {
-      const updatedCase = await CaseService.update(id, caseUpdate);
-      return res.status(200).json(updatedCase);
-    }
-
-    const newItem = await CaseService.create(caseUpdate);
-
-    res.status(201).json(newItem);
-  } catch (error: any) {
-    res.status(500).send(error.message);
-  }
-});
+casesRouter.put("/:cid", updateCase);
 
 // - DELETE cases/:cid
 //   - elimina o cado de dados especificado
 
-casesRouter.delete("/:cid", async (req: Request, res: Response) => {
-  try {
-    const id: number = parseInt(req.params.cid, 10);
-    await CaseService.remove(id);
-
-    res.sendStatus(204);
-  } catch (error: any) {
-    res.status(500).send(error.message);
-  }
-});
+casesRouter.delete("/:cid", removeCase);
