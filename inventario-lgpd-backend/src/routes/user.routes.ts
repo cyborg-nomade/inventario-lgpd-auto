@@ -38,7 +38,7 @@ usersRouter.post("/", registerUser);
 // - PUT users/:uid
 //   - edita o usuário especificado
 
-usersRouter.patch("/:uid", updateUser);
+usersRouter.put("/:uid", updateUser);
 
 // - DELETE users/:uid
 //   - elimina o usuário especificado
