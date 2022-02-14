@@ -1,18 +1,6 @@
-# cases form
+# login
 
-1- criar app de frontend (OK)
-2- checkout develop (OK)
-3- checkout esqueleto-basico (OK)
-4- instalar router (OK)
-5- criar rotas (OK)
-6- criar páginas (OK)
-7- adicionar componente de lista de casos (OK)
-8- adicionar component de item de casos (OK)
-9- estilização (OK)
-10- links de navegação da lista para os items (OK)
-11- adicionar barra de navegação (OK)
-12- tornar barra de navegação responsiva (side-drawer) (OK)
-13- inserir links apropriados na barra de navegação (OK)
-14 - formulário criado (OK)
-15 - ações de novo, editar e aprovar implementadas (OK)
-16 - otimização de performance (OK)
+1 - melhoria nas tabelas (OK)
+2 - criação do formulário de login (OK)
+3 - ajuste nas rotas (OK)
+4 - rotas protegidas + status login e comite (OK)

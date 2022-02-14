@@ -3,9 +3,9 @@
 - v0: app de frontend criado (OK)
   - v0.1: esqueleto básico criado (navegação + main) (OK)
   - v0.2: formulário de registro criado (OK)
-  - v0.3: lista de registros criada (dummy data)
-  - v0.4: tela de login criada
-  - v0.5: lógica de login no frontend
+  - v0.3: lista de registros criada (dummy data) (OK)
+  - v0.4: tela de login criada (OK)
+  - v0.5: lógica de login no frontend (OK)
 - v1: app de backend criado
   - v1.1: esqueleto básico da API
   - v1.2: funcionalidade de registro criada
