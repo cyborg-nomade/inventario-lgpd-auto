@@ -6,7 +6,7 @@
   - v0.3: lista de registros criada (dummy data) (OK)
   - v0.4: tela de login criada (OK)
   - v0.5: lógica de login no frontend (OK)
-- v1: app de backend criado
+- v1: app de backend criado (OK)
   - v1.1: esqueleto básico da API
   - v1.2: funcionalidade de registro criada
   - v1.3: funcionalidade de consulta criada
