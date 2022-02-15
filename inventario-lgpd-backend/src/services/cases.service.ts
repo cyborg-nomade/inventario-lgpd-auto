@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
  */
 import {
   BaseFullCaseObject,
+  BaseFullCaseObjectModel,
   CaseItemObject,
   categoriaTitulares,
   emptyAgenteTratamento,
@@ -340,12 +341,16 @@ export const findByUser = async (uid: string): Promise<CaseItemObject[]> => {
 
 export const create = async (
   recCase: BaseFullCaseObject
-): Promise<FullCaseObject> => {
+): Promise<BaseFullCaseObject> => {
   const id = uuidv4();
 
-  const newCase = { id, ...recCase };
+  const newCase = new BaseFullCaseObjectModel({ ...recCase });
 
-  cases.push(newCase);
+  try {
+    await newCase.save();
+  } catch (error) {
+    throw new Error("Erro na conexão de banco de dados");
+  }
 
   return newCase;
 };

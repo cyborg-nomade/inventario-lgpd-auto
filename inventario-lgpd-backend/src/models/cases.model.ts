@@ -1,5 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
-import { emptyUser, User } from "./users.model";
+import { Schema, Types, model } from "mongoose";
+
+import { emptyUser, User, UserSchema } from "./users.model";
 
 export enum verbosTratamento {
   coleta = "coleta",
@@ -129,6 +131,13 @@ interface AgenteTratamento {
   email?: string;
 }
 
+const agenteTratamentoSchema = new Schema<AgenteTratamento>({
+  nome: String,
+  area: String,
+  telefone: String,
+  email: String,
+});
+
 export interface itemCategoriaDadosPessoais {
   descricao: string;
   tempoRetencao: string;
@@ -136,10 +145,24 @@ export interface itemCategoriaDadosPessoais {
   caminhoRedeSistema: string;
 }
 
+const itemCategoriaDadosPessoaisSchema = new Schema<itemCategoriaDadosPessoais>(
+  {
+    descricao: String,
+    tempoRetencao: String,
+    fonteRetencao: String,
+    caminhoRedeSistema: String,
+  }
+);
+
 interface itemCategoriaTitulares {
   tipoCategoria: categoriaTitulares;
   descricao: string;
 }
+
+const itemCategoriaTitularesSchema = new Schema<itemCategoriaTitulares>({
+  tipoCategoria: String,
+  descricao: String,
+});
 
 interface itemCompartilhamentoDados {
   nomeInstituicao: string;
@@ -147,10 +170,22 @@ interface itemCompartilhamentoDados {
   finalidadeCompartilhamento: string;
 }
 
+const itemCompartilhamentoDadosSchema = new Schema<itemCompartilhamentoDados>({
+  nomeInstituicao: String,
+  dadosCompartilhados: String,
+  finalidadeCompartilhamento: String,
+});
+
 interface itemMedidasSegurancaPrivacidade {
   tipo: tipoMedidaSegurancaPrivacidade;
   descricaoControles: string;
 }
+
+const itemMedidasSegurancaPrivacidadeSchema =
+  new Schema<itemMedidasSegurancaPrivacidade>({
+    tipo: String,
+    descricaoControles: String,
+  });
 
 interface itemTransferenciaInternacional {
   nomeOrganizacao: string;
@@ -159,6 +194,14 @@ interface itemTransferenciaInternacional {
   tipoGarantia: tipoGarantiaTranferenciaInternacional;
 }
 
+const itemTransferenciaInternacionalSchema =
+  new Schema<itemTransferenciaInternacional>({
+    nomeOrganizacao: String,
+    pais: String,
+    dadosTransferidos: String,
+    tipoGarantia: String,
+  });
+
 interface itemContratoTI {
   numeroContrato: string;
   numeroProcessoContratacao: string;
@@ -166,14 +209,30 @@ interface itemContratoTI {
   emailGestorContrato: string;
 }
 
+const itemContratoTISchema = new Schema<itemContratoTI>({
+  numeroContrato: String,
+  numeroProcessoContratacao: String,
+  objetoContrato: String,
+  emailGestorContrato: String,
+});
+
 interface itemRiscoPrivacidade {
   tipoRisco: tipoRiscoPrivacidade;
   observacoes: string;
 }
 
+const itemRiscoPrivacidadeSchema = new Schema<itemRiscoPrivacidade>({
+  tipoRisco: String,
+  observacoes: String,
+});
+
 interface itemObservacoesProcesso {
   descricaoObs: string;
 }
+
+const itemObservacoesProcessoSchema = new Schema<itemObservacoesProcesso>({
+  descricaoObs: String,
+});
 
 export interface BaseCaseItemObject {
   nome: string;
@@ -330,6 +389,156 @@ export interface BaseFullCaseObject extends BaseCaseItemObject {
   riscosPrivacidade: itemRiscoPrivacidade[];
   observacoesProcesso: itemObservacoesProcesso[];
 }
+
+const BaseFullCaseObjectSchema = new Schema<BaseFullCaseObject>({
+  nome: String,
+  ref: String,
+  area: String,
+  dataCriacao: String,
+  dataAtualizacao: String,
+  dadosPessoaisSensiveis: Boolean,
+  criador: UserSchema,
+  aprovado: Boolean,
+  controlador: agenteTratamentoSchema,
+  encarregado: agenteTratamentoSchema,
+  extensaoEncarregado: agenteTratamentoSchema,
+  areaTratamentoDados: agenteTratamentoSchema,
+  operador: agenteTratamentoSchema,
+  fasesCicloTratamento: {
+    coleta: Boolean,
+    retencao: Boolean,
+    processamento: Boolean,
+    compartilhamento: Boolean,
+    eliminacao: Boolean,
+    verbos: [String],
+  },
+  descricaoFluxoTratamento: String,
+  abrangenciaGeografica: String,
+  fonteDados: String,
+  finalidadeTratamento: {
+    hipoteseTratamento: String,
+    descricaoFinalidade: String,
+    previsaoLegal: String,
+    resultadosTitular: String,
+    beneficiosEsperados: String,
+  },
+  categoriaDadosPessoais: {
+    identificacao: {
+      idPessoal: itemCategoriaDadosPessoaisSchema,
+      idGov: itemCategoriaDadosPessoaisSchema,
+      idEletronica: itemCategoriaDadosPessoaisSchema,
+      locEletronica: itemCategoriaDadosPessoaisSchema,
+    },
+    financeiros: {
+      idFin: itemCategoriaDadosPessoaisSchema,
+      recursosFin: itemCategoriaDadosPessoaisSchema,
+      dividasDespesas: itemCategoriaDadosPessoaisSchema,
+      solvencia: itemCategoriaDadosPessoaisSchema,
+      emprestimosHipotecaCredito: itemCategoriaDadosPessoaisSchema,
+      assistenciaFin: itemCategoriaDadosPessoaisSchema,
+      apoliceSeguro: itemCategoriaDadosPessoaisSchema,
+      planoPensao: itemCategoriaDadosPessoaisSchema,
+      transacaoFin: itemCategoriaDadosPessoaisSchema,
+      compensacao: itemCategoriaDadosPessoaisSchema,
+      atividadeProfissional: itemCategoriaDadosPessoaisSchema,
+      acordosAjustes: itemCategoriaDadosPessoaisSchema,
+      autorizacoesConsentimentos: itemCategoriaDadosPessoaisSchema,
+    },
+    caracteristicas: {
+      detalhesPessoais: itemCategoriaDadosPessoaisSchema,
+      detalhesMilitares: itemCategoriaDadosPessoaisSchema,
+      situacaoImigracao: itemCategoriaDadosPessoaisSchema,
+      descricaoFisica: itemCategoriaDadosPessoaisSchema,
+    },
+    habitos: {
+      habitos: itemCategoriaDadosPessoaisSchema,
+      estiloVida: itemCategoriaDadosPessoaisSchema,
+      viagensDeslocamento: itemCategoriaDadosPessoaisSchema,
+      contatosSociais: itemCategoriaDadosPessoaisSchema,
+      posses: itemCategoriaDadosPessoaisSchema,
+      denunciasIncidentesAcidentes: itemCategoriaDadosPessoaisSchema,
+      distincoes: itemCategoriaDadosPessoaisSchema,
+      usoMidia: itemCategoriaDadosPessoaisSchema,
+    },
+    caracteristicasPsicologicas: {
+      descricaoPsi: itemCategoriaDadosPessoaisSchema,
+    },
+    composicaoFamiliar: {
+      casamentoCoabitacao: itemCategoriaDadosPessoaisSchema,
+      historicoConjugal: itemCategoriaDadosPessoaisSchema,
+      membrosFamilia: itemCategoriaDadosPessoaisSchema,
+    },
+    interessesLazer: {
+      atividadesInteressesLaz: itemCategoriaDadosPessoaisSchema,
+    },
+    associacoes: {
+      outrasAssociacoesNaoSensiveis: itemCategoriaDadosPessoaisSchema,
+    },
+    processoJudAdmCrim: {
+      suspeitas: itemCategoriaDadosPessoaisSchema,
+      condenacoesSentencas: itemCategoriaDadosPessoaisSchema,
+      acoesJud: itemCategoriaDadosPessoaisSchema,
+      penalidadesAdm: itemCategoriaDadosPessoaisSchema,
+    },
+    habitosConsumo: {
+      dadosBensServicos: itemCategoriaDadosPessoaisSchema,
+    },
+    residenciais: {
+      dadosResidencia: itemCategoriaDadosPessoaisSchema,
+    },
+    educacaoTreinamento: {
+      academicosEscolares: itemCategoriaDadosPessoaisSchema,
+      registroFinanceiro: itemCategoriaDadosPessoaisSchema,
+      qualificacaoExperienciaProf: itemCategoriaDadosPessoaisSchema,
+    },
+    profissaoEmprego: {
+      empregoAtual: itemCategoriaDadosPessoaisSchema,
+      recrutamento: itemCategoriaDadosPessoaisSchema,
+      rescisao: itemCategoriaDadosPessoaisSchema,
+      carreira: itemCategoriaDadosPessoaisSchema,
+      absenteismoDisciplina: itemCategoriaDadosPessoaisSchema,
+      avaliacaoDesempenho: itemCategoriaDadosPessoaisSchema,
+    },
+    regVideoImgVoz: {
+      videoImagem: itemCategoriaDadosPessoaisSchema,
+      imagemVigilancia: itemCategoriaDadosPessoaisSchema,
+      voz: itemCategoriaDadosPessoaisSchema,
+    },
+    outros: {
+      outros: [itemCategoriaDadosPessoaisSchema],
+    },
+  },
+  categoriaDadosPessoaisSensiveis: {
+    origemRacialEtnica: itemCategoriaDadosPessoaisSchema,
+    conviccaoReligiosa: itemCategoriaDadosPessoaisSchema,
+    opiniaoPolitica: itemCategoriaDadosPessoaisSchema,
+    filiacaoSindicato: itemCategoriaDadosPessoaisSchema,
+    filiacaoOrganizacaoReligiosa: itemCategoriaDadosPessoaisSchema,
+    filiacaoCrencaFilosofica: itemCategoriaDadosPessoaisSchema,
+    filiacaoPreferenciaPolitica: itemCategoriaDadosPessoaisSchema,
+    saudeVidaSexual: itemCategoriaDadosPessoaisSchema,
+    geneticos: itemCategoriaDadosPessoaisSchema,
+    biometricos: itemCategoriaDadosPessoaisSchema,
+  },
+  frequenciaTratamento: String,
+  quantidadeDadosTratados: String,
+  categoriasTitulares: {
+    categorias: [itemCategoriaTitularesSchema],
+    criancasAdolescentes: [itemCategoriaTitularesSchema],
+    outrosGruposVulneraveis: [itemCategoriaTitularesSchema],
+  },
+  compartilhamentoDadosPessoais: [itemCompartilhamentoDadosSchema],
+  medidasSegurancaPrivacidade: [itemMedidasSegurancaPrivacidadeSchema],
+  transferenciaInternacional: [itemTransferenciaInternacionalSchema],
+  contratoServicosTITratamentoDados: [itemContratoTISchema],
+  riscosPrivacidade: [itemRiscoPrivacidadeSchema],
+  observacoesProcesso: [itemObservacoesProcessoSchema],
+});
+
+export const BaseFullCaseObjectModel = model<BaseFullCaseObject>(
+  "Case",
+  BaseFullCaseObjectSchema
+);
 
 export interface FullCaseObject extends BaseFullCaseObject {
   id: string;

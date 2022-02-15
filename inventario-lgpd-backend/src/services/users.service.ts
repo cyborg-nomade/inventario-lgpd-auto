@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 /**
  * Data Model Interfaces
  */
-import { BaseUser, User } from "../models/users.model";
+import { BaseUser, User, UserModel } from "../models/users.model";
 
 /**
  * In-Memory Store
@@ -56,13 +56,16 @@ export const findByUserName = async (
 };
 
 export const create = async (recUser: BaseUser): Promise<User> => {
-  const id = uuidv4();
   const isComite = false;
-  const userCode = id;
+  const userCode = uuidv4();
 
-  const newUser = { id, isComite, userCode, ...recUser };
+  const newUser = new UserModel({ isComite, userCode, ...recUser });
 
-  users.push(newUser);
+  try {
+    await newUser.save();
+  } catch (error) {
+    throw new Error("Erro na conexão de banco de dados");
+  }
 
   return newUser;
 };
