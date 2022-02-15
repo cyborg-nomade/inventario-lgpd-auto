@@ -9,6 +9,7 @@ import {
   updateUser,
   removeUser,
   registerUser,
+  loginUser,
 } from "../controllers/users.controller";
 
 /**
@@ -25,15 +26,20 @@ export const usersRouter = express.Router();
 
 usersRouter.get("/", getUsers);
 
-// - GET users/:uid
-//   - retorna o usuário especificado
-
-usersRouter.get("/:uid", getUserById);
-
 // - POST users/
 //   - registra um novo usuário
 
 usersRouter.post("/", registerUser);
+
+// - POST users/login
+//    - faz login do usuário
+
+usersRouter.post("/login", loginUser);
+
+// - GET users/:uid
+//   - retorna o usuário especificado
+
+usersRouter.get("/:uid", getUserById);
 
 // - PUT users/:uid
 //   - edita o usuário especificado

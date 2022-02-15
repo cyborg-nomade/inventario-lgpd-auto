@@ -33,6 +33,12 @@ export const registerUser = async (req: Request, res: Response) => {
   try {
     const receivedUser: BaseUser = req.body;
 
+    const hasUser = await UserService.findByUserName(receivedUser.username);
+
+    if (hasUser) {
+      return res.status(422).send("Já existe um usuário com este nome!");
+    }
+
     const newUser = await UserService.create(receivedUser);
 
     res.status(201).json(newUser);
@@ -71,4 +77,20 @@ export const removeUser = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(500).send(error.message);
   }
+};
+
+export const loginUser = async (req: Request, res: Response) => {
+  try {
+    const userToLogin: BaseUser = req.body;
+
+    const identifiedUser = await UserService.findByUserName(
+      userToLogin.username
+    );
+
+    if (!identifiedUser || identifiedUser.password !== userToLogin.password) {
+      res.status(401).send("Credenciais incorretas!");
+    }
+
+    res.status(200).send("Usuário logado!");
+  } catch (error) {}
 };

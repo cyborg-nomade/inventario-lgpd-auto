@@ -3,12 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 export interface BaseUser {
   username: string;
   password: string;
-  userCode: string;
-  isComite: boolean;
 }
 
 export interface User extends BaseUser {
   id: string;
+  userCode: string;
+  isComite: boolean;
 }
 
 export const emptyUser = (): User => ({

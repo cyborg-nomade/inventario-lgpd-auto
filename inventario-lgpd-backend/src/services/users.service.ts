@@ -41,16 +41,26 @@ export const find = async (id: string): Promise<User> => {
   const foundUser = users.find((u) => u.id === id);
 
   if (foundUser === undefined) {
-    throw new TypeError("Caso não encontrado!");
+    throw new TypeError("Usuário não encontrado!");
   }
+
+  return foundUser;
+};
+
+export const findByUserName = async (
+  username: string
+): Promise<User | undefined> => {
+  const foundUser = users.find((u) => u.username === username);
 
   return foundUser;
 };
 
 export const create = async (recUser: BaseUser): Promise<User> => {
   const id = uuidv4();
+  const isComite = false;
+  const userCode = id;
 
-  const newUser = { id, ...recUser };
+  const newUser = { id, isComite, userCode, ...recUser };
 
   users.push(newUser);
 
@@ -68,7 +78,7 @@ export const update = async (
     return null;
   }
 
-  storedUser = { ...userUpdate, id };
+  storedUser = { ...storedUser, ...userUpdate };
 
   users[storedUserIndex] = storedUser;
 
