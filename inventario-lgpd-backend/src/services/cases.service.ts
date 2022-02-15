@@ -12,6 +12,7 @@ import {
   fontesRetencao,
   FullCaseObject,
   hipotesesTratamento,
+  reduceCaseObject,
   tipoMedidaSegurancaPrivacidade,
   tipoRiscoPrivacidade,
 } from "../models/cases.model";
@@ -314,24 +315,7 @@ let cases: FullCaseObject[] = [
  * Service Methods
  */
 export const findAll = async (): Promise<CaseItemObject[]> => {
-  const reducedCases: CaseItemObject[] = cases.map((c) => {
-    const { hipoteseTratamento, descricaoFinalidade } = c.finalidadeTratamento;
-
-    const reducedCase: CaseItemObject = {
-      nome: c.nome,
-      ref: c.ref,
-      area: c.area,
-      dataCriacao: c.dataCriacao,
-      dataAtualizacao: c.dataAtualizacao,
-      finalidadeTratamento: { hipoteseTratamento, descricaoFinalidade },
-      dadosPessoaisSensiveis: c.dadosPessoaisSensiveis,
-      criador: c.criador,
-      aprovado: c.aprovado,
-      id: c.id,
-    };
-
-    return reducedCase;
-  });
+  const reducedCases: CaseItemObject[] = cases.map((c) => reduceCaseObject(c));
 
   return reducedCases;
 };
@@ -348,25 +332,7 @@ export const find = async (id: string): Promise<FullCaseObject> => {
 
 export const findByUser = async (uid: string): Promise<CaseItemObject[]> => {
   const filteredCases: CaseItemObject[] = cases
-    .map((c) => {
-      const { hipoteseTratamento, descricaoFinalidade } =
-        c.finalidadeTratamento;
-
-      const reducedCase: CaseItemObject = {
-        nome: c.nome,
-        ref: c.ref,
-        area: c.area,
-        dataCriacao: c.dataCriacao,
-        dataAtualizacao: c.dataAtualizacao,
-        finalidadeTratamento: { hipoteseTratamento, descricaoFinalidade },
-        dadosPessoaisSensiveis: c.dadosPessoaisSensiveis,
-        criador: c.criador,
-        aprovado: c.aprovado,
-        id: c.id,
-      };
-
-      return reducedCase;
-    })
+    .map((c) => reduceCaseObject(c))
     .filter((c) => c.criador.id === uid);
 
   return filteredCases;

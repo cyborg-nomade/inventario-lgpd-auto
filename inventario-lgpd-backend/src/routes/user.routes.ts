@@ -11,6 +11,7 @@ import {
   registerUser,
   loginUser,
 } from "../controllers/users.controller";
+import { check } from "express-validator";
 
 /**
  * Router Definition
@@ -29,7 +30,11 @@ usersRouter.get("/", getUsers);
 // - POST users/
 //   - registra um novo usuário
 
-usersRouter.post("/", registerUser);
+usersRouter.post(
+  "/",
+  [check("username").not().isEmpty(), check("password").isLength({ min: 8 })],
+  registerUser
+);
 
 // - POST users/login
 //    - faz login do usuário

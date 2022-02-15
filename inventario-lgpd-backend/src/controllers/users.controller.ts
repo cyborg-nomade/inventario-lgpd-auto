@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 
 import { BaseUser, User } from "../models/users.model";
 import * as UserService from "../services/users.service";
+import { validationResult } from "express-validator";
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -31,6 +32,11 @@ export const getUserById = async (req: Request, res: Response) => {
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      return res.status(422).send("Requisição inválida!");
+    }
+
     const receivedUser: BaseUser = req.body;
 
     const hasUser = await UserService.findByUserName(receivedUser.username);

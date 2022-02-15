@@ -335,6 +335,25 @@ export interface FullCaseObject extends BaseFullCaseObject {
   id: string;
 }
 
+export const reduceCaseObject = (c: FullCaseObject): CaseItemObject => {
+  const { hipoteseTratamento, descricaoFinalidade } = c.finalidadeTratamento;
+
+  const reducedCase: CaseItemObject = {
+    nome: c.nome,
+    ref: c.ref,
+    area: c.area,
+    dataCriacao: c.dataCriacao,
+    dataAtualizacao: c.dataAtualizacao,
+    finalidadeTratamento: { hipoteseTratamento, descricaoFinalidade },
+    dadosPessoaisSensiveis: c.dadosPessoaisSensiveis,
+    criador: c.criador,
+    aprovado: c.aprovado,
+    id: c.id,
+  };
+
+  return reducedCase;
+};
+
 export const emptyAgenteTratamento = (): AgenteTratamento => ({
   nome: "",
   area: "",
