@@ -4,12 +4,11 @@ import { Schema, Types, model } from "mongoose";
 export interface BaseUser {
   username: string;
   password: string;
+  isComite: boolean;
 }
 
 export interface User extends BaseUser {
-  id: String;
   userCode: string;
-  isComite: boolean;
 }
 
 export const UserSchema = new Schema<User>({
@@ -22,7 +21,6 @@ export const UserSchema = new Schema<User>({
 export const UserModel = model<User>("User", UserSchema);
 
 export const emptyUser = (): User => ({
-  id: "",
   username: "",
   password: "",
   userCode: "",

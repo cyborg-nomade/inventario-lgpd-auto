@@ -4,14 +4,13 @@ import { v4 as uuidv4 } from "uuid";
  * Data Model Interfaces
  */
 import {
-  BaseFullCaseObject,
-  BaseFullCaseObjectModel,
+  FullCaseObject,
+  FullCaseObjectModel,
   CaseItemObject,
   categoriaTitulares,
   emptyAgenteTratamento,
   emptyItemCategoriaDadosPessoais,
   fontesRetencao,
-  FullCaseObject,
   hipotesesTratamento,
   reduceCaseObject,
   tipoMedidaSegurancaPrivacidade,
@@ -24,14 +23,12 @@ import {
 let cases: FullCaseObject[] = [
   {
     nome: "0800 - Relacionamento com o passageiro",
-    id: uuidv4(),
     ref: "Não se aplica",
     area: "DRMP",
     dataCriacao: new Date("2021-04-19").toISOString().substring(0, 10),
     dataAtualizacao: new Date("2021-04-19").toISOString().substring(0, 10),
     aprovado: false,
     criador: {
-      id: "u1",
       username: "User1",
       password: "Anarchy!19",
       userCode: "u1",
@@ -322,13 +319,19 @@ export const findAll = async (): Promise<CaseItemObject[]> => {
 };
 
 export const find = async (id: string): Promise<FullCaseObject> => {
-  const foundCase = cases.find((c) => c.id === id);
+  let foundCase;
 
-  if (foundCase === undefined) {
+  try {
+    foundCase = await FullCaseObjectModel.findById(id);
+  } catch (error) {
+    throw new Error("Não foi possível encontrar o caso");
+  }
+
+  if (!foundCase) {
     throw new TypeError("Caso não encontrado!");
   }
 
-  return foundCase;
+  return foundCase.toObject({ getters: true });
 };
 
 export const findByUser = async (uid: string): Promise<CaseItemObject[]> => {
@@ -340,11 +343,11 @@ export const findByUser = async (uid: string): Promise<CaseItemObject[]> => {
 };
 
 export const create = async (
-  recCase: BaseFullCaseObject
-): Promise<BaseFullCaseObject> => {
+  recCase: FullCaseObject
+): Promise<FullCaseObject> => {
   const id = uuidv4();
 
-  const newCase = new BaseFullCaseObjectModel({ ...recCase });
+  const newCase = new FullCaseObjectModel({ ...recCase });
 
   try {
     await newCase.save();
@@ -357,7 +360,7 @@ export const create = async (
 
 export const update = async (
   id: string,
-  caseUpdate: BaseFullCaseObject
+  caseUpdate: FullCaseObject
 ): Promise<FullCaseObject | null> => {
   let storedCase = { ...(await find(id)) };
   const storedCaseIndex = cases.findIndex((c) => c.id === id);

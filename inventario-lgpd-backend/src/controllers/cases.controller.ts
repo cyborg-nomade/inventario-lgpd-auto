@@ -1,10 +1,6 @@
 import express, { Request, Response } from "express";
 
-import {
-  BaseFullCaseObject,
-  CaseItemObject,
-  FullCaseObject,
-} from "../models/cases.model";
+import { CaseItemObject, FullCaseObject } from "../models/cases.model";
 import * as CaseService from "../services/cases.service";
 
 export const getCases = async (req: Request, res: Response) => {
@@ -46,7 +42,7 @@ export const getCasesById = async (req: Request, res: Response) => {
 
 export const registerCase = async (req: Request, res: Response) => {
   try {
-    const receivedCase: BaseFullCaseObject = req.body;
+    const receivedCase: FullCaseObject = req.body;
 
     const newCase = await CaseService.create(receivedCase);
 

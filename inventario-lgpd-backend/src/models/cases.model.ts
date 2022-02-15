@@ -234,7 +234,7 @@ const itemObservacoesProcessoSchema = new Schema<itemObservacoesProcesso>({
   descricaoObs: String,
 });
 
-export interface BaseCaseItemObject {
+export interface CaseItemObject {
   nome: string;
   ref: string;
   area: string;
@@ -249,11 +249,7 @@ export interface BaseCaseItemObject {
   aprovado: boolean;
 }
 
-export interface CaseItemObject extends BaseCaseItemObject {
-  id: string;
-}
-
-export interface BaseFullCaseObject extends BaseCaseItemObject {
+export interface FullCaseObject extends CaseItemObject {
   controlador: AgenteTratamento;
   encarregado: AgenteTratamento;
   extensaoEncarregado: AgenteTratamento;
@@ -390,7 +386,7 @@ export interface BaseFullCaseObject extends BaseCaseItemObject {
   observacoesProcesso: itemObservacoesProcesso[];
 }
 
-const BaseFullCaseObjectSchema = new Schema<BaseFullCaseObject>({
+const FullCaseObjectSchema = new Schema<FullCaseObject>({
   nome: String,
   ref: String,
   area: String,
@@ -535,14 +531,10 @@ const BaseFullCaseObjectSchema = new Schema<BaseFullCaseObject>({
   observacoesProcesso: [itemObservacoesProcessoSchema],
 });
 
-export const BaseFullCaseObjectModel = model<BaseFullCaseObject>(
+export const FullCaseObjectModel = model<FullCaseObject>(
   "Case",
-  BaseFullCaseObjectSchema
+  FullCaseObjectSchema
 );
-
-export interface FullCaseObject extends BaseFullCaseObject {
-  id: string;
-}
 
 export const reduceCaseObject = (c: FullCaseObject): CaseItemObject => {
   const { hipoteseTratamento, descricaoFinalidade } = c.finalidadeTratamento;
@@ -557,7 +549,6 @@ export const reduceCaseObject = (c: FullCaseObject): CaseItemObject => {
     dadosPessoaisSensiveis: c.dadosPessoaisSensiveis,
     criador: c.criador,
     aprovado: c.aprovado,
-    id: c.id,
   };
 
   return reducedCase;
@@ -622,7 +613,6 @@ export const emptyItemObservacoesProcesso = (): itemObservacoesProcesso => ({
 
 export const emptyFullCaseObject = (): FullCaseObject => ({
   nome: "",
-  id: uuidv4(),
   ref: "",
   area: "",
   aprovado: false,
