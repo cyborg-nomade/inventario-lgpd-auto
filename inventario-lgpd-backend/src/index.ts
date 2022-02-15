@@ -5,6 +5,8 @@ import * as dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import mongoose from "mongoose";
+
 import { casesRouter } from "./routes/cases.routes";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
@@ -38,6 +40,11 @@ app.use(notFoundHandler);
 /**
  * Server Activation
  */
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
-});
+mongoose
+  .connect("mongodb://localhost:27017/cases")
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Listening on port ${PORT}`);
+    });
+  })
+  .catch((err) => console.log(err));
