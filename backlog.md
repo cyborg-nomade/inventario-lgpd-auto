@@ -1,6 +1,6 @@
-# login
+# api
 
-1 - melhoria nas tabelas (OK)
-2 - criação do formulário de login (OK)
-3 - ajuste nas rotas (OK)
-4 - rotas protegidas + status login e comite (OK)
+1- CRUD cases api, with dummies (OK)
+2- CRUD users api, with dummies (OK)
+3- dummy login function (OK)
+4- models perfected (OK)
