@@ -103,8 +103,10 @@ const AllCasesList = () => {
       const loadedCases: CaseItemObject[] = [];
 
       for (const key in responseData) {
-        loadedCases.push(reduceCaseObject(responseData[key]));
+        loadedCases.push({ ...reduceCaseObject(responseData[key]), id: key });
       }
+
+      console.log(loadedCases);
 
       setCases(loadedCases);
       setIsLoading(false);

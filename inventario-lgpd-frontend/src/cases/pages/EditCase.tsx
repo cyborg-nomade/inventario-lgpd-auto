@@ -1,5 +1,11 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
+import Row from "react-bootstrap/Row";
+
+import { CONNSTR } from "./../../App";
+
 import {
   categoriaTitulares,
   emptyAgenteTratamento,
@@ -9,6 +15,7 @@ import {
   hipotesesTratamento,
   tipoMedidaSegurancaPrivacidade,
   tipoRiscoPrivacidade,
+  emptyFullCaseObject,
 } from "../../shared/models/cases.model";
 import { User } from "../../shared/models/users.model";
 import CaseForm from "../components/CaseForm";
@@ -308,12 +315,95 @@ const EditCase = () => {
 
   let navigate = useNavigate();
 
+  const [fullCase, setFullCase] = useState<FullCaseObject>(
+    emptyFullCaseObject()
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const getAllCases = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      const response = await fetch(`${CONNSTR}cases/${cid}.json`);
+
+      if (!response.ok) {
+        throw new Error("Algo deu errado!");
+      }
+
+      console.log(response);
+
+      const responseData = await response.json();
+
+      let loadedCase: FullCaseObject = emptyFullCaseObject();
+
+      console.log(loadedCase.fasesCicloTratamento.verbos);
+      console.log(responseData.fasesCicloTratamento.verbos);
+
+      loadedCase = {
+        ...loadedCase,
+        ...responseData,
+        fasesCicloTratamento: {
+          ...loadedCase.fasesCicloTratamento,
+          ...responseData.fasesCicloTratamento,
+          verbos: responseData.fasesCicloTratamento.verbos
+            ? responseData.fasesCicloTratamento.verbos?.map(
+                (o: { id: string; text: string }) => o.text
+              )
+            : loadedCase.fasesCicloTratamento.verbos,
+        },
+        categoriaDadosPessoais: {
+          ...responseData.categoriaDadosPessoais,
+          outros: {
+            ...loadedCase.categoriaDadosPessoais.outros,
+            ...responseData.categoriaDadosPessoais.outros,
+          },
+        },
+      };
+
+      console.log(loadedCase.fasesCicloTratamento.verbos);
+
+      setFullCase(loadedCase);
+      setIsLoading(false);
+    };
+
+    getAllCases().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
+
+    return () => {
+      setFullCase(emptyFullCaseObject());
+      setIsLoading(false);
+      setError(null);
+    };
+  }, [cid]);
+
+  if (isLoading) {
+    return (
+      <Row className="justify-content-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </Row>
+    );
+  }
+
+  if (error) {
+    return (
+      <Row className="justify-content-center">
+        <Alert variant="danger">{error}</Alert>
+      </Row>
+    );
+  }
+
   const submitFormHandler = (item: FullCaseObject) => {
     console.log(item);
     navigate(`/`);
   };
 
-  return <CaseForm item={testItem} edit={true} onSubmit={submitFormHandler} />;
+  return <CaseForm item={fullCase} edit={true} onSubmit={submitFormHandler} />;
 };
 
 export default EditCase;

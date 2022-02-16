@@ -33,7 +33,7 @@ const UserCasesList = () => {
       const loadedCases: CaseItemObject[] = [];
 
       for (const key in responseData) {
-        loadedCases.push(reduceCaseObject(responseData[key]));
+        loadedCases.push({ ...reduceCaseObject(responseData[key]), id: key });
       }
 
       setCases(loadedCases);
