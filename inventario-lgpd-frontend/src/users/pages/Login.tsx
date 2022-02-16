@@ -7,7 +7,7 @@ import Card from "react-bootstrap/Card";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { User, BaseUser } from "./../../shared/models/users.model";
+import { BaseUser } from "./../../shared/models/users.model";
 import { AuthContext } from "./../../shared/context/auth-context";
 
 const schema = yup.object().shape({

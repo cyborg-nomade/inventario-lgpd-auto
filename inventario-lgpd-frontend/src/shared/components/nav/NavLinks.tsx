@@ -29,9 +29,7 @@ const NavLinks = () => {
         </Nav.Link>
       )}
       {authContext.isLoggedIn && (
-        <Nav.Link eventKey={4} onClick={authContext.logout}>
-          Sair
-        </Nav.Link>
+        <Nav.Link onClick={authContext.logout}>Sair</Nav.Link>
       )}
       {!authContext.isLoggedIn && (
         <Nav.Link eventKey={5} as={NavLink} to="/login">

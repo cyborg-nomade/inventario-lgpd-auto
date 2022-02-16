@@ -18,6 +18,9 @@ import { AuthContext } from "./shared/context/auth-context";
 import ApprovePage from "./cases/pages/ApprovePage";
 import AllCasesPage from "./cases/pages/AllCasesPage";
 
+export const CONNSTR =
+  "https://inventario-lgpd-auto-default-rtdb.firebaseio.com/";
+
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isComite, setIsComite] = useState(false);
