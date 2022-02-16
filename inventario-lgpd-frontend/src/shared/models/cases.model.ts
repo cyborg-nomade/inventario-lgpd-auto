@@ -1,3 +1,5 @@
+import { emptyUser, User } from "./users.model";
+
 export enum verbosTratamento {
   coleta = "coleta",
   producao = "producao",
@@ -172,14 +174,22 @@ interface itemObservacoesProcesso {
   descricaoObs: string;
 }
 
-export interface FullCaseObject {
+export interface CaseItemObject {
   nome: string;
-  id: number;
   ref: string;
-  aprovado: boolean;
-  criador: string;
+  area: string;
   dataCriacao: string;
   dataAtualizacao: string;
+  finalidadeTratamento: {
+    hipoteseTratamento: hipotesesTratamento;
+    descricaoFinalidade: string;
+  };
+  dadosPessoaisSensiveis: boolean;
+  criador: User;
+  aprovado: boolean;
+}
+
+export interface FullCaseObject extends CaseItemObject {
   controlador: AgenteTratamento;
   encarregado: AgenteTratamento;
   extensaoEncarregado: AgenteTratamento;
@@ -316,6 +326,24 @@ export interface FullCaseObject {
   observacoesProcesso: itemObservacoesProcesso[];
 }
 
+export const reduceCaseObject = (c: FullCaseObject): CaseItemObject => {
+  const { hipoteseTratamento, descricaoFinalidade } = c.finalidadeTratamento;
+
+  const reducedCase: CaseItemObject = {
+    nome: c.nome,
+    ref: c.ref,
+    area: c.area,
+    dataCriacao: c.dataCriacao,
+    dataAtualizacao: c.dataAtualizacao,
+    finalidadeTratamento: { hipoteseTratamento, descricaoFinalidade },
+    dadosPessoaisSensiveis: c.dadosPessoaisSensiveis,
+    criador: c.criador,
+    aprovado: c.aprovado,
+  };
+
+  return reducedCase;
+};
+
 export const emptyAgenteTratamento = (): AgenteTratamento => ({
   nome: "",
   area: "",
@@ -375,10 +403,10 @@ export const emptyItemObservacoesProcesso = (): itemObservacoesProcesso => ({
 
 export const emptyFullCaseObject = (): FullCaseObject => ({
   nome: "",
-  id: 0,
   ref: "",
+  area: "",
   aprovado: false,
-  criador: "u1",
+  criador: emptyUser(),
   dataCriacao: new Date().toDateString(),
   dataAtualizacao: new Date().toDateString(),
   controlador: emptyAgenteTratamento(),
@@ -490,6 +518,7 @@ export const emptyFullCaseObject = (): FullCaseObject => ({
       outros: [],
     },
   },
+  dadosPessoaisSensiveis: false,
   categoriaDadosPessoaisSensiveis: {
     origemRacialEtnica: emptyItemCategoriaDadosPessoais(),
     conviccaoReligiosa: emptyItemCategoriaDadosPessoais(),
