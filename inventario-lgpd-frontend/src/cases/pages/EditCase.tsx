@@ -19,9 +19,11 @@ import {
 } from "../../shared/models/cases.model";
 import { User } from "../../shared/models/users.model";
 import CaseForm from "../components/CaseForm";
+import { USERS } from "./AllCasesList";
 
 const EditCase = () => {
   const cid = useParams().cid || 0;
+  const uid = useParams().uid || 101;
 
   const testUser: User = {
     username: "user1",
@@ -347,11 +349,9 @@ const EditCase = () => {
         fasesCicloTratamento: {
           ...loadedCase.fasesCicloTratamento,
           ...responseData.fasesCicloTratamento,
-          verbos: responseData.fasesCicloTratamento.verbos
-            ? responseData.fasesCicloTratamento.verbos?.map(
-                (o: { id: string; text: string }) => o.text
-              )
-            : loadedCase.fasesCicloTratamento.verbos,
+          verbos:
+            responseData.fasesCicloTratamento.verbos ??
+            loadedCase.fasesCicloTratamento.verbos,
         },
         categoriaDadosPessoais: {
           ...responseData.categoriaDadosPessoais,
@@ -398,8 +398,30 @@ const EditCase = () => {
     );
   }
 
-  const submitFormHandler = (item: FullCaseObject) => {
+  const submitFormHandler = async (item: FullCaseObject) => {
     console.log(item);
+
+    item.area = item.extensaoEncarregado.area || "";
+    item.criador = USERS[+uid - 1];
+    for (const value of Object.values(item.categoriaDadosPessoaisSensiveis)) {
+      if (value.descricao !== "Não se aplica") {
+        item.dadosPessoaisSensiveis = true;
+      }
+    }
+
+    console.log(item);
+    console.log(`${CONNSTR}cases.json/${cid}.json`);
+
+    const response = await fetch(`${CONNSTR}cases/${cid}.json`, {
+      method: "PUT",
+      body: JSON.stringify(item),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+    console.log(data);
     navigate(`/`);
   };
 

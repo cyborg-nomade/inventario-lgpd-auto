@@ -2330,7 +2330,7 @@ const CaseForm = (props: {
                         />
                       </Accordion.Body>
                     </Accordion.Item>
-                    <Accordion.Item eventKey="613">
+                    <Accordion.Item eventKey="614">
                       <Accordion.Header>Outros</Accordion.Header>
                       <Accordion.Body>
                         <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
@@ -2362,11 +2362,7 @@ const CaseForm = (props: {
                                         }`}
                                         label="Outros (Especificar)"
                                         tooltip={<React.Fragment />}
-                                        disabled={
-                                          props.edit ||
-                                          props.approve ||
-                                          !isEditing
-                                        }
+                                        disabled={!isEditing}
                                         name={`categoriaDadosPessoais.outros.outros[${index}]`}
                                       />
                                       <Row className="justify-content-center">

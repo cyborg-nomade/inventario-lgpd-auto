@@ -17,16 +17,11 @@ const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
 const TagPicker = (props: {
   name: string;
-  onChange: (tags: { id: string; text: string }[]) => void;
-  value: verbosTratamento[];
+  onChange: (tags: string[]) => void;
+  value: string[];
   disabled: boolean;
 }) => {
-  const [tags, setTags] = useState<{ id: string; text: string }[]>(
-    props.value.map((verbo) => ({
-      id: verbo,
-      text: verbo,
-    }))
-  );
+  const [tags, setTags] = useState(props.value);
 
   const handleInputChange = () => {
     console.log(tags);
@@ -39,7 +34,7 @@ const TagPicker = (props: {
   };
 
   const handleAddition = (tag: { id: string; text: string }) => {
-    setTags([...tags, tag]);
+    setTags([...tags, tag.text]);
   };
 
   const handleDrag = (
@@ -50,7 +45,7 @@ const TagPicker = (props: {
     const newTags = tags.slice();
 
     newTags.splice(currPos, 1);
-    newTags.splice(newPos, 0, tag);
+    newTags.splice(newPos, 0, tag.id);
 
     // re-render
     setTags(newTags);
@@ -64,7 +59,7 @@ const TagPicker = (props: {
     <div>
       <ReactTags
         readOnly={props.disabled}
-        tags={tags}
+        tags={tags.map((tag) => ({ id: tag, text: tag }))}
         suggestions={suggestions}
         delimiters={delimiters}
         handleDelete={handleDelete}
