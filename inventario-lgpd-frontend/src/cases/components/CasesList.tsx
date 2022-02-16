@@ -15,8 +15,9 @@ import {
 import {
   CaseItemObject,
   headersCaseItemObjectReduced,
-} from "../../shared/models/CaseListItem.model";
+} from "../../shared/models/cases.model";
 import { useNavigate } from "react-router-dom";
+import { reduceCaseObjectToList } from "./../../shared/models/cases.model";
 
 const headers: {
   title: string;
@@ -41,7 +42,7 @@ const headers: {
   },
   {
     title: "Finalidade",
-    prop: "finalidade",
+    prop: "descricaoFinalidade",
     isFilterable: true,
     isSortable: true,
   },
@@ -74,12 +75,8 @@ const CasesList = (props: { items: CaseItemObject[] }) => {
     );
   }
 
-  const bodyItems = props.items.map(({ aprovado, criador, ...rest }) => {
-    if (rest.dadosPessoaisSensiveis) {
-      return { ...rest, dadosPessoaisSensiveis: "SIM" };
-    } else {
-      return { ...rest, dadosPessoaisSensiveis: "NÃO" };
-    }
+  const bodyItems = props.items.map((c) => {
+    return reduceCaseObjectToList(c);
   });
 
   const handleRowClick = (row: CaseItemObject) => {

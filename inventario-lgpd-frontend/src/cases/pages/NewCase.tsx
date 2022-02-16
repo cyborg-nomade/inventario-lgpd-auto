@@ -1,7 +1,8 @@
-import { FullCaseObject } from "../../shared/models/FullCase.model";
-
 import CaseForm from "../components/CaseForm";
-import { emptyFullCaseObject } from "./../../shared/models/FullCase.model";
+import {
+  emptyFullCaseObject,
+  FullCaseObject,
+} from "./../../shared/models/cases.model";
 
 const NewCase = () => {
   const submitFormHandler = (item: FullCaseObject) => {

@@ -9,18 +9,28 @@ import {
   hipotesesTratamento,
   tipoMedidaSegurancaPrivacidade,
   tipoRiscoPrivacidade,
-} from "../../shared/models/FullCase.model";
+} from "../../shared/models/cases.model";
+import { User } from "../../shared/models/users.model";
 import CaseForm from "../components/CaseForm";
 
 const ApproveCase = () => {
-  const cid = useParams().cid || 0;
+  const cid = useParams().cid;
+
+  const testUser: User = {
+    username: "user1",
+    password: "Usuario1!",
+    isComite: false,
+    userCode: "1",
+  };
 
   const testItem: FullCaseObject = {
     nome: "0800 - Relacionamento com o passageiro",
-    id: +cid || 0,
+    id: cid || "1",
     ref: "Não se aplica",
     aprovado: false,
-    criador: "u1",
+    criador: testUser,
+    area: "DRMP",
+    dadosPessoaisSensiveis: true,
     dataCriacao: new Date("2021-04-19").toISOString().substring(0, 10),
     dataAtualizacao: new Date("2021-04-19").toISOString().substring(0, 10),
     controlador: { nome: "CPTM" },

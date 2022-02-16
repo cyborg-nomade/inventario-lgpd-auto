@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { WithContext as ReactTags } from "react-tag-input";
-import { verbosTratamento, FullCaseObject } from "../../models/FullCase.model";
+import { verbosTratamento } from "../../models/cases.model";
 
 import classes from "./TagPicker.module.css";
 

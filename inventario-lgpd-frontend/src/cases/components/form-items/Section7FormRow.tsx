@@ -10,7 +10,7 @@ import { useFormikContext, getIn } from "formik";
 import {
   fontesRetencao,
   FullCaseObject,
-} from "../../../shared/models/FullCase.model";
+} from "../../../shared/models/cases.model";
 
 const Section7FormRow = (props: {
   tooltip: JSX.Element;

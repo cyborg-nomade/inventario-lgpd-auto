@@ -1,45 +1,77 @@
 import CasesList from "../components/CasesList";
-import { CaseItemObject } from "../../shared/models/CaseListItem.model";
+import {
+  CaseItemObject,
+  hipotesesTratamento,
+} from "../../shared/models/cases.model";
+import { User } from "../../shared/models/users.model";
+
+export const USERS: User[] = [
+  {
+    username: "user1",
+    password: "Usuario1!",
+    isComite: false,
+    userCode: "1",
+  },
+  {
+    username: "user2",
+    password: "Usuario2!",
+    isComite: false,
+    userCode: "2",
+  },
+  {
+    username: "comite",
+    password: "Comite100!",
+    isComite: true,
+    userCode: "100",
+  },
+];
 
 export const CASES: CaseItemObject[] = [
   {
     nome: "0800 - RELACIONAMENTO COM O PASSAGEIRO",
-    id: Math.floor(Math.random() * 1000),
+    ref: "",
+    id: Math.floor(Math.random() * 1000).toString(),
     area: "DRMP",
     dataCriacao: new Date("2021-04-19").toLocaleDateString("pt-BR"),
     dataAtualizacao: new Date("2021-04-19").toLocaleDateString("pt-BR"),
-    finalidade:
-      "Identificação, atendimento de manifestações, histórico de atendimentos, acompanhamento de demandas recorrentes.",
-    hipoteseTratamento:
-      "Cumprimento de obrigação legal ou regulatória pelo controlador.",
+    finalidadeTratamento: {
+      descricaoFinalidade:
+        "Identificação, atendimento de manifestações, histórico de atendimentos, acompanhamento de demandas recorrentes.",
+      hipoteseTratamento: hipotesesTratamento.obrigacaoLegal,
+    },
     dadosPessoaisSensiveis: true,
-    criador: 1,
+    criador: USERS[0],
     aprovado: false,
   },
   {
     nome: "CREDENCIAMENTO DO TRABALHADOR DESEMPREGADO",
-    id: Math.floor(Math.random() * 1000),
+    id: Math.floor(Math.random() * 1000).toString(),
+    ref: "",
     area: "DRMP",
     dataCriacao: new Date("2021-04-21").toLocaleDateString("pt-BR"),
     dataAtualizacao: new Date("2021-05-26").toLocaleDateString("pt-BR"),
-    finalidade: "Emissão de credencial do trabalhador desempregado.",
-    hipoteseTratamento:
-      "Cumprimento de obrigação legal ou regulatória pelo controlador.",
+    finalidadeTratamento: {
+      descricaoFinalidade: "Emissão de credencial do trabalhador desempregado.",
+      hipoteseTratamento: hipotesesTratamento.obrigacaoLegal,
+    },
     dadosPessoaisSensiveis: false,
-    criador: 1,
+    criador: USERS[0],
     aprovado: true,
   },
   {
     nome: "ACHADOS E PERDIDOS",
-    id: Math.floor(Math.random() * 1000),
+    id: Math.floor(Math.random() * 1000).toString(),
+    ref: "",
     area: "DRMP",
     dataCriacao: new Date("2021-04-21").toLocaleDateString("pt-BR"),
     dataAtualizacao: new Date("2021-05-26").toLocaleDateString("pt-BR"),
-    finalidade: "Identificação e tratamento de itens perdidos no sistema CPTM.",
-    hipoteseTratamento:
-      "Cumprimento de obrigação legal ou regulatória pelo controlador.",
+    finalidadeTratamento: {
+      descricaoFinalidade:
+        "Identificação e tratamento de itens perdidos no sistema CPTM.",
+      hipoteseTratamento: hipotesesTratamento.obrigacaoLegal,
+    },
     dadosPessoaisSensiveis: false,
-    criador: 2,
+    criador: USERS[1],
     aprovado: false,
   },
 ];

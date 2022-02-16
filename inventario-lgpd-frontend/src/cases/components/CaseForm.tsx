@@ -24,7 +24,7 @@ import {
   emptyItemTransferenciaInternacional,
   FullCaseObject,
   verbosTratamento,
-} from "../../shared/models/FullCase.model";
+} from "../../shared/models/cases.model";
 import TagPicker from "../../shared/components/UI/TagPicker";
 import Section6FormRow from "./form-items/Section6FormRow";
 import Section7FormRow from "./form-items/Section7FormRow";

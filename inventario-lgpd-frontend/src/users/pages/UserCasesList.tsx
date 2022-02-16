@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { CASES } from "../../cases/pages/AllCasesList";
 
 const UserCasesList = () => {
-  const uid = useParams().uid || 0;
-  const filteredCases = CASES.filter((item) => item.criador === +uid);
+  const uid = useParams().uid;
+  const filteredCases = CASES.filter((item) => item.criador.userCode === uid);
 
   return <CasesList items={filteredCases} />;
 };

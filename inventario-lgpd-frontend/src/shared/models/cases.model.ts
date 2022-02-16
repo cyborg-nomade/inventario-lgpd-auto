@@ -175,6 +175,7 @@ interface itemObservacoesProcesso {
 }
 
 export interface CaseItemObject {
+  id: string;
   nome: string;
   ref: string;
   area: string;
@@ -188,6 +189,38 @@ export interface CaseItemObject {
   criador: User;
   aprovado: boolean;
 }
+
+export interface CaseItemObjectReduced {
+  id: string;
+  nome: string;
+  ref: string;
+  area: string;
+  dataCriacao: string;
+  dataAtualizacao: string;
+  hipoteseTratamento: hipotesesTratamento;
+  descricaoFinalidade: string;
+  dadosPessoaisSensiveis: string;
+}
+
+export const reduceCaseObjectToList = (
+  c: CaseItemObject
+): CaseItemObjectReduced => {
+  const reducedCase: CaseItemObjectReduced = {
+    nome: c.nome,
+    ref: c.ref,
+    area: c.area,
+    dataCriacao: c.dataCriacao,
+    dataAtualizacao: c.dataAtualizacao,
+    hipoteseTratamento: c.finalidadeTratamento.hipoteseTratamento,
+    descricaoFinalidade: c.finalidadeTratamento.descricaoFinalidade,
+    dadosPessoaisSensiveis: c.dadosPessoaisSensiveis ? "SIM" : "NÃO",
+    id: c.id,
+  };
+
+  return reducedCase;
+};
+
+export type headersCaseItemObjectReduced = keyof CaseItemObjectReduced;
 
 export interface FullCaseObject extends CaseItemObject {
   controlador: AgenteTratamento;
@@ -339,6 +372,7 @@ export const reduceCaseObject = (c: FullCaseObject): CaseItemObject => {
     dadosPessoaisSensiveis: c.dadosPessoaisSensiveis,
     criador: c.criador,
     aprovado: c.aprovado,
+    id: c.id,
   };
 
   return reducedCase;
@@ -402,6 +436,7 @@ export const emptyItemObservacoesProcesso = (): itemObservacoesProcesso => ({
 });
 
 export const emptyFullCaseObject = (): FullCaseObject => ({
+  id: "",
   nome: "",
   ref: "",
   area: "",
