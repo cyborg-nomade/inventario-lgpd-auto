@@ -1,9 +1,16 @@
+import { useEffect, useState } from "react";
+import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
+import Row from "react-bootstrap/Row";
+
 import CasesList from "../components/CasesList";
 import {
   CaseItemObject,
   hipotesesTratamento,
+  reduceCaseObject,
 } from "../../shared/models/cases.model";
 import { User } from "../../shared/models/users.model";
+import { CONNSTR } from "./../../App";
 
 export const USERS: User[] = [
   {
@@ -77,7 +84,57 @@ export const CASES: CaseItemObject[] = [
 ];
 
 const AllCasesList = () => {
-  return <CasesList items={CASES} />;
+  const [cases, setCases] = useState<CaseItemObject[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const getAllCases = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      const response = await fetch(`${CONNSTR}cases.json`);
+      if (!response.ok) {
+        throw new Error("Algo deu errado!");
+      }
+
+      const responseData = await response.json();
+
+      const loadedCases: CaseItemObject[] = [];
+
+      for (const key in responseData) {
+        loadedCases.push(reduceCaseObject(responseData[key]));
+      }
+
+      setCases(loadedCases);
+      setIsLoading(false);
+    };
+
+    getAllCases().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Row className="justify-content-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </Row>
+    );
+  }
+
+  if (error) {
+    return (
+      <Row className="justify-content-center">
+        <Alert variant="danger">{error}</Alert>
+      </Row>
+    );
+  }
+
+  return <CasesList items={cases} />;
 };
 
 export default AllCasesList;

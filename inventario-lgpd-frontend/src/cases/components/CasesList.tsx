@@ -26,7 +26,7 @@ const headers: {
   prop: headersCaseItemObjectReduced;
 }[] = [
   { title: "Nome", prop: "nome", isFilterable: true, isSortable: true },
-  { title: "ID", prop: "id", isFilterable: true, isSortable: true },
+  { title: "ID", prop: "ref", isFilterable: true, isSortable: true },
   { title: "Área", prop: "area", isFilterable: true, isSortable: true },
   {
     title: "Data de Criação do Inventário",
