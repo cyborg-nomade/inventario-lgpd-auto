@@ -1,51 +1,149 @@
+import React, { useEffect, useState } from "react";
+import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
+import Row from "react-bootstrap/Row";
+
 import CasesList from "../components/CasesList";
-import { CaseItemObject } from "../../shared/models/CaseListItem.model";
+import {
+  CaseItemObject,
+  hipotesesTratamento,
+  reduceCaseObject,
+} from "../../shared/models/cases.model";
+import { User } from "../../shared/models/users.model";
+import { CONNSTR } from "./../../App";
+
+export const USERS: User[] = [
+  {
+    username: "user1",
+    password: "Usuario1!",
+    isComite: false,
+    userCode: "1",
+  },
+  {
+    username: "user2",
+    password: "Usuario2!",
+    isComite: false,
+    userCode: "2",
+  },
+  {
+    username: "comite",
+    password: "Comite100!",
+    isComite: true,
+    userCode: "100",
+  },
+];
 
 export const CASES: CaseItemObject[] = [
   {
     nome: "0800 - RELACIONAMENTO COM O PASSAGEIRO",
-    id: Math.floor(Math.random() * 1000),
+    ref: "",
+    id: Math.floor(Math.random() * 1000).toString(),
     area: "DRMP",
     dataCriacao: new Date("2021-04-19").toLocaleDateString("pt-BR"),
     dataAtualizacao: new Date("2021-04-19").toLocaleDateString("pt-BR"),
-    finalidade:
-      "Identificação, atendimento de manifestações, histórico de atendimentos, acompanhamento de demandas recorrentes.",
-    hipoteseTratamento:
-      "Cumprimento de obrigação legal ou regulatória pelo controlador.",
+    finalidadeTratamento: {
+      descricaoFinalidade:
+        "Identificação, atendimento de manifestações, histórico de atendimentos, acompanhamento de demandas recorrentes.",
+      hipoteseTratamento: hipotesesTratamento.obrigacaoLegal,
+    },
     dadosPessoaisSensiveis: true,
-    criador: 1,
+    criador: USERS[0],
     aprovado: false,
   },
   {
     nome: "CREDENCIAMENTO DO TRABALHADOR DESEMPREGADO",
-    id: Math.floor(Math.random() * 1000),
+    id: Math.floor(Math.random() * 1000).toString(),
+    ref: "",
     area: "DRMP",
     dataCriacao: new Date("2021-04-21").toLocaleDateString("pt-BR"),
     dataAtualizacao: new Date("2021-05-26").toLocaleDateString("pt-BR"),
-    finalidade: "Emissão de credencial do trabalhador desempregado.",
-    hipoteseTratamento:
-      "Cumprimento de obrigação legal ou regulatória pelo controlador.",
+    finalidadeTratamento: {
+      descricaoFinalidade: "Emissão de credencial do trabalhador desempregado.",
+      hipoteseTratamento: hipotesesTratamento.obrigacaoLegal,
+    },
     dadosPessoaisSensiveis: false,
-    criador: 1,
+    criador: USERS[0],
     aprovado: true,
   },
   {
     nome: "ACHADOS E PERDIDOS",
-    id: Math.floor(Math.random() * 1000),
+    id: Math.floor(Math.random() * 1000).toString(),
+    ref: "",
     area: "DRMP",
     dataCriacao: new Date("2021-04-21").toLocaleDateString("pt-BR"),
     dataAtualizacao: new Date("2021-05-26").toLocaleDateString("pt-BR"),
-    finalidade: "Identificação e tratamento de itens perdidos no sistema CPTM.",
-    hipoteseTratamento:
-      "Cumprimento de obrigação legal ou regulatória pelo controlador.",
+    finalidadeTratamento: {
+      descricaoFinalidade:
+        "Identificação e tratamento de itens perdidos no sistema CPTM.",
+      hipoteseTratamento: hipotesesTratamento.obrigacaoLegal,
+    },
     dadosPessoaisSensiveis: false,
-    criador: 2,
+    criador: USERS[1],
     aprovado: false,
   },
 ];
 
 const AllCasesList = () => {
-  return <CasesList items={CASES} />;
+  const [cases, setCases] = useState<CaseItemObject[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const getAllCases = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      const response = await fetch(`${CONNSTR}cases.json`);
+      if (!response.ok) {
+        throw new Error("Algo deu errado!");
+      }
+
+      const responseData = await response.json();
+
+      const loadedCases: CaseItemObject[] = [];
+
+      for (const key in responseData) {
+        loadedCases.push({ ...reduceCaseObject(responseData[key]), id: key });
+      }
+
+      console.log(loadedCases);
+
+      setCases(loadedCases);
+      setIsLoading(false);
+    };
+
+    getAllCases().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Row className="justify-content-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </Row>
+    );
+  }
+
+  if (error) {
+    return (
+      <Row className="justify-content-center">
+        <Alert variant="danger">{error}</Alert>
+      </Row>
+    );
+  }
+
+  const approvedCases = cases.filter((item) => item.aprovado);
+
+  return (
+    <React.Fragment>
+      <h1>Página Inicial - Todos os Itens Aprovados</h1>
+      <CasesList items={approvedCases} />
+    </React.Fragment>
+  );
 };
 
 export default AllCasesList;

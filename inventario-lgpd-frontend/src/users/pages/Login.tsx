@@ -7,7 +7,7 @@ import Card from "react-bootstrap/Card";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import { User } from "./../../shared/models/User.model";
+import { BaseUser } from "./../../shared/models/users.model";
 import { AuthContext } from "./../../shared/context/auth-context";
 
 const schema = yup.object().shape({
@@ -18,18 +18,16 @@ const schema = yup.object().shape({
     .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/),
 });
 
-const initialValues: User = {
+const initialValues: BaseUser = {
   username: "",
   password: "",
-  userCode: "",
-  isComite: false,
 };
 
 const Login = () => {
   const authContext = useContext(AuthContext);
   let navigate = useNavigate();
 
-  const submitLoginHandler = (user: User) => {
+  const submitLoginHandler = (user: BaseUser) => {
     console.log(user);
     if (user.username === "user1") {
       authContext.login("1", false);
