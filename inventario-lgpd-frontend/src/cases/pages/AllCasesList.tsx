@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
@@ -138,7 +138,12 @@ const AllCasesList = () => {
 
   const approvedCases = cases.filter((item) => item.aprovado);
 
-  return <CasesList items={approvedCases} />;
+  return (
+    <React.Fragment>
+      <h1>Página Inicial - Todos os Itens Aprovados</h1>
+      <CasesList items={approvedCases} />
+    </React.Fragment>
+  );
 };
 
 export default AllCasesList;

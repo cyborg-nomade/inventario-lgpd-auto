@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
@@ -127,7 +127,12 @@ const EditCase = () => {
     navigate(`/`);
   };
 
-  return <CaseForm item={fullCase} edit={true} onSubmit={submitFormHandler} />;
+  return (
+    <React.Fragment>
+      <h1>Editar Item</h1>
+      <CaseForm item={fullCase} edit={true} onSubmit={submitFormHandler} />
+    </React.Fragment>
+  );
 };
 
 export default EditCase;

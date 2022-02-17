@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
@@ -119,7 +119,10 @@ const ApproveCase = () => {
   };
 
   return (
-    <CaseForm item={fullCase} approve={true} onSubmit={submitFormHandler} />
+    <React.Fragment>
+      <h1>Aprovar Item</h1>
+      <CaseForm item={fullCase} approve={true} onSubmit={submitFormHandler} />
+    </React.Fragment>
   );
 };
 

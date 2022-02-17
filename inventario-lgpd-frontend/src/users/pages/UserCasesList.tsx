@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
@@ -66,7 +66,12 @@ const UserCasesList = () => {
 
   const filteredCases = cases.filter((item) => item.criador.userCode === uid);
 
-  return <CasesList items={filteredCases} />;
+  return (
+    <React.Fragment>
+      <h1>Página Inicia - Todos os seus itens</h1>
+      <CasesList items={filteredCases} />
+    </React.Fragment>
+  );
 };
 
 export default UserCasesList;

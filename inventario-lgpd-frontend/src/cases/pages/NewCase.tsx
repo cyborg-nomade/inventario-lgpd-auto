@@ -1,11 +1,13 @@
-import CaseForm from "../components/CaseForm";
+import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import { CONNSTR } from "./../../App";
 import { USERS } from "./AllCasesList";
 import {
   emptyFullCaseObject,
   FullCaseObject,
 } from "./../../shared/models/cases.model";
-import { useNavigate, useParams } from "react-router-dom";
+import CaseForm from "../components/CaseForm";
 
 let idCounter = 0;
 
@@ -42,7 +44,12 @@ const NewCase = () => {
 
   const emptyItem = emptyFullCaseObject();
 
-  return <CaseForm new={true} onSubmit={submitFormHandler} item={emptyItem} />;
+  return (
+    <React.Fragment>
+      <h1>Registrar Novo Item</h1>
+      <CaseForm new={true} onSubmit={submitFormHandler} item={emptyItem} />
+    </React.Fragment>
+  );
 };
 
 export default NewCase;

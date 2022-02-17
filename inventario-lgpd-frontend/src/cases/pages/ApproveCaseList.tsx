@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
@@ -65,7 +65,12 @@ const ApproveCaseList = () => {
 
   const notApprovedCases = cases.filter((item) => !item.aprovado);
 
-  return <CasesList items={notApprovedCases} />;
+  return (
+    <React.Fragment>
+      <h1>Aprovações Pendentes</h1>
+      <CasesList items={notApprovedCases} />
+    </React.Fragment>
+  );
 };
 
 export default ApproveCaseList;
