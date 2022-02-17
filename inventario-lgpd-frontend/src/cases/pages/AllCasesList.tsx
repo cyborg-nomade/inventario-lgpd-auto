@@ -136,7 +136,9 @@ const AllCasesList = () => {
     );
   }
 
-  return <CasesList items={cases} />;
+  const approvedCases = cases.filter((item) => item.aprovado);
+
+  return <CasesList items={approvedCases} />;
 };
 
 export default AllCasesList;
