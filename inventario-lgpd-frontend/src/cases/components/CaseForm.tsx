@@ -10,7 +10,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Modal from "react-bootstrap/Modal";
 import { Formik, getIn, FieldArray } from "formik";
-import * as yup from "yup";
+// import * as yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
@@ -35,6 +35,7 @@ import Section13FormRow from "./form-items/Section13FormRow";
 import Section14FormRow from "./form-items/Section14FormRow";
 import Section15FormRow from "./form-items/Section15FormRow";
 import Section16FormRow from "./form-items/Section16FormRow";
+import { CONNSTR } from "../../App";
 
 type onSubmitFn = (item: FullCaseObject) => void;
 
@@ -615,7 +616,7 @@ const CaseForm = (props: {
     navigate(`/`);
   };
 
-  const { cid } = useParams<{ cid?: string }>();
+  const cid = useParams().cid || "";
 
   const handleShowDeleteModal = () => {
     setShowModal(true);
@@ -625,8 +626,17 @@ const CaseForm = (props: {
     setShowModal(false);
   };
 
-  const onDelete = (itemId: number) => {
+  const onDelete = async (itemId: string) => {
     console.log(itemId);
+
+    console.log(`${CONNSTR}cases.json/${itemId}.json`);
+
+    const response = await fetch(`${CONNSTR}cases/${itemId}.json`, {
+      method: "DELETE",
+    });
+
+    const data = await response.json();
+    console.log(data);
     navigate(`/`);
   };
 
@@ -637,13 +647,13 @@ const CaseForm = (props: {
           <Modal.Title>Remover Registro!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Você está prestes a deletar o registro de número {cid}
+          Você está prestes a deletar o registro {props.item.nome}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handleCloseModal}>
             Cancelar
           </Button>
-          <Button variant="danger" onClick={() => onDelete(+cid!)}>
+          <Button variant="danger" onClick={() => onDelete(cid)}>
             Prosseguir com Remoção
           </Button>
         </Modal.Footer>
@@ -3355,9 +3365,17 @@ const CaseForm = (props: {
               </Button>
             )}
             {props.approve && (
-              <Button type="submit" className="float-end mt-3">
-                Aprovar
-              </Button>
+              <Row className="float-end mt-3">
+                <ButtonGroup as={Col} lg={2}>
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => onCancel()}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button type="submit">Aprovar</Button>
+                </ButtonGroup>
+              </Row>
             )}
             {props.edit && isEditing && isValid && (
               <Button
