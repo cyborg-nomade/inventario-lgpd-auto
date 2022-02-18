@@ -4,11 +4,11 @@ import { Schema, Types, model } from "mongoose";
 export interface BaseUser {
   username: string;
   password: string;
-  isComite: boolean;
 }
 
 export interface User extends BaseUser {
   userCode: string;
+  isComite: boolean;
 }
 
 export const UserSchema = new Schema<User>({

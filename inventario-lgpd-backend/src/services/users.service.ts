@@ -10,21 +10,18 @@ import { BaseUser, User, UserModel } from "../models/users.model";
  */
 let users: User[] = [
   {
-    id: "u1",
     username: "User1",
     userCode: "1",
     password: "Anarchy!19",
     isComite: false,
   },
   {
-    id: "u2",
     username: "User2",
     userCode: "2",
     password: "Anarchy!19",
     isComite: false,
   },
   {
-    id: "c100",
     username: "Comite",
     userCode: "100",
     password: "Anarchy!19",
@@ -38,21 +35,39 @@ let users: User[] = [
 export const findAll = async (): Promise<User[]> => users;
 
 export const find = async (id: string): Promise<User> => {
-  const foundUser = users.find((u) => u.id === id);
+  let foundUser;
 
-  if (foundUser === undefined) {
+  try {
+    foundUser = await UserModel.findById(id);
+  } catch (error) {
+    throw new Error("Não foi possível recuperar dados da base");
+  }
+
+  if (!foundUser) {
     throw new TypeError("Usuário não encontrado!");
   }
 
-  return foundUser;
+  return foundUser.toObject({ getters: true });
 };
 
 export const findByUserName = async (
   username: string
 ): Promise<User | undefined> => {
-  const foundUser = users.find((u) => u.username === username);
+  let foundUsers;
 
-  return foundUser;
+  try {
+    foundUsers = await UserModel.findOne({
+      username: username,
+    });
+  } catch (error) {
+    throw new Error("Não foi possível recuperar dados da base");
+  }
+
+  if (!foundUsers) {
+    throw new TypeError("Nenhum usuário com este nome foi encontrado!");
+  }
+
+  return foundUsers.toObject({ getters: true });
 };
 
 export const create = async (recUser: BaseUser): Promise<User> => {

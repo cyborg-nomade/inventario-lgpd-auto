@@ -25,10 +25,9 @@ export const getCasesByUser = async (req: Request, res: Response) => {
 };
 
 export const getCasesById = async (req: Request, res: Response) => {
-  const id: string = req.params.cid;
-
   try {
-    const reqCase: FullCaseObject = await CaseService.find(id);
+    const id: string = req.params.cid;
+    const reqCase = await CaseService.find(id);
 
     if (reqCase) {
       return res.status(200).send(reqCase);
@@ -53,12 +52,11 @@ export const registerCase = async (req: Request, res: Response) => {
 };
 
 export const updateCase = async (req: Request, res: Response) => {
-  const id: string = req.params.cid;
-
   try {
+    const id: string = req.params.cid;
     const caseUpdate: FullCaseObject = req.body;
 
-    const existingCase: FullCaseObject = await CaseService.find(id);
+    const existingCase = await CaseService.find(id);
 
     if (existingCase) {
       const updatedCase = await CaseService.update(id, caseUpdate);
@@ -76,9 +74,15 @@ export const updateCase = async (req: Request, res: Response) => {
 export const removeCase = async (req: Request, res: Response) => {
   try {
     const id: string = req.params.cid;
-    await CaseService.remove(id);
 
-    res.status(200).send("Caso removido com sucesso");
+    const existingCase = await CaseService.find(id);
+
+    if (existingCase) {
+      const removedCase = await CaseService.remove(id);
+      return res.status(200).json(removeCase);
+    }
+
+    res.status(404).send("Caso de Uso não encontrado");
   } catch (error: any) {
     res.status(500).send(error.message);
   }
