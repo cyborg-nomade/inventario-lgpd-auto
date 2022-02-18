@@ -52,7 +52,7 @@ export const find = async (id: string): Promise<User> => {
 
 export const findByUserName = async (
   username: string
-): Promise<User | undefined> => {
+): Promise<User | null> => {
   let foundUsers;
 
   try {
@@ -64,7 +64,7 @@ export const findByUserName = async (
   }
 
   if (!foundUsers) {
-    throw new TypeError("Nenhum usuário com este nome foi encontrado!");
+    return null;
   }
 
   return foundUsers.toObject({ getters: true });
@@ -82,7 +82,7 @@ export const create = async (recUser: BaseUser): Promise<User> => {
     throw new Error("Erro na conexão de banco de dados");
   }
 
-  return newUser;
+  return newUser.toObject();
 };
 
 export const update = async (

@@ -33,6 +33,7 @@ let cases: FullCaseObject[] = [
       password: "Anarchy!19",
       userCode: "u1",
       isComite: false,
+      cases: "hi",
     },
     controlador: { nome: "CPTM" },
     encarregado: { nome: "Olivia Shibata Nishiyama" },
