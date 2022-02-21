@@ -7,9 +7,9 @@ import cors from "cors";
 import helmet from "helmet";
 import mongoose from "mongoose";
 import { casesRouter } from "./routes/cases.routes";
+import { usersRouter } from "./routes/user.routes";
 import { errorHandler } from "./middleware/error.middleware";
 import { notFoundHandler } from "./middleware/not-found.middleware";
-import { usersRouter } from "./routes/user.routes";
 
 dotenv.config();
 

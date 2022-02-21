@@ -311,27 +311,15 @@ export const findAll = async (): Promise<CaseItemObject[]> => {
     throw new Error("Não foi possível recuperar dados da base");
   }
 
+  if (!allStoredCases || allStoredCases.length === 0) {
+    throw new Error("Nenhum caso encontrado na base de dados!");
+  }
+
   const reducedCases: CaseItemObject[] = allStoredCases
     .map((c) => c.toObject({ getters: true }))
     .map((c) => reduceCaseObject(c));
 
   return reducedCases;
-};
-
-export const find = async (id: string): Promise<FullCaseObject | null> => {
-  let foundCase;
-
-  try {
-    foundCase = await FullCaseObjectModel.findById(id);
-  } catch (error) {
-    throw new Error("Não foi possível recuperar dados da base");
-  }
-
-  if (!foundCase) {
-    return null;
-  }
-
-  return foundCase.toObject({ getters: true });
 };
 
 export const findByUser = async (
@@ -348,7 +336,7 @@ export const findByUser = async (
   }
 
   if (!foundCases || foundCases.length === 0) {
-    throw new TypeError("Nenhum caso encontrado para este usuário!");
+    throw new Error("Nenhum caso encontrado para este usuário!");
   }
 
   return foundCases
@@ -356,11 +344,25 @@ export const findByUser = async (
     .map((c) => reduceCaseObject(c));
 };
 
+export const find = async (id: string): Promise<FullCaseObject> => {
+  let foundCase;
+
+  try {
+    foundCase = await FullCaseObjectModel.findById(id);
+  } catch (error) {
+    throw new Error("Não foi possível recuperar dados da base");
+  }
+
+  if (!foundCase) {
+    throw new Error("Caso de Uso não encontrado!");
+  }
+
+  return foundCase.toObject({ getters: true });
+};
+
 export const create = async (
   receivedCase: FullCaseObject
 ): Promise<FullCaseObject> => {
-  const id = uuidv4();
-
   const newCase = new FullCaseObjectModel({ ...receivedCase });
 
   let newCaseUser;
@@ -382,7 +384,7 @@ export const create = async (
     session.startTransaction();
     await newCase.save({ session: session });
     newCaseUser.cases.push(newCase);
-    await newCase.save({ session: session });
+    await newCaseUser.save({ session: session });
     await session.commitTransaction();
   } catch (error) {
     throw new Error("Erro na conexão de banco de dados");
@@ -396,29 +398,47 @@ export const update = async (
   caseUpdate: FullCaseObject
 ): Promise<FullCaseObject | null> => {
   let updatedCase;
+  let updatedCaseUser;
 
   try {
-    updatedCase = await FullCaseObjectModel.findByIdAndUpdate(id, caseUpdate, {
-      new: true,
-    });
+    updatedCase = await FullCaseObjectModel.findById(id);
   } catch (error) {
     throw new Error("Não foi possível recuperar dados da base");
   }
 
   if (!updatedCase) {
-    return null;
+    throw new Error("Não foi encontrado um caso de uso com o id fornecido!");
   }
 
-  // try {
-  //   await updatedCase.save();
-  // } catch (error) {
-  //   throw new Error("Erro na conexão de banco de dados");
-  // }
+  console.log(updatedCase);
+
+  try {
+    updatedCaseUser = await UserModel.findById(caseUpdate.criador);
+  } catch (error) {
+    throw new Error("Erro na conexão de banco de dados");
+  }
+
+  if (!updatedCaseUser) {
+    throw new Error("Não foi encontrado um usuário com o id fornecido!");
+  }
+
+  console.log(updatedCaseUser);
+
+  try {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    await updatedCase.update(caseUpdate, { session: session });
+    updatedCaseUser.cases.push(updatedCase);
+    await updatedCaseUser.save({ session: session });
+    await session.commitTransaction();
+  } catch (error) {
+    throw new Error("Não foi possível recuperar dados da base");
+  }
 
   return updatedCase.toObject({ getters: true });
 };
 
-export const remove = async (id: string): Promise<null | FullCaseObject> => {
+export const remove = async (id: string): Promise<FullCaseObject> => {
   let caseToRemove;
   let caseToRemoveUser;
 
@@ -429,7 +449,7 @@ export const remove = async (id: string): Promise<null | FullCaseObject> => {
   }
 
   if (!caseToRemove) {
-    return null;
+    throw new Error("Caso de uso não encontrado");
   }
 
   try {

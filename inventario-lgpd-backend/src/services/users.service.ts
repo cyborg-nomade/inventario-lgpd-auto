@@ -36,9 +36,7 @@ export const find = async (id: string): Promise<User> => {
   return foundUser.toObject({ getters: true });
 };
 
-export const findByUserName = async (
-  username: string
-): Promise<User | null> => {
+export const findByUserName = async (username: string): Promise<User> => {
   let foundUser;
 
   try {
@@ -50,16 +48,22 @@ export const findByUserName = async (
   }
 
   if (!foundUser) {
-    return null;
+    throw new Error("Usuário não encontrado!");
   }
 
   return foundUser.toObject({ getters: true });
 };
 
 export const create = async (receivedUser: BaseUser): Promise<User> => {
-  const isComite = receivedUser.username === "comite"; // TO-DO: define function for assigning comite status
+  const isComite = receivedUser.username.includes("comite"); // TO-DO: define function for assigning comite status
   const userCode = uuidv4();
   const cases: Types.ObjectId[] = [];
+
+  const hasUser = await findByUserName(receivedUser.username);
+
+  if (hasUser) {
+    throw new Error("Já existe um usuário com este nome!");
+  }
 
   const newUser = new UserModel({ isComite, userCode, cases, ...receivedUser });
 
@@ -79,19 +83,19 @@ export const update = async (
   let updatedUser;
 
   try {
-    updatedUser = await UserModel.findByIdAndUpdate(id, userUpdate);
+    updatedUser = await UserModel.findById(id);
   } catch (error) {
     throw new Error("Não foi possível recuperar dados da base");
   }
 
   if (!updatedUser) {
-    return null;
+    throw new Error("Não foi encontrado um usuário com o id fornecido!");
   }
 
   try {
-    await updatedUser.save();
+    await updatedUser.update(userUpdate);
   } catch (error) {
-    throw new Error("Erro na conexão de banco de dados");
+    throw new Error("Não foi possível recuperar dados da base");
   }
 
   return updatedUser.toObject({ getters: true });
