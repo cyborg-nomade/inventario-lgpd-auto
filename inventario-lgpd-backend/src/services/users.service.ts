@@ -8,7 +8,16 @@ import { BaseUser, User, UserModel } from "../models/users.model";
 /**
  * Service Methods
  */
-export const findAll = async (): Promise<User[]> => UserModel.find({});
+export const findAll = async (): Promise<User[]> => {
+  let users;
+  try {
+    users = await UserModel.find({}, "-password");
+  } catch (error) {
+    throw new Error("Não foi possível recuperar dados da base");
+  }
+
+  return users.map((user) => user.toObject({ getters: true }));
+};
 
 export const find = async (id: string): Promise<User> => {
   let foundUser;
@@ -29,21 +38,21 @@ export const find = async (id: string): Promise<User> => {
 export const findByUserName = async (
   username: string
 ): Promise<User | null> => {
-  let foundUsers;
+  let foundUser;
 
   try {
-    foundUsers = await UserModel.findOne({
+    foundUser = await UserModel.findOne({
       username: username,
     });
   } catch (error) {
     throw new Error("Não foi possível recuperar dados da base");
   }
 
-  if (!foundUsers) {
+  if (!foundUser) {
     return null;
   }
 
-  return foundUsers.toObject({ getters: true });
+  return foundUser.toObject({ getters: true });
 };
 
 export const create = async (receivedUser: BaseUser): Promise<User> => {

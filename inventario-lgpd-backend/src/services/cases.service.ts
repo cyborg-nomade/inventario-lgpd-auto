@@ -14,7 +14,12 @@ import {
  * Service Methods
  */
 export const findAll = async (): Promise<CaseItemObject[]> => {
-  const allStoredCases = await FullCaseObjectModel.find({});
+  let allStoredCases;
+  try {
+    allStoredCases = await FullCaseObjectModel.find({});
+  } catch (error) {
+    throw new Error("Não foi possível recuperar dados da base");
+  }
 
   const reducedCases: CaseItemObject[] = allStoredCases
     .map((c) => c.toObject({ getters: true }))
