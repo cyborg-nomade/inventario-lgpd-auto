@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
  * Data Model Interfaces
  */
 import { BaseUser, User, UserModel } from "../models/users.model";
+import { Types } from "mongoose";
 
 /**
  * Service Methods
@@ -56,10 +57,11 @@ export const findByUserName = async (
 };
 
 export const create = async (receivedUser: BaseUser): Promise<User> => {
-  const isComite = false; // TO-DO: define function for assigning comite status
+  const isComite = receivedUser.username === "comite"; // TO-DO: define function for assigning comite status
   const userCode = uuidv4();
+  const cases: Types.ObjectId[] = [];
 
-  const newUser = new UserModel({ isComite, userCode, ...receivedUser });
+  const newUser = new UserModel({ isComite, userCode, cases, ...receivedUser });
 
   try {
     await newUser.save();

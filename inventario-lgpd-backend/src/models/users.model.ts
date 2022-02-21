@@ -4,12 +4,12 @@ import uniqueValidator from "mongoose-unique-validator";
 export interface BaseUser {
   username: string;
   password: string;
-  cases: string;
 }
 
 export interface User extends BaseUser {
   userCode: string;
   isComite: boolean;
+  cases: Types.ObjectId[];
 }
 
 export const UserSchema = new Schema<User>({
@@ -17,17 +17,17 @@ export const UserSchema = new Schema<User>({
   password: { type: String, required: true },
   userCode: { type: String, required: true, unique: true },
   isComite: { type: Boolean, required: true },
-  cases: { type: String, required: true },
+  cases: [{ type: Schema.Types.ObjectId, required: true, ref: "Case" }],
 });
 
 UserSchema.plugin(uniqueValidator);
 
 export const UserModel = model<User>("User", UserSchema);
 
-export const emptyUser = (): User => ({
-  username: "",
-  password: "",
-  userCode: "",
-  isComite: false,
-  cases: "",
-});
+// export const emptyUser = (): User => ({
+//   username: "",
+//   password: "",
+//   userCode: "",
+//   isComite: false,
+//   cases: "",
+// });
