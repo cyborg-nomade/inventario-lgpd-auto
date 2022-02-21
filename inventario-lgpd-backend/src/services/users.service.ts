@@ -6,33 +6,9 @@ import { v4 as uuidv4 } from "uuid";
 import { BaseUser, User, UserModel } from "../models/users.model";
 
 /**
- * In-Memory Store
- */
-let users: User[] = [
-  {
-    username: "User1",
-    userCode: "1",
-    password: "Anarchy!19",
-    isComite: false,
-  },
-  {
-    username: "User2",
-    userCode: "2",
-    password: "Anarchy!19",
-    isComite: false,
-  },
-  {
-    username: "Comite",
-    userCode: "100",
-    password: "Anarchy!19",
-    isComite: true,
-  },
-];
-
-/**
  * Service Methods
  */
-export const findAll = async (): Promise<User[]> => users;
+export const findAll = async (): Promise<User[]> => UserModel.find({});
 
 export const find = async (id: string): Promise<User> => {
   let foundUser;
@@ -44,7 +20,7 @@ export const find = async (id: string): Promise<User> => {
   }
 
   if (!foundUser) {
-    throw new TypeError("Usuário não encontrado!");
+    throw new Error("Usuário não encontrado!");
   }
 
   return foundUser.toObject({ getters: true });
@@ -70,39 +46,64 @@ export const findByUserName = async (
   return foundUsers.toObject({ getters: true });
 };
 
-export const create = async (recUser: BaseUser): Promise<User> => {
-  const isComite = false;
+export const create = async (receivedUser: BaseUser): Promise<User> => {
+  const isComite = false; // TO-DO: define function for assigning comite status
   const userCode = uuidv4();
 
-  const newUser = new UserModel({ isComite, userCode, ...recUser });
+  const newUser = new UserModel({ isComite, userCode, ...receivedUser });
 
   try {
     await newUser.save();
   } catch (error) {
-    throw new Error("Erro na conexão de banco de dados");
+    throw new Error("Não foi possível salvar dados na base");
   }
 
-  return newUser.toObject();
+  return newUser.toObject({ getters: true });
 };
 
 export const update = async (
   id: string,
   userUpdate: BaseUser
 ): Promise<User | null> => {
-  let storedUser = { ...(await find(id)) };
-  const storedUserIndex = users.findIndex((c) => c.id === id);
+  let updatedUser;
 
-  if (!storedUser) {
+  try {
+    updatedUser = await UserModel.findByIdAndUpdate(id, userUpdate);
+  } catch (error) {
+    throw new Error("Não foi possível recuperar dados da base");
+  }
+
+  if (!updatedUser) {
     return null;
   }
 
-  storedUser = { ...storedUser, ...userUpdate };
+  try {
+    await updatedUser.save();
+  } catch (error) {
+    throw new Error("Erro na conexão de banco de dados");
+  }
 
-  users[storedUserIndex] = storedUser;
-
-  return users[storedUserIndex];
+  return updatedUser.toObject({ getters: true });
 };
 
-export const remove = async (id: string): Promise<null | void> => {
-  users = users.filter((u) => u.id === id);
+export const remove = async (id: string): Promise<null | User> => {
+  let userToRemove;
+
+  try {
+    userToRemove = await UserModel.findByIdAndDelete(id);
+  } catch (error) {
+    throw new Error("Não foi possível recuperar dados da base");
+  }
+
+  if (!userToRemove) {
+    return null;
+  }
+
+  try {
+    await userToRemove.save();
+  } catch (error) {
+    throw new Error("Erro na conexão de banco de dados");
+  }
+
+  return userToRemove.toObject({ getters: true });
 };

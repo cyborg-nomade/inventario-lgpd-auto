@@ -4,12 +4,12 @@ import uniqueValidator from "mongoose-unique-validator";
 export interface BaseUser {
   username: string;
   password: string;
+  cases: string;
 }
 
 export interface User extends BaseUser {
   userCode: string;
   isComite: boolean;
-  cases: string;
 }
 
 export const UserSchema = new Schema<User>({
