@@ -79,7 +79,7 @@ export const removeCase = async (req: Request, res: Response) => {
 
     if (existingCase) {
       const removedCase = await CaseService.remove(id);
-      return res.status(200).json(removeCase);
+      return res.status(200).json(removedCase);
     }
 
     res.status(404).send("Caso de Uso não encontrado");

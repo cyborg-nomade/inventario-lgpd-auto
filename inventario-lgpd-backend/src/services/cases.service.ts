@@ -10,7 +10,7 @@ import {
   CaseItemObject,
   reduceCaseObject,
 } from "../models/cases.model";
-import { UserModel } from "../models/users.model";
+import { User, UserModel } from "../models/users.model";
 
 /**
  * In-Memory Store
@@ -381,7 +381,7 @@ export const create = async (
     const session = await mongoose.startSession();
     session.startTransaction();
     await newCase.save({ session: session });
-    newCaseUser.cases.push(newCase._id);
+    newCaseUser.cases.push(newCase);
     await newCase.save({ session: session });
     await session.commitTransaction();
   } catch (error) {
@@ -398,7 +398,9 @@ export const update = async (
   let updatedCase;
 
   try {
-    updatedCase = await FullCaseObjectModel.findByIdAndUpdate(id, caseUpdate);
+    updatedCase = await FullCaseObjectModel.findByIdAndUpdate(id, caseUpdate, {
+      new: true,
+    });
   } catch (error) {
     throw new Error("Não foi possível recuperar dados da base");
   }
@@ -407,20 +409,21 @@ export const update = async (
     return null;
   }
 
-  try {
-    await updatedCase.save();
-  } catch (error) {
-    throw new Error("Erro na conexão de banco de dados");
-  }
+  // try {
+  //   await updatedCase.save();
+  // } catch (error) {
+  //   throw new Error("Erro na conexão de banco de dados");
+  // }
 
   return updatedCase.toObject({ getters: true });
 };
 
 export const remove = async (id: string): Promise<null | FullCaseObject> => {
   let caseToRemove;
+  let caseToRemoveUser;
 
   try {
-    caseToRemove = await FullCaseObjectModel.findByIdAndDelete(id);
+    caseToRemove = await FullCaseObjectModel.findById(id);
   } catch (error) {
     throw new Error("Não foi possível recuperar dados da base");
   }
@@ -430,7 +433,24 @@ export const remove = async (id: string): Promise<null | FullCaseObject> => {
   }
 
   try {
-    await caseToRemove.save();
+    caseToRemoveUser = await UserModel.findById(caseToRemove.criador);
+  } catch (error) {
+    throw new Error("Erro na conexão de banco de dados");
+  }
+
+  if (!caseToRemoveUser) {
+    throw new Error("Não foi encontrado um usuário com o id fornecido!");
+  }
+
+  console.log(caseToRemoveUser);
+
+  try {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    await caseToRemove.remove({ session: session });
+    caseToRemoveUser.cases.pull(caseToRemove);
+    await caseToRemoveUser.save({ session: session });
+    await session.commitTransaction();
   } catch (error) {
     throw new Error("Erro na conexão de banco de dados");
   }

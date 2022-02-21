@@ -1,4 +1,4 @@
-import { Schema, Types, model } from "mongoose";
+import { Schema, Types, model, Model } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 
 export interface BaseUser {
@@ -12,7 +12,13 @@ export interface User extends BaseUser {
   cases: Types.ObjectId[];
 }
 
-export const UserSchema = new Schema<User>({
+// TMethodsAndOverrides
+type UserDocumentProps = {
+  cases: Types.DocumentArray<Types.ObjectId>;
+};
+type UserModelType = Model<User, {}, UserDocumentProps>;
+
+export const UserSchema = new Schema<User, UserModelType>({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   userCode: { type: String, required: true, unique: true },
@@ -22,7 +28,7 @@ export const UserSchema = new Schema<User>({
 
 UserSchema.plugin(uniqueValidator);
 
-export const UserModel = model<User>("User", UserSchema);
+export const UserModel = model<User, UserModelType>("User", UserSchema);
 
 // export const emptyUser = (): User => ({
 //   username: "",

@@ -101,7 +101,7 @@ export const remove = async (id: string): Promise<null | User> => {
   let userToRemove;
 
   try {
-    userToRemove = await UserModel.findByIdAndDelete(id);
+    userToRemove = await UserModel.findById(id);
   } catch (error) {
     throw new Error("Não foi possível recuperar dados da base");
   }
@@ -111,7 +111,7 @@ export const remove = async (id: string): Promise<null | User> => {
   }
 
   try {
-    await userToRemove.save();
+    await userToRemove.remove();
   } catch (error) {
     throw new Error("Erro na conexão de banco de dados");
   }
