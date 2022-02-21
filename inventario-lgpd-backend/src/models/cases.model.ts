@@ -245,7 +245,7 @@ export interface CaseItemObject {
     descricaoFinalidade: string;
   };
   dadosPessoaisSensiveis: boolean;
-  criador: User;
+  criador: string;
   aprovado: boolean;
 }
 
@@ -393,7 +393,7 @@ const FullCaseObjectSchema = new Schema<FullCaseObject>({
   dataCriacao: String,
   dataAtualizacao: String,
   dadosPessoaisSensiveis: Boolean,
-  criador: UserSchema,
+  criador: String,
   aprovado: Boolean,
   controlador: agenteTratamentoSchema,
   encarregado: agenteTratamentoSchema,
@@ -616,7 +616,7 @@ export const emptyFullCaseObject = (): FullCaseObject => ({
   ref: "",
   area: "",
   aprovado: false,
-  criador: emptyUser(),
+  criador: "",
   dataCriacao: new Date().toDateString(),
   dataAtualizacao: new Date().toDateString(),
   controlador: emptyAgenteTratamento(),
