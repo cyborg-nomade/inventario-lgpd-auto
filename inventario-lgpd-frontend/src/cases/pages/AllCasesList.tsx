@@ -18,18 +18,21 @@ export const USERS: User[] = [
     password: "Usuario1!",
     isComite: false,
     userCode: "1",
+    id: "1",
   },
   {
     username: "user2",
     password: "Usuario2!",
     isComite: false,
     userCode: "2",
+    id: "2",
   },
   {
     username: "comite",
     password: "Comite100!",
     isComite: true,
     userCode: "100",
+    id: "100",
   },
 ];
 

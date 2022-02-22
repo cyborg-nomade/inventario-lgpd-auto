@@ -1,14 +1,16 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Formik } from "formik";
+import * as yup from "yup";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import { Formik } from "formik";
-import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
-import { BaseUser } from "./../../shared/models/users.model";
+
+import { BaseUser, User } from "./../../shared/models/users.model";
 import { AuthContext } from "./../../shared/context/auth-context";
+import { CONNSTR } from "./../../App";
 
 const schema = yup.object().shape({
   username: yup.string().required(),
@@ -27,24 +29,59 @@ const Login = () => {
   const authContext = useContext(AuthContext);
   let navigate = useNavigate();
 
-  const submitLoginHandler = (user: BaseUser) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const submitLoginHandler = async (user: BaseUser) => {
+    setIsLoading(true);
     console.log(user);
-    if (user.username === "user1") {
-      authContext.login("1", false);
-      navigate(`/1/cases`);
-      return;
+
+    try {
+      const response = await fetch(`${CONNSTR}/users/login`, {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(responseData.message);
+      }
+
+      console.log(responseData);
+
+      const receivedUser: User = responseData.user;
+
+      console.log(receivedUser);
+
+      setIsLoading(false);
+
+      authContext.login(receivedUser.id, receivedUser.isComite);
+      navigate(`/${receivedUser.id}/cases`);
+    } catch (error: any) {
+      console.log(error);
+      alert(error.message);
     }
-    if (user.username === "user2") {
-      authContext.login("2", false);
-      navigate(`/2/cases`);
-      return;
-    }
-    if (user.username === "comite") {
-      authContext.login("100", true);
-      navigate(`/comite/cases`);
-      return;
-    }
-    alert("Usuário não encontrado, tente novamente");
+
+    // console.log(user);
+    // if (user.username === "user1") {
+    //   authContext.login("1", false);
+    //   navigate(`/1/cases`);
+    //   return;
+    // }
+    // if (user.username === "user2") {
+    //   authContext.login("2", false);
+    //   navigate(`/2/cases`);
+    //   return;
+    // }
+    // if (user.username === "comite") {
+    //   authContext.login("100", true);
+    //   navigate(`/comite/cases`);
+    //   return;
+    // }
+    // alert("Usuário não encontrado, tente novamente");
   };
 
   return (
@@ -85,7 +122,7 @@ const Login = () => {
                 </Form.Group>
               </Row>
               <Row className="mb-3">
-                <Form.Group as={Col} controlId="validationFormik01">
+                <Form.Group as={Col} controlId="validationFormik02">
                   <Form.Label>Senha</Form.Label>
                   <Form.Control
                     type="password"

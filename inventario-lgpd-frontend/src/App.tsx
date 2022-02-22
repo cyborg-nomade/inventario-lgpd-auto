@@ -17,8 +17,7 @@ import ApproveCase from "./cases/pages/ApproveCase";
 import ApprovePage from "./cases/pages/ApprovePage";
 import AllCasesPage from "./cases/pages/AllCasesPage";
 
-export const CONNSTR =
-  "https://inventario-lgpd-auto-default-rtdb.firebaseio.com/";
+export const CONNSTR = "http://localhost:7000/api";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

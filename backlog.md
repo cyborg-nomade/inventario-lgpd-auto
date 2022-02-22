@@ -5,5 +5,5 @@
 3- GET calls to populate edit / approve form
 4- PUT calls to edit cases
 5- DELETE calls to remove cases
-6- POST calls for logging in
-7- error handling (front and backend)
+6- POST calls for logging in (OK)
+7- error handling (front and backend) (partial)
