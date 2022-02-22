@@ -427,12 +427,22 @@ export const update = async (
   try {
     const session = await mongoose.startSession();
     session.startTransaction();
-    await updatedCase.update(caseUpdate, { session: session });
+    await updatedCase.updateOne(caseUpdate, { session: session });
     updatedCaseUser.cases.push(updatedCase);
     await updatedCaseUser.save({ session: session });
     await session.commitTransaction();
   } catch (error) {
     throw new Error("Não foi possível recuperar dados da base");
+  }
+
+  try {
+    updatedCase = await FullCaseObjectModel.findById(id);
+  } catch (error) {
+    throw new Error("Não foi possível recuperar dados da base");
+  }
+
+  if (!updatedCase) {
+    throw new Error("Não foi encontrado um caso de uso com o id fornecido!");
   }
 
   return updatedCase.toObject({ getters: true });

@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from "uuid";
 /**
  * Data Model Interfaces
  */
+import mongoose, { Types } from "mongoose";
 import { BaseUser, User, UserModel } from "../models/users.model";
-import { Types } from "mongoose";
 
 /**
  * Service Methods
@@ -23,9 +23,15 @@ export const findAll = async (): Promise<User[]> => {
 export const find = async (id: string): Promise<User> => {
   let foundUser;
 
+  if (!mongoose.isValidObjectId(id)) {
+    throw new Error("Id fornecida é inválida para a busca");
+  }
+
   try {
     foundUser = await UserModel.findById(id);
   } catch (error) {
+    console.log(error);
+
     throw new Error("Não foi possível recuperar dados da base");
   }
 
@@ -59,7 +65,15 @@ export const create = async (receivedUser: BaseUser): Promise<User> => {
   const userCode = uuidv4();
   const cases: Types.ObjectId[] = [];
 
-  const hasUser = await findByUserName(receivedUser.username);
+  let hasUser;
+
+  try {
+    hasUser = await UserModel.findOne({
+      username: receivedUser.username,
+    });
+  } catch (error) {
+    throw new Error("Não foi possível recuperar dados da base");
+  }
 
   if (hasUser) {
     throw new Error("Já existe um usuário com este nome!");
@@ -93,9 +107,19 @@ export const update = async (
   }
 
   try {
-    await updatedUser.update(userUpdate);
+    await updatedUser.updateOne(userUpdate);
   } catch (error) {
     throw new Error("Não foi possível recuperar dados da base");
+  }
+
+  try {
+    updatedUser = await UserModel.findById(id);
+  } catch (error) {
+    throw new Error("Não foi possível recuperar dados da base");
+  }
+
+  if (!updatedUser) {
+    throw new Error("Não foi encontrado um usuário com o id fornecido!");
   }
 
   return updatedUser.toObject({ getters: true });

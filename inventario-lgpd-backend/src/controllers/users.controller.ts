@@ -15,9 +15,8 @@ export const getUsers = async (req: Request, res: Response) => {
 };
 
 export const getUserById = async (req: Request, res: Response) => {
-  const id: string = req.params.uid;
-
   try {
+    const id: string = req.params.uid;
     const reqUser: User = await UserService.find(id);
 
     return res.status(200).send(reqUser);
@@ -45,7 +44,7 @@ export const registerUser = async (req: Request, res: Response) => {
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const id: string = req.params.uid;
-    const userUpdate: User = req.body;
+    const userUpdate: BaseUser = req.body;
 
     const updatedUser = await UserService.update(id, userUpdate);
     return res.status(200).json(updatedUser);
@@ -80,7 +79,7 @@ export const loginUser = async (req: Request, res: Response) => {
     );
 
     if (!identifiedUser || identifiedUser.password !== userToLogin.password) {
-      res.status(401).send("Credenciais incorretas!");
+      return res.status(401).send("Credenciais incorretas!");
     }
 
     res.status(200).send("Usuário logado!");
