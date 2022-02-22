@@ -74,8 +74,6 @@ export const loginUser = async (req: Request, res: Response) => {
   try {
     const userToLogin: BaseUser = req.body;
 
-    console.log(userToLogin);
-
     const identifiedUser = await UserService.findByUserName(
       userToLogin.username
     );

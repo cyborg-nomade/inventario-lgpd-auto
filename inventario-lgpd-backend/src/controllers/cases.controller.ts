@@ -7,9 +7,9 @@ export const getCases = async (req: Request, res: Response) => {
   try {
     const cases: CaseItemObject[] = await CaseService.findAll();
 
-    res.status(200).send(cases);
+    res.status(200).send({ cases: cases });
   } catch (error: any) {
-    res.status(500).send(error.message);
+    res.status(500).send({ message: error.message });
   }
 };
 
@@ -18,9 +18,9 @@ export const getCasesByUser = async (req: Request, res: Response) => {
     const uid: string = req.params.uid;
     const userCases: CaseItemObject[] = await CaseService.findByUser(uid);
 
-    res.status(200).send(userCases);
+    res.status(200).send({ cases: userCases });
   } catch (error: any) {
-    res.status(500).send(error.message);
+    res.status(500).send({ message: error.message });
   }
 };
 
@@ -29,9 +29,9 @@ export const getCasesById = async (req: Request, res: Response) => {
     const id: string = req.params.cid;
     const reqCase = await CaseService.find(id);
 
-    return res.status(200).send(reqCase);
+    return res.status(200).send({ case: reqCase });
   } catch (error: any) {
-    res.status(500).send(error.message);
+    res.status(500).send({ message: error.message });
   }
 };
 
@@ -40,9 +40,9 @@ export const registerCase = async (req: Request, res: Response) => {
     const receivedCase: FullCaseObject = req.body;
 
     const newCase = await CaseService.create(receivedCase);
-    res.status(201).json(newCase);
+    res.status(201).send({ case: newCase });
   } catch (error: any) {
-    res.status(500).send(error.message);
+    res.status(500).send({ message: error.message });
   }
 };
 
@@ -52,9 +52,9 @@ export const updateCase = async (req: Request, res: Response) => {
     const caseUpdate: FullCaseObject = req.body;
 
     const updatedCase = await CaseService.update(id, caseUpdate);
-    return res.status(200).json(updatedCase);
+    return res.status(200).send({ case: updatedCase });
   } catch (error: any) {
-    res.status(500).send(error.message);
+    res.status(500).send({ message: error.message });
   }
 };
 
@@ -63,8 +63,8 @@ export const removeCase = async (req: Request, res: Response) => {
     const id: string = req.params.cid;
 
     const removedCase = await CaseService.remove(id);
-    return res.status(200).json(removedCase);
+    return res.status(200).send({ case: removedCase });
   } catch (error: any) {
-    res.status(500).send(error.message);
+    res.status(500).send({ message: error.message });
   }
 };
