@@ -23,18 +23,15 @@ const UserCasesList = () => {
       setIsLoading(true);
       setError(null);
 
-      const response = await fetch(`${CONNSTR}cases.json`);
-      if (!response.ok) {
-        throw new Error("Algo deu errado!");
-      }
+      const response = await fetch(`${CONNSTR}/cases/user/${uid}`);
 
       const responseData = await response.json();
 
-      const loadedCases: CaseItemObject[] = [];
-
-      for (const key in responseData) {
-        loadedCases.push({ ...reduceCaseObject(responseData[key]), id: key });
+      if (!response.ok) {
+        throw new Error(responseData.message);
       }
+
+      const loadedCases: CaseItemObject[] = responseData.cases;
 
       setCases(loadedCases);
       setIsLoading(false);
@@ -44,7 +41,7 @@ const UserCasesList = () => {
       setIsLoading(false);
       setError(error.message);
     });
-  }, []);
+  }, [uid]);
 
   if (isLoading) {
     return (

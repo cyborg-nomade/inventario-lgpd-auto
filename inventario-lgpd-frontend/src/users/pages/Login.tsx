@@ -60,6 +60,7 @@ const Login = () => {
       navigate(`/${receivedUser.id}/cases`);
     } catch (error: any) {
       setIsLoading(false);
+
       console.log(error);
       setError(error.message);
     }
