@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -7,6 +7,8 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
+import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
 
 import { BaseUser, User } from "./../../shared/models/users.model";
 import { AuthContext } from "./../../shared/context/auth-context";
@@ -30,10 +32,10 @@ const Login = () => {
   let navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const submitLoginHandler = async (user: BaseUser) => {
     setIsLoading(true);
-    console.log(user);
 
     try {
       const response = await fetch(`${CONNSTR}/users/login`, {
@@ -50,107 +52,106 @@ const Login = () => {
         throw new Error(responseData.message);
       }
 
-      console.log(responseData);
-
       const receivedUser: User = responseData.user;
-
-      console.log(receivedUser);
 
       setIsLoading(false);
 
       authContext.login(receivedUser.id, receivedUser.isComite);
       navigate(`/${receivedUser.id}/cases`);
     } catch (error: any) {
+      setIsLoading(false);
       console.log(error);
-      alert(error.message);
+      setError(error.message);
     }
-
-    // console.log(user);
-    // if (user.username === "user1") {
-    //   authContext.login("1", false);
-    //   navigate(`/1/cases`);
-    //   return;
-    // }
-    // if (user.username === "user2") {
-    //   authContext.login("2", false);
-    //   navigate(`/2/cases`);
-    //   return;
-    // }
-    // if (user.username === "comite") {
-    //   authContext.login("100", true);
-    //   navigate(`/comite/cases`);
-    //   return;
-    // }
-    // alert("Usuário não encontrado, tente novamente");
   };
 
+  if (isLoading) {
+    return (
+      <Row className="justify-content-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </Row>
+    );
+  }
+
   return (
-    <Formik
-      validationSchema={schema}
-      onSubmit={submitLoginHandler}
-      initialValues={initialValues}
-    >
-      {({
-        handleSubmit,
-        handleChange,
-        handleBlur,
-        values,
-        touched,
-        isValid,
-        errors,
-        dirty,
-      }) => (
-        <Form noValidate onSubmit={handleSubmit}>
-          <Card className="mx-auto" style={{ width: "28rem" }}>
-            <Card.Title className="pt-3 px-3">Login</Card.Title>
-            <Card.Body>
-              <Row className="mb-3">
-                <Form.Group as={Col} controlId="validationFormik01">
-                  <Form.Label>Usuário</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="username"
-                    value={values.username}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isValid={touched.username && !errors.username}
-                    isInvalid={!!errors.username}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    Esse campo é obrigatório
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Row>
-              <Row className="mb-3">
-                <Form.Group as={Col} controlId="validationFormik02">
-                  <Form.Label>Senha</Form.Label>
-                  <Form.Control
-                    type="password"
-                    name="password"
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isValid={touched.password && !errors.password}
-                    isInvalid={!!errors.password}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    A senha deve ter pelo menos 6 caracteres, um caracter
-                    especial, uma letra maiúscula e um número
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Row>
-              <Button
-                type="submit"
-                className="float-end mt-3"
-                disabled={!(isValid && dirty)}
-              >
-                Login
-              </Button>
-            </Card.Body>
-          </Card>
-        </Form>
+    <React.Fragment>
+      <Formik
+        validationSchema={schema}
+        onSubmit={submitLoginHandler}
+        initialValues={initialValues}
+      >
+        {({
+          handleSubmit,
+          handleChange,
+          handleBlur,
+          values,
+          touched,
+          isValid,
+          errors,
+          dirty,
+        }) => (
+          <Form noValidate onSubmit={handleSubmit}>
+            <Card className="mx-auto" style={{ width: "28rem" }}>
+              <Card.Title className="pt-3 px-3">Login</Card.Title>
+              <Card.Body>
+                <Row className="mb-3">
+                  <Form.Group as={Col} controlId="validationFormik01">
+                    <Form.Label>Usuário</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="username"
+                      value={values.username}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      isValid={touched.username && !errors.username}
+                      isInvalid={!!errors.username}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Esse campo é obrigatório
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Row>
+                <Row className="mb-3">
+                  <Form.Group as={Col} controlId="validationFormik02">
+                    <Form.Label>Senha</Form.Label>
+                    <Form.Control
+                      type="password"
+                      name="password"
+                      value={values.password}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      isValid={touched.password && !errors.password}
+                      isInvalid={!!errors.password}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      A senha deve ter pelo menos 6 caracteres, um caracter
+                      especial, uma letra maiúscula e um número
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                </Row>
+                <Button
+                  type="submit"
+                  className="float-end mt-3"
+                  disabled={!(isValid && dirty)}
+                >
+                  Login
+                </Button>
+              </Card.Body>
+            </Card>
+          </Form>
+        )}
+      </Formik>
+      {error && (
+        <Row
+          className="justify-content-center mx-auto"
+          style={{ width: "28rem" }}
+        >
+          <Alert variant="danger">{error}</Alert>
+        </Row>
       )}
-    </Formik>
+    </React.Fragment>
   );
 };
 
