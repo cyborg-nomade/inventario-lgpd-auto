@@ -1,7 +1,9 @@
-# db + POC frontend deploy to Firebase
+# connect front and backend
 
-1- CRUD cases api, with mongoose (OK)
-2- CRUD users api, with mongoose (OK)
-3- dummy login function, using db users (OK)
-4- models perfected (OK)
-5- plug frontend app to Firebase for demo purposes (OK)
+1- POST call to create new case
+2- GET calls to load lists
+3- GET calls to populate edit / approve form
+4- PUT calls to edit cases
+5- DELETE calls to remove cases
+6- POST calls for logging in
+7- error handling (front and backend)
