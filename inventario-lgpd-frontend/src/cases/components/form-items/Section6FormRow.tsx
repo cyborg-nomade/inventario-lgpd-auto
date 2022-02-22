@@ -10,7 +10,7 @@ import { useFormikContext, getIn } from "formik";
 import {
   FullCaseObject,
   hipotesesTratamento,
-} from "../../../shared/models/FullCase.model";
+} from "../../../shared/models/cases.model";
 
 const Section6FormRow = (props: {
   tooltip: JSX.Element;

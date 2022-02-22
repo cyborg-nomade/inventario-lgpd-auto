@@ -10,7 +10,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Modal from "react-bootstrap/Modal";
 import { Formik, getIn, FieldArray } from "formik";
-import * as yup from "yup";
+// import * as yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
@@ -24,7 +24,7 @@ import {
   emptyItemTransferenciaInternacional,
   FullCaseObject,
   verbosTratamento,
-} from "../../shared/models/FullCase.model";
+} from "../../shared/models/cases.model";
 import TagPicker from "../../shared/components/UI/TagPicker";
 import Section6FormRow from "./form-items/Section6FormRow";
 import Section7FormRow from "./form-items/Section7FormRow";
@@ -35,566 +35,567 @@ import Section13FormRow from "./form-items/Section13FormRow";
 import Section14FormRow from "./form-items/Section14FormRow";
 import Section15FormRow from "./form-items/Section15FormRow";
 import Section16FormRow from "./form-items/Section16FormRow";
+import { CONNSTR } from "../../App";
 
 type onSubmitFn = (item: FullCaseObject) => void;
 
-const schema = yup.object().shape({
-  nome: yup.string().required(),
-  id: yup.number().required(),
-  ref: yup.string().required(),
-  dataCriacao: yup.date().required(),
-  dataAtualizacao: yup.date().required(),
-  controlador: yup.object().shape({
-    nome: yup.string().required(),
-    area: yup.string().optional(),
-    telefone: yup.string().optional(),
-    email: yup.string().email().optional(),
-  }),
-  encarregado: yup.object().shape({
-    nome: yup.string().required(),
-    area: yup.string().optional(),
-    telefone: yup.string().optional(),
-    email: yup.string().email().optional(),
-  }),
-  extensaoEncarregado: yup.object().shape({
-    nome: yup.string().required(),
-    area: yup.string().required(),
-    telefone: yup.string().required(),
-    email: yup.string().email().required(),
-  }),
-  areaTratamentoDados: yup.object().shape({
-    nome: yup.string().optional(),
-    area: yup.string().optional(),
-    telefone: yup.string().optional(),
-    email: yup.string().email().optional(),
-  }),
-  operador: yup.object().shape({
-    nome: yup.string().required(),
-    area: yup.string().optional(),
-    telefone: yup.string().optional(),
-    email: yup.string().email().optional(),
-  }),
-  fasesCicloTratamento: yup.object({
-    coleta: yup.boolean(),
-    retencao: yup.boolean(),
-    processamento: yup.boolean(),
-    compartilhamento: yup.boolean(),
-    eliminacao: yup.boolean(),
-    verbos: yup.array().optional(),
-  }),
-  descricaoFluxoTratamento: yup.string().required(),
-  abrangenciaGeografica: yup.string().required(),
-  fonteDados: yup.string().required(),
-  finalidadeTratamento: yup.object().shape({
-    hipoteseTratamento: yup.string().required(),
-    descricaoFinalidade: yup.string().required(),
-    previsaoLegal: yup.string().required(),
-    resultadosTitular: yup.string().required(),
-    beneficiosEsperados: yup.string().required(),
-  }),
-  categoriaDadosPessoais: yup.object().shape({
-    identificacao: yup.object().shape({
-      idPessoal: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      idGov: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      idEletronica: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      locEletronica: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    financeiros: yup.object().shape({
-      idFin: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      recursosFin: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      dividasDespesas: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      solvencia: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      emprestimosHipotecaCredito: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      assistenciaFin: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      apoliceSeguro: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      planoPensao: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      transacaoFin: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      compensacao: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      atividadeProfissional: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      acordosAjustes: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      autorizacoesConsentimentos: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    caracteristicas: yup.object().shape({
-      detalhesPessoais: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      detalhesMilitares: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      situacaoImigracao: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      descricaoFisica: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    habitos: yup.object().shape({
-      habitos: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      estiloVida: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      viagensDeslocamento: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      contatosSociais: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      posses: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      denunciasIncidentesAcidentes: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      distincoes: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      usoMidia: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    caracteristicasPsicologicas: yup.object().shape({
-      descricaoPsi: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    composicaoFamiliar: yup.object().shape({
-      casamentoCoabitacao: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      historicoConjugal: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      membrosFamilia: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    interessesLazer: yup.object().shape({
-      atividadesInteressesLaz: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    associacoes: yup.object().shape({
-      outrasAssociacoesNaoSensiveis: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    processoJudAdmCrim: yup.object().shape({
-      suspeitas: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      condenacoesSentencas: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      acoesJud: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      penalidadesAdm: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    habitosConsumo: yup.object().shape({
-      dadosBensServicos: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    residenciais: yup.object().shape({
-      dadosResidencia: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    educacaoTreinamento: yup.object().shape({
-      academicosEscolares: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      registroFinanceiro: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      qualificacaoExperienciaProf: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    profissaoEmprego: yup.object().shape({
-      empregoAtual: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      recrutamento: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      rescisao: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      carreira: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      absenteismoDisciplina: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      avaliacaoDesempenho: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    regVideoImgVoz: yup.object().shape({
-      videoImagem: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      imagemVigilancia: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-      voz: yup.object().shape({
-        descricao: yup.string().required(),
-        tempoRetencao: yup.string().optional(),
-        fonteRetencao: yup.string().optional(),
-        caminhoRedeSistema: yup.string().optional(),
-      }),
-    }),
-    outros: yup.object().shape({
-      outros: yup.array(),
-    }),
-  }),
-  categoriaDadosPessoaisSensiveis: yup.object().shape({
-    origemRacialEtnica: yup.object().shape({
-      descricao: yup.string().required(),
-      tempoRetencao: yup.string().optional(),
-      fonteRetencao: yup.string().optional(),
-      caminhoRedeSistema: yup.string().optional(),
-    }),
-    conviccaoReligiosa: yup.object().shape({
-      descricao: yup.string().required(),
-      tempoRetencao: yup.string().optional(),
-      fonteRetencao: yup.string().optional(),
-      caminhoRedeSistema: yup.string().optional(),
-    }),
-    opiniaoPolitica: yup.object().shape({
-      descricao: yup.string().required(),
-      tempoRetencao: yup.string().optional(),
-      fonteRetencao: yup.string().optional(),
-      caminhoRedeSistema: yup.string().optional(),
-    }),
-    filiacaoSindicato: yup.object().shape({
-      descricao: yup.string().required(),
-      tempoRetencao: yup.string().optional(),
-      fonteRetencao: yup.string().optional(),
-      caminhoRedeSistema: yup.string().optional(),
-    }),
-    filiacaoOrganizacaoReligiosa: yup.object().shape({
-      descricao: yup.string().required(),
-      tempoRetencao: yup.string().optional(),
-      fonteRetencao: yup.string().optional(),
-      caminhoRedeSistema: yup.string().optional(),
-    }),
-    filiacaoCrencaFilosofica: yup.object().shape({
-      descricao: yup.string().required(),
-      tempoRetencao: yup.string().optional(),
-      fonteRetencao: yup.string().optional(),
-      caminhoRedeSistema: yup.string().optional(),
-    }),
-    filiacaoPreferenciaPolitica: yup.object().shape({
-      descricao: yup.string().required(),
-      tempoRetencao: yup.string().optional(),
-      fonteRetencao: yup.string().optional(),
-      caminhoRedeSistema: yup.string().optional(),
-    }),
-    saudeVidaSexual: yup.object().shape({
-      descricao: yup.string().required(),
-      tempoRetencao: yup.string().optional(),
-      fonteRetencao: yup.string().optional(),
-      caminhoRedeSistema: yup.string().optional(),
-    }),
-    geneticos: yup.object().shape({
-      descricao: yup.string().required(),
-      tempoRetencao: yup.string().optional(),
-      fonteRetencao: yup.string().optional(),
-      caminhoRedeSistema: yup.string().optional(),
-    }),
-    biometricos: yup.object().shape({
-      descricao: yup.string().required(),
-      tempoRetencao: yup.string().optional(),
-      fonteRetencao: yup.string().optional(),
-      caminhoRedeSistema: yup.string().optional(),
-    }),
-  }),
-  frequenciaTratamento: yup.string().required(),
-  quantidadeDadosTratados: yup.string().required(),
-  categoriasTitulares: yup.object().shape({
-    categorias: yup
-      .array()
-      .required()
-      .of(
-        yup.object().shape({
-          tipoCategoria: yup.string().required(),
-          descricao: yup.string().optional(),
-        })
-      ),
-    criancasAdolescentes: yup
-      .array()
-      .optional()
-      .of(
-        yup.object().shape({
-          tipoCategoria: yup.string().required(),
-          descricao: yup.string().optional(),
-        })
-      ),
-    outrosGruposVulneraveis: yup
-      .array()
-      .optional()
-      .of(
-        yup.object().shape({
-          tipoCategoria: yup.string().required(),
-          descricao: yup.string().optional(),
-        })
-      ),
-  }),
-  compartilhamentoDadosPessoais: yup
-    .array()
-    .optional()
-    .of(
-      yup.object().shape({
-        nomeInstituicao: yup.string().required(),
-        dadosCompartilhados: yup.string().optional(),
-        finalidadeCompartilhamento: yup.string().optional(),
-      })
-    ),
-  medidasSegurancaPrivacidade: yup
-    .array()
-    .optional()
-    .of(
-      yup.object().shape({
-        tipo: yup.string().required(),
-        descricaoControles: yup.string().optional(),
-      })
-    ),
-  transferenciaInternacional: yup
-    .array()
-    .optional()
-    .of(
-      yup.object().shape({
-        nomeOrganizacao: yup.string().required(),
-        pais: yup.string().required(),
-        dadosTransferidos: yup.string().required(),
-        tipoGarantia: yup.string().required(),
-      })
-    ),
-  contratoServicosTITratamentoDados: yup
-    .array()
-    .optional()
-    .of(
-      yup.object().shape({
-        numeroContrato: yup.string().required(),
-        numeroProcessoContratacao: yup.string().optional(),
-        objetoContrato: yup.string().required(),
-        emailGestorContrato: yup.string().required(),
-      })
-    ),
-  riscosPrivacidade: yup
-    .array()
-    .optional()
-    .of(
-      yup.object().shape({
-        tipoRisco: yup.string().required(),
-        observacoes: yup.string().optional(),
-      })
-    ),
-  observacoesProcesso: yup
-    .array()
-    .optional()
-    .of(
-      yup.object().shape({
-        descricaoObs: yup.string().required(),
-      })
-    ),
-});
+// const schema = yup.object().shape({
+//   nome: yup.string().required(),
+//   id: yup.number().required(),
+//   ref: yup.string().required(),
+//   dataCriacao: yup.date().required(),
+//   dataAtualizacao: yup.date().required(),
+//   controlador: yup.object().shape({
+//     nome: yup.string().required(),
+//     area: yup.string().optional(),
+//     telefone: yup.string().optional(),
+//     email: yup.string().email().optional(),
+//   }),
+//   encarregado: yup.object().shape({
+//     nome: yup.string().required(),
+//     area: yup.string().optional(),
+//     telefone: yup.string().optional(),
+//     email: yup.string().email().optional(),
+//   }),
+//   extensaoEncarregado: yup.object().shape({
+//     nome: yup.string().required(),
+//     area: yup.string().required(),
+//     telefone: yup.string().required(),
+//     email: yup.string().email().required(),
+//   }),
+//   areaTratamentoDados: yup.object().shape({
+//     nome: yup.string().optional(),
+//     area: yup.string().optional(),
+//     telefone: yup.string().optional(),
+//     email: yup.string().email().optional(),
+//   }),
+//   operador: yup.object().shape({
+//     nome: yup.string().required(),
+//     area: yup.string().optional(),
+//     telefone: yup.string().optional(),
+//     email: yup.string().email().optional(),
+//   }),
+//   fasesCicloTratamento: yup.object({
+//     coleta: yup.boolean(),
+//     retencao: yup.boolean(),
+//     processamento: yup.boolean(),
+//     compartilhamento: yup.boolean(),
+//     eliminacao: yup.boolean(),
+//     verbos: yup.array().optional(),
+//   }),
+//   descricaoFluxoTratamento: yup.string().required(),
+//   abrangenciaGeografica: yup.string().required(),
+//   fonteDados: yup.string().required(),
+//   finalidadeTratamento: yup.object().shape({
+//     hipoteseTratamento: yup.string().required(),
+//     descricaoFinalidade: yup.string().required(),
+//     previsaoLegal: yup.string().required(),
+//     resultadosTitular: yup.string().required(),
+//     beneficiosEsperados: yup.string().required(),
+//   }),
+//   categoriaDadosPessoais: yup.object().shape({
+//     identificacao: yup.object().shape({
+//       idPessoal: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       idGov: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       idEletronica: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       locEletronica: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     financeiros: yup.object().shape({
+//       idFin: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       recursosFin: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       dividasDespesas: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       solvencia: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       emprestimosHipotecaCredito: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       assistenciaFin: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       apoliceSeguro: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       planoPensao: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       transacaoFin: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       compensacao: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       atividadeProfissional: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       acordosAjustes: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       autorizacoesConsentimentos: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     caracteristicas: yup.object().shape({
+//       detalhesPessoais: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       detalhesMilitares: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       situacaoImigracao: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       descricaoFisica: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     habitos: yup.object().shape({
+//       habitos: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       estiloVida: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       viagensDeslocamento: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       contatosSociais: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       posses: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       denunciasIncidentesAcidentes: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       distincoes: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       usoMidia: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     caracteristicasPsicologicas: yup.object().shape({
+//       descricaoPsi: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     composicaoFamiliar: yup.object().shape({
+//       casamentoCoabitacao: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       historicoConjugal: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       membrosFamilia: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     interessesLazer: yup.object().shape({
+//       atividadesInteressesLaz: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     associacoes: yup.object().shape({
+//       outrasAssociacoesNaoSensiveis: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     processoJudAdmCrim: yup.object().shape({
+//       suspeitas: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       condenacoesSentencas: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       acoesJud: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       penalidadesAdm: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     habitosConsumo: yup.object().shape({
+//       dadosBensServicos: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     residenciais: yup.object().shape({
+//       dadosResidencia: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     educacaoTreinamento: yup.object().shape({
+//       academicosEscolares: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       registroFinanceiro: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       qualificacaoExperienciaProf: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     profissaoEmprego: yup.object().shape({
+//       empregoAtual: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       recrutamento: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       rescisao: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       carreira: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       absenteismoDisciplina: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       avaliacaoDesempenho: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     regVideoImgVoz: yup.object().shape({
+//       videoImagem: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       imagemVigilancia: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//       voz: yup.object().shape({
+//         descricao: yup.string().required(),
+//         tempoRetencao: yup.string().optional(),
+//         fonteRetencao: yup.string().optional(),
+//         caminhoRedeSistema: yup.string().optional(),
+//       }),
+//     }),
+//     outros: yup.object().shape({
+//       outros: yup.array(),
+//     }),
+//   }),
+//   categoriaDadosPessoaisSensiveis: yup.object().shape({
+//     origemRacialEtnica: yup.object().shape({
+//       descricao: yup.string().required(),
+//       tempoRetencao: yup.string().optional(),
+//       fonteRetencao: yup.string().optional(),
+//       caminhoRedeSistema: yup.string().optional(),
+//     }),
+//     conviccaoReligiosa: yup.object().shape({
+//       descricao: yup.string().required(),
+//       tempoRetencao: yup.string().optional(),
+//       fonteRetencao: yup.string().optional(),
+//       caminhoRedeSistema: yup.string().optional(),
+//     }),
+//     opiniaoPolitica: yup.object().shape({
+//       descricao: yup.string().required(),
+//       tempoRetencao: yup.string().optional(),
+//       fonteRetencao: yup.string().optional(),
+//       caminhoRedeSistema: yup.string().optional(),
+//     }),
+//     filiacaoSindicato: yup.object().shape({
+//       descricao: yup.string().required(),
+//       tempoRetencao: yup.string().optional(),
+//       fonteRetencao: yup.string().optional(),
+//       caminhoRedeSistema: yup.string().optional(),
+//     }),
+//     filiacaoOrganizacaoReligiosa: yup.object().shape({
+//       descricao: yup.string().required(),
+//       tempoRetencao: yup.string().optional(),
+//       fonteRetencao: yup.string().optional(),
+//       caminhoRedeSistema: yup.string().optional(),
+//     }),
+//     filiacaoCrencaFilosofica: yup.object().shape({
+//       descricao: yup.string().required(),
+//       tempoRetencao: yup.string().optional(),
+//       fonteRetencao: yup.string().optional(),
+//       caminhoRedeSistema: yup.string().optional(),
+//     }),
+//     filiacaoPreferenciaPolitica: yup.object().shape({
+//       descricao: yup.string().required(),
+//       tempoRetencao: yup.string().optional(),
+//       fonteRetencao: yup.string().optional(),
+//       caminhoRedeSistema: yup.string().optional(),
+//     }),
+//     saudeVidaSexual: yup.object().shape({
+//       descricao: yup.string().required(),
+//       tempoRetencao: yup.string().optional(),
+//       fonteRetencao: yup.string().optional(),
+//       caminhoRedeSistema: yup.string().optional(),
+//     }),
+//     geneticos: yup.object().shape({
+//       descricao: yup.string().required(),
+//       tempoRetencao: yup.string().optional(),
+//       fonteRetencao: yup.string().optional(),
+//       caminhoRedeSistema: yup.string().optional(),
+//     }),
+//     biometricos: yup.object().shape({
+//       descricao: yup.string().required(),
+//       tempoRetencao: yup.string().optional(),
+//       fonteRetencao: yup.string().optional(),
+//       caminhoRedeSistema: yup.string().optional(),
+//     }),
+//   }),
+//   frequenciaTratamento: yup.string().required(),
+//   quantidadeDadosTratados: yup.string().required(),
+//   categoriasTitulares: yup.object().shape({
+//     categorias: yup
+//       .array()
+//       .required()
+//       .of(
+//         yup.object().shape({
+//           tipoCategoria: yup.string().required(),
+//           descricao: yup.string().optional(),
+//         })
+//       ),
+//     criancasAdolescentes: yup
+//       .array()
+//       .optional()
+//       .of(
+//         yup.object().shape({
+//           tipoCategoria: yup.string().required(),
+//           descricao: yup.string().optional(),
+//         })
+//       ),
+//     outrosGruposVulneraveis: yup
+//       .array()
+//       .optional()
+//       .of(
+//         yup.object().shape({
+//           tipoCategoria: yup.string().required(),
+//           descricao: yup.string().optional(),
+//         })
+//       ),
+//   }),
+//   compartilhamentoDadosPessoais: yup
+//     .array()
+//     .optional()
+//     .of(
+//       yup.object().shape({
+//         nomeInstituicao: yup.string().required(),
+//         dadosCompartilhados: yup.string().optional(),
+//         finalidadeCompartilhamento: yup.string().optional(),
+//       })
+//     ),
+//   medidasSegurancaPrivacidade: yup
+//     .array()
+//     .optional()
+//     .of(
+//       yup.object().shape({
+//         tipo: yup.string().required(),
+//         descricaoControles: yup.string().optional(),
+//       })
+//     ),
+//   transferenciaInternacional: yup
+//     .array()
+//     .optional()
+//     .of(
+//       yup.object().shape({
+//         nomeOrganizacao: yup.string().required(),
+//         pais: yup.string().required(),
+//         dadosTransferidos: yup.string().required(),
+//         tipoGarantia: yup.string().required(),
+//       })
+//     ),
+//   contratoServicosTITratamentoDados: yup
+//     .array()
+//     .optional()
+//     .of(
+//       yup.object().shape({
+//         numeroContrato: yup.string().required(),
+//         numeroProcessoContratacao: yup.string().optional(),
+//         objetoContrato: yup.string().required(),
+//         emailGestorContrato: yup.string().required(),
+//       })
+//     ),
+//   riscosPrivacidade: yup
+//     .array()
+//     .optional()
+//     .of(
+//       yup.object().shape({
+//         tipoRisco: yup.string().required(),
+//         observacoes: yup.string().optional(),
+//       })
+//     ),
+//   observacoesProcesso: yup
+//     .array()
+//     .optional()
+//     .of(
+//       yup.object().shape({
+//         descricaoObs: yup.string().required(),
+//       })
+//     ),
+// });
 
 const CaseForm = (props: {
   item: FullCaseObject;
@@ -615,7 +616,7 @@ const CaseForm = (props: {
     navigate(`/`);
   };
 
-  const { cid } = useParams<{ cid?: string }>();
+  const cid = useParams().cid || "";
 
   const handleShowDeleteModal = () => {
     setShowModal(true);
@@ -625,8 +626,17 @@ const CaseForm = (props: {
     setShowModal(false);
   };
 
-  const onDelete = (itemId: number) => {
+  const onDelete = async (itemId: string) => {
     console.log(itemId);
+
+    console.log(`${CONNSTR}cases.json/${itemId}.json`);
+
+    const response = await fetch(`${CONNSTR}cases/${itemId}.json`, {
+      method: "DELETE",
+    });
+
+    const data = await response.json();
+    console.log(data);
     navigate(`/`);
   };
 
@@ -637,19 +647,19 @@ const CaseForm = (props: {
           <Modal.Title>Remover Registro!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Você está prestes a deletar o registro de número {cid}
+          Você está prestes a deletar o registro {props.item.nome}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handleCloseModal}>
             Cancelar
           </Button>
-          <Button variant="danger" onClick={() => onDelete(+cid!)}>
+          <Button variant="danger" onClick={() => onDelete(cid)}>
             Prosseguir com Remoção
           </Button>
         </Modal.Footer>
       </Modal>
       <Formik
-        validationSchema={schema}
+        // validationSchema={schema}
         onSubmit={props.onSubmit!}
         initialValues={props.item}
       >
@@ -699,7 +709,7 @@ const CaseForm = (props: {
                       <Form.Control
                         disabled={!isEditing}
                         type="text"
-                        name="id"
+                        name="ref"
                         value={values.ref}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -2330,7 +2340,7 @@ const CaseForm = (props: {
                         />
                       </Accordion.Body>
                     </Accordion.Item>
-                    <Accordion.Item eventKey="613">
+                    <Accordion.Item eventKey="614">
                       <Accordion.Header>Outros</Accordion.Header>
                       <Accordion.Body>
                         <Row className="mb-3 bg-primary bg-opacity-10 pt-2 pb-2">
@@ -2362,11 +2372,7 @@ const CaseForm = (props: {
                                         }`}
                                         label="Outros (Especificar)"
                                         tooltip={<React.Fragment />}
-                                        disabled={
-                                          props.edit ||
-                                          props.approve ||
-                                          !isEditing
-                                        }
+                                        disabled={!isEditing}
                                         name={`categoriaDadosPessoais.outros.outros[${index}]`}
                                       />
                                       <Row className="justify-content-center">
@@ -3359,9 +3365,17 @@ const CaseForm = (props: {
               </Button>
             )}
             {props.approve && (
-              <Button type="submit" className="float-end mt-3">
-                Aprovar
-              </Button>
+              <Row className="float-end mt-3">
+                <ButtonGroup as={Col} lg={2}>
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => onCancel()}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button type="submit">Aprovar</Button>
+                </ButtonGroup>
+              </Row>
             )}
             {props.edit && isEditing && isValid && (
               <Button

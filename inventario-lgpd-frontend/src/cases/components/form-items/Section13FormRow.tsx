@@ -8,7 +8,7 @@ import { useFormikContext, getIn } from "formik";
 import {
   FullCaseObject,
   tipoGarantiaTranferenciaInternacional,
-} from "../../../shared/models/FullCase.model";
+} from "../../../shared/models/cases.model";
 
 const Section13FormRow = (props: {
   disabled: boolean;
