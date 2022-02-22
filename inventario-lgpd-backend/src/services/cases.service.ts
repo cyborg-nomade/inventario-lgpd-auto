@@ -305,6 +305,7 @@ import { User, UserModel } from "../models/users.model";
  */
 export const findAll = async (): Promise<CaseItemObject[]> => {
   let allStoredCases;
+
   try {
     allStoredCases = await FullCaseObjectModel.find({});
   } catch (error) {
@@ -317,19 +318,23 @@ export const findAll = async (): Promise<CaseItemObject[]> => {
 
   const reducedCases: CaseItemObject[] = allStoredCases
     .map((c) => c.toObject({ getters: true }))
-    .map((c) => reduceCaseObject(c));
+    .map((c) => {
+      return { ...reduceCaseObject(c), id: c.id };
+    });
 
   return reducedCases;
 };
 
-export const findByUser = async (
-  userCode: string
-): Promise<CaseItemObject[]> => {
+export const findByUser = async (uid: string): Promise<CaseItemObject[]> => {
   let foundCases;
+
+  if (!mongoose.isValidObjectId(uid)) {
+    throw new Error("Id de usuário fornecida é inválida para a busca");
+  }
 
   try {
     foundCases = await FullCaseObjectModel.find({
-      "criador.userCode": userCode,
+      criador: uid,
     });
   } catch (error) {
     throw new Error("Não foi possível recuperar dados da base");
@@ -346,6 +351,10 @@ export const findByUser = async (
 
 export const find = async (id: string): Promise<FullCaseObject> => {
   let foundCase;
+
+  if (!mongoose.isValidObjectId(id)) {
+    throw new Error("Id fornecida é inválida para a busca");
+  }
 
   try {
     foundCase = await FullCaseObjectModel.findById(id);
@@ -367,6 +376,10 @@ export const create = async (
 
   let newCaseUser;
 
+  if (!mongoose.isValidObjectId(newCase.criador)) {
+    throw new Error("Id de usuário referido inválida!");
+  }
+
   try {
     newCaseUser = await UserModel.findById(newCase.criador);
   } catch (error) {
@@ -377,14 +390,12 @@ export const create = async (
     throw new Error("Não foi encontrado um usuário com o id fornecido!");
   }
 
-  console.log(newCaseUser);
-
   try {
     const session = await mongoose.startSession();
     session.startTransaction();
     await newCase.save({ session: session });
-    newCaseUser.cases.push(newCase);
-    await newCaseUser.save({ session: session });
+    newCaseUser.cases.push(newCase._id);
+    await newCaseUser.save({ session: session, validateBeforeSave: false }); // workaround because mongoose-unique-validator creates error
     await session.commitTransaction();
   } catch (error) {
     throw new Error("Erro na conexão de banco de dados");
@@ -398,7 +409,10 @@ export const update = async (
   caseUpdate: FullCaseObject
 ): Promise<FullCaseObject | null> => {
   let updatedCase;
-  let updatedCaseUser;
+
+  if (!mongoose.isValidObjectId(id)) {
+    throw new Error("Id fornecida é inválida para a busca");
+  }
 
   try {
     updatedCase = await FullCaseObjectModel.findById(id);
@@ -413,25 +427,10 @@ export const update = async (
   console.log(updatedCase);
 
   try {
-    updatedCaseUser = await UserModel.findById(caseUpdate.criador);
+    await updatedCase.updateOne(caseUpdate);
   } catch (error) {
-    throw new Error("Erro na conexão de banco de dados");
-  }
+    console.log(error);
 
-  if (!updatedCaseUser) {
-    throw new Error("Não foi encontrado um usuário com o id fornecido!");
-  }
-
-  console.log(updatedCaseUser);
-
-  try {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-    await updatedCase.updateOne(caseUpdate, { session: session });
-    updatedCaseUser.cases.push(updatedCase);
-    await updatedCaseUser.save({ session: session });
-    await session.commitTransaction();
-  } catch (error) {
     throw new Error("Não foi possível recuperar dados da base");
   }
 
@@ -451,6 +450,10 @@ export const update = async (
 export const remove = async (id: string): Promise<FullCaseObject> => {
   let caseToRemove;
   let caseToRemoveUser;
+
+  if (!mongoose.isValidObjectId(id)) {
+    throw new Error("Id fornecida é inválida para a busca");
+  }
 
   try {
     caseToRemove = await FullCaseObjectModel.findById(id);
@@ -478,10 +481,15 @@ export const remove = async (id: string): Promise<FullCaseObject> => {
     const session = await mongoose.startSession();
     session.startTransaction();
     await caseToRemove.remove({ session: session });
-    caseToRemoveUser.cases.pull(caseToRemove);
-    await caseToRemoveUser.save({ session: session });
+    caseToRemoveUser.cases.pull(caseToRemove._id);
+    await caseToRemoveUser.save({
+      session: session,
+      validateBeforeSave: false,
+    });
     await session.commitTransaction();
   } catch (error) {
+    console.log(error);
+
     throw new Error("Erro na conexão de banco de dados");
   }
 
