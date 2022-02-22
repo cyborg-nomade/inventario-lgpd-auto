@@ -2,6 +2,10 @@ import React, { useState, useCallback } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
+import { AuthContext } from "./shared/context/auth-context";
+import MainHeader from "./shared/components/nav/MainHeader";
+import "./App.css";
+
 import AllCasesList from "./cases/pages/AllCasesList";
 import ApproveCaseList from "./cases/pages/ApproveCaseList";
 import EditCase from "./cases/pages/EditCase";
@@ -9,14 +13,12 @@ import NewCase from "./cases/pages/NewCase";
 import Login from "./users/pages/Login";
 import UserCasesList from "./users/pages/UserCasesList";
 import UserPage from "./users/pages/UserPage";
-
-import MainHeader from "./shared/components/nav/MainHeader";
-
-import "./App.css";
 import ApproveCase from "./cases/pages/ApproveCase";
-import { AuthContext } from "./shared/context/auth-context";
 import ApprovePage from "./cases/pages/ApprovePage";
 import AllCasesPage from "./cases/pages/AllCasesPage";
+
+export const CONNSTR =
+  "https://inventario-lgpd-auto-default-rtdb.firebaseio.com/";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

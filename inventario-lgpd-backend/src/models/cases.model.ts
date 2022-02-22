@@ -1,5 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
-import { emptyUser, User } from "./users.model";
+import { Schema, Types, model } from "mongoose";
 
 export enum verbosTratamento {
   coleta = "coleta",
@@ -129,6 +128,13 @@ interface AgenteTratamento {
   email?: string;
 }
 
+const agenteTratamentoSchema = new Schema<AgenteTratamento>({
+  nome: String,
+  area: String,
+  telefone: String,
+  email: String,
+});
+
 export interface itemCategoriaDadosPessoais {
   descricao: string;
   tempoRetencao: string;
@@ -136,10 +142,24 @@ export interface itemCategoriaDadosPessoais {
   caminhoRedeSistema: string;
 }
 
+const itemCategoriaDadosPessoaisSchema = new Schema<itemCategoriaDadosPessoais>(
+  {
+    descricao: String,
+    tempoRetencao: String,
+    fonteRetencao: String,
+    caminhoRedeSistema: String,
+  }
+);
+
 interface itemCategoriaTitulares {
   tipoCategoria: categoriaTitulares;
   descricao: string;
 }
+
+const itemCategoriaTitularesSchema = new Schema<itemCategoriaTitulares>({
+  tipoCategoria: String,
+  descricao: String,
+});
 
 interface itemCompartilhamentoDados {
   nomeInstituicao: string;
@@ -147,10 +167,22 @@ interface itemCompartilhamentoDados {
   finalidadeCompartilhamento: string;
 }
 
+const itemCompartilhamentoDadosSchema = new Schema<itemCompartilhamentoDados>({
+  nomeInstituicao: String,
+  dadosCompartilhados: String,
+  finalidadeCompartilhamento: String,
+});
+
 interface itemMedidasSegurancaPrivacidade {
   tipo: tipoMedidaSegurancaPrivacidade;
   descricaoControles: string;
 }
+
+const itemMedidasSegurancaPrivacidadeSchema =
+  new Schema<itemMedidasSegurancaPrivacidade>({
+    tipo: String,
+    descricaoControles: String,
+  });
 
 interface itemTransferenciaInternacional {
   nomeOrganizacao: string;
@@ -159,6 +191,14 @@ interface itemTransferenciaInternacional {
   tipoGarantia: tipoGarantiaTranferenciaInternacional;
 }
 
+const itemTransferenciaInternacionalSchema =
+  new Schema<itemTransferenciaInternacional>({
+    nomeOrganizacao: String,
+    pais: String,
+    dadosTransferidos: String,
+    tipoGarantia: String,
+  });
+
 interface itemContratoTI {
   numeroContrato: string;
   numeroProcessoContratacao: string;
@@ -166,16 +206,32 @@ interface itemContratoTI {
   emailGestorContrato: string;
 }
 
+const itemContratoTISchema = new Schema<itemContratoTI>({
+  numeroContrato: String,
+  numeroProcessoContratacao: String,
+  objetoContrato: String,
+  emailGestorContrato: String,
+});
+
 interface itemRiscoPrivacidade {
   tipoRisco: tipoRiscoPrivacidade;
   observacoes: string;
 }
 
+const itemRiscoPrivacidadeSchema = new Schema<itemRiscoPrivacidade>({
+  tipoRisco: String,
+  observacoes: String,
+});
+
 interface itemObservacoesProcesso {
   descricaoObs: string;
 }
 
-export interface BaseCaseItemObject {
+const itemObservacoesProcessoSchema = new Schema<itemObservacoesProcesso>({
+  descricaoObs: String,
+});
+
+export interface CaseItemObject {
   nome: string;
   ref: string;
   area: string;
@@ -186,15 +242,11 @@ export interface BaseCaseItemObject {
     descricaoFinalidade: string;
   };
   dadosPessoaisSensiveis: boolean;
-  criador: User;
+  criador: Types.ObjectId;
   aprovado: boolean;
 }
 
-export interface CaseItemObject extends BaseCaseItemObject {
-  id: string;
-}
-
-export interface BaseFullCaseObject extends BaseCaseItemObject {
+export interface FullCaseObject extends CaseItemObject {
   controlador: AgenteTratamento;
   encarregado: AgenteTratamento;
   extensaoEncarregado: AgenteTratamento;
@@ -331,9 +383,155 @@ export interface BaseFullCaseObject extends BaseCaseItemObject {
   observacoesProcesso: itemObservacoesProcesso[];
 }
 
-export interface FullCaseObject extends BaseFullCaseObject {
-  id: string;
-}
+const FullCaseObjectSchema = new Schema<FullCaseObject>({
+  nome: String,
+  ref: String,
+  area: String,
+  dataCriacao: String,
+  dataAtualizacao: String,
+  dadosPessoaisSensiveis: Boolean,
+  criador: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+  aprovado: Boolean,
+  controlador: agenteTratamentoSchema,
+  encarregado: agenteTratamentoSchema,
+  extensaoEncarregado: agenteTratamentoSchema,
+  areaTratamentoDados: agenteTratamentoSchema,
+  operador: agenteTratamentoSchema,
+  fasesCicloTratamento: {
+    coleta: Boolean,
+    retencao: Boolean,
+    processamento: Boolean,
+    compartilhamento: Boolean,
+    eliminacao: Boolean,
+    verbos: [String],
+  },
+  descricaoFluxoTratamento: String,
+  abrangenciaGeografica: String,
+  fonteDados: String,
+  finalidadeTratamento: {
+    hipoteseTratamento: String,
+    descricaoFinalidade: String,
+    previsaoLegal: String,
+    resultadosTitular: String,
+    beneficiosEsperados: String,
+  },
+  categoriaDadosPessoais: {
+    identificacao: {
+      idPessoal: itemCategoriaDadosPessoaisSchema,
+      idGov: itemCategoriaDadosPessoaisSchema,
+      idEletronica: itemCategoriaDadosPessoaisSchema,
+      locEletronica: itemCategoriaDadosPessoaisSchema,
+    },
+    financeiros: {
+      idFin: itemCategoriaDadosPessoaisSchema,
+      recursosFin: itemCategoriaDadosPessoaisSchema,
+      dividasDespesas: itemCategoriaDadosPessoaisSchema,
+      solvencia: itemCategoriaDadosPessoaisSchema,
+      emprestimosHipotecaCredito: itemCategoriaDadosPessoaisSchema,
+      assistenciaFin: itemCategoriaDadosPessoaisSchema,
+      apoliceSeguro: itemCategoriaDadosPessoaisSchema,
+      planoPensao: itemCategoriaDadosPessoaisSchema,
+      transacaoFin: itemCategoriaDadosPessoaisSchema,
+      compensacao: itemCategoriaDadosPessoaisSchema,
+      atividadeProfissional: itemCategoriaDadosPessoaisSchema,
+      acordosAjustes: itemCategoriaDadosPessoaisSchema,
+      autorizacoesConsentimentos: itemCategoriaDadosPessoaisSchema,
+    },
+    caracteristicas: {
+      detalhesPessoais: itemCategoriaDadosPessoaisSchema,
+      detalhesMilitares: itemCategoriaDadosPessoaisSchema,
+      situacaoImigracao: itemCategoriaDadosPessoaisSchema,
+      descricaoFisica: itemCategoriaDadosPessoaisSchema,
+    },
+    habitos: {
+      habitos: itemCategoriaDadosPessoaisSchema,
+      estiloVida: itemCategoriaDadosPessoaisSchema,
+      viagensDeslocamento: itemCategoriaDadosPessoaisSchema,
+      contatosSociais: itemCategoriaDadosPessoaisSchema,
+      posses: itemCategoriaDadosPessoaisSchema,
+      denunciasIncidentesAcidentes: itemCategoriaDadosPessoaisSchema,
+      distincoes: itemCategoriaDadosPessoaisSchema,
+      usoMidia: itemCategoriaDadosPessoaisSchema,
+    },
+    caracteristicasPsicologicas: {
+      descricaoPsi: itemCategoriaDadosPessoaisSchema,
+    },
+    composicaoFamiliar: {
+      casamentoCoabitacao: itemCategoriaDadosPessoaisSchema,
+      historicoConjugal: itemCategoriaDadosPessoaisSchema,
+      membrosFamilia: itemCategoriaDadosPessoaisSchema,
+    },
+    interessesLazer: {
+      atividadesInteressesLaz: itemCategoriaDadosPessoaisSchema,
+    },
+    associacoes: {
+      outrasAssociacoesNaoSensiveis: itemCategoriaDadosPessoaisSchema,
+    },
+    processoJudAdmCrim: {
+      suspeitas: itemCategoriaDadosPessoaisSchema,
+      condenacoesSentencas: itemCategoriaDadosPessoaisSchema,
+      acoesJud: itemCategoriaDadosPessoaisSchema,
+      penalidadesAdm: itemCategoriaDadosPessoaisSchema,
+    },
+    habitosConsumo: {
+      dadosBensServicos: itemCategoriaDadosPessoaisSchema,
+    },
+    residenciais: {
+      dadosResidencia: itemCategoriaDadosPessoaisSchema,
+    },
+    educacaoTreinamento: {
+      academicosEscolares: itemCategoriaDadosPessoaisSchema,
+      registroFinanceiro: itemCategoriaDadosPessoaisSchema,
+      qualificacaoExperienciaProf: itemCategoriaDadosPessoaisSchema,
+    },
+    profissaoEmprego: {
+      empregoAtual: itemCategoriaDadosPessoaisSchema,
+      recrutamento: itemCategoriaDadosPessoaisSchema,
+      rescisao: itemCategoriaDadosPessoaisSchema,
+      carreira: itemCategoriaDadosPessoaisSchema,
+      absenteismoDisciplina: itemCategoriaDadosPessoaisSchema,
+      avaliacaoDesempenho: itemCategoriaDadosPessoaisSchema,
+    },
+    regVideoImgVoz: {
+      videoImagem: itemCategoriaDadosPessoaisSchema,
+      imagemVigilancia: itemCategoriaDadosPessoaisSchema,
+      voz: itemCategoriaDadosPessoaisSchema,
+    },
+    outros: {
+      outros: [itemCategoriaDadosPessoaisSchema],
+    },
+  },
+  categoriaDadosPessoaisSensiveis: {
+    origemRacialEtnica: itemCategoriaDadosPessoaisSchema,
+    conviccaoReligiosa: itemCategoriaDadosPessoaisSchema,
+    opiniaoPolitica: itemCategoriaDadosPessoaisSchema,
+    filiacaoSindicato: itemCategoriaDadosPessoaisSchema,
+    filiacaoOrganizacaoReligiosa: itemCategoriaDadosPessoaisSchema,
+    filiacaoCrencaFilosofica: itemCategoriaDadosPessoaisSchema,
+    filiacaoPreferenciaPolitica: itemCategoriaDadosPessoaisSchema,
+    saudeVidaSexual: itemCategoriaDadosPessoaisSchema,
+    geneticos: itemCategoriaDadosPessoaisSchema,
+    biometricos: itemCategoriaDadosPessoaisSchema,
+  },
+  frequenciaTratamento: String,
+  quantidadeDadosTratados: String,
+  categoriasTitulares: {
+    categorias: [itemCategoriaTitularesSchema],
+    criancasAdolescentes: [itemCategoriaTitularesSchema],
+    outrosGruposVulneraveis: [itemCategoriaTitularesSchema],
+  },
+  compartilhamentoDadosPessoais: [itemCompartilhamentoDadosSchema],
+  medidasSegurancaPrivacidade: [itemMedidasSegurancaPrivacidadeSchema],
+  transferenciaInternacional: [itemTransferenciaInternacionalSchema],
+  contratoServicosTITratamentoDados: [itemContratoTISchema],
+  riscosPrivacidade: [itemRiscoPrivacidadeSchema],
+  observacoesProcesso: [itemObservacoesProcessoSchema],
+});
+
+export const FullCaseObjectModel = model<FullCaseObject>(
+  "Case",
+  FullCaseObjectSchema
+);
 
 export const reduceCaseObject = (c: FullCaseObject): CaseItemObject => {
   const { hipoteseTratamento, descricaoFinalidade } = c.finalidadeTratamento;
@@ -348,7 +546,6 @@ export const reduceCaseObject = (c: FullCaseObject): CaseItemObject => {
     dadosPessoaisSensiveis: c.dadosPessoaisSensiveis,
     criador: c.criador,
     aprovado: c.aprovado,
-    id: c.id,
   };
 
   return reducedCase;
@@ -411,148 +608,147 @@ export const emptyItemObservacoesProcesso = (): itemObservacoesProcesso => ({
   descricaoObs: "",
 });
 
-export const emptyFullCaseObject = (): FullCaseObject => ({
-  nome: "",
-  id: uuidv4(),
-  ref: "",
-  area: "",
-  aprovado: false,
-  criador: emptyUser(),
-  dataCriacao: new Date().toDateString(),
-  dataAtualizacao: new Date().toDateString(),
-  controlador: emptyAgenteTratamento(),
-  encarregado: emptyAgenteTratamento(),
-  extensaoEncarregado: emptyAgenteTratamento(),
-  areaTratamentoDados: emptyAgenteTratamento(),
-  operador: emptyAgenteTratamento(),
-  fasesCicloTratamento: {
-    coleta: false,
-    retencao: false,
-    processamento: false,
-    compartilhamento: false,
-    eliminacao: false,
-    verbos: [],
-  },
-  descricaoFluxoTratamento: "",
-  abrangenciaGeografica: "",
-  fonteDados: "",
-  finalidadeTratamento: {
-    hipoteseTratamento: hipotesesTratamento.consentimento,
-    descricaoFinalidade: "",
-    previsaoLegal: "",
-    resultadosTitular: "",
-    beneficiosEsperados: "",
-  },
-  categoriaDadosPessoais: {
-    identificacao: {
-      idPessoal: emptyItemCategoriaDadosPessoais(),
-      idGov: emptyItemCategoriaDadosPessoais(),
-      idEletronica: emptyItemCategoriaDadosPessoais(),
-      locEletronica: emptyItemCategoriaDadosPessoais(),
-    },
-    financeiros: {
-      idFin: emptyItemCategoriaDadosPessoais(),
-      recursosFin: emptyItemCategoriaDadosPessoais(),
-      dividasDespesas: emptyItemCategoriaDadosPessoais(),
-      solvencia: emptyItemCategoriaDadosPessoais(),
-      emprestimosHipotecaCredito: emptyItemCategoriaDadosPessoais(),
-      assistenciaFin: emptyItemCategoriaDadosPessoais(),
-      apoliceSeguro: emptyItemCategoriaDadosPessoais(),
-      planoPensao: emptyItemCategoriaDadosPessoais(),
-      transacaoFin: emptyItemCategoriaDadosPessoais(),
-      compensacao: emptyItemCategoriaDadosPessoais(),
-      atividadeProfissional: emptyItemCategoriaDadosPessoais(),
-      acordosAjustes: emptyItemCategoriaDadosPessoais(),
-      autorizacoesConsentimentos: emptyItemCategoriaDadosPessoais(),
-    },
-    caracteristicas: {
-      detalhesPessoais: emptyItemCategoriaDadosPessoais(),
-      detalhesMilitares: emptyItemCategoriaDadosPessoais(),
-      situacaoImigracao: emptyItemCategoriaDadosPessoais(),
-      descricaoFisica: emptyItemCategoriaDadosPessoais(),
-    },
-    habitos: {
-      habitos: emptyItemCategoriaDadosPessoais(),
-      estiloVida: emptyItemCategoriaDadosPessoais(),
-      viagensDeslocamento: emptyItemCategoriaDadosPessoais(),
-      contatosSociais: emptyItemCategoriaDadosPessoais(),
-      posses: emptyItemCategoriaDadosPessoais(),
-      denunciasIncidentesAcidentes: emptyItemCategoriaDadosPessoais(),
-      distincoes: emptyItemCategoriaDadosPessoais(),
-      usoMidia: emptyItemCategoriaDadosPessoais(),
-    },
-    caracteristicasPsicologicas: {
-      descricaoPsi: emptyItemCategoriaDadosPessoais(),
-    },
-    composicaoFamiliar: {
-      casamentoCoabitacao: emptyItemCategoriaDadosPessoais(),
-      historicoConjugal: emptyItemCategoriaDadosPessoais(),
-      membrosFamilia: emptyItemCategoriaDadosPessoais(),
-    },
-    interessesLazer: {
-      atividadesInteressesLaz: emptyItemCategoriaDadosPessoais(),
-    },
-    associacoes: {
-      outrasAssociacoesNaoSensiveis: emptyItemCategoriaDadosPessoais(),
-    },
-    processoJudAdmCrim: {
-      suspeitas: emptyItemCategoriaDadosPessoais(),
-      condenacoesSentencas: emptyItemCategoriaDadosPessoais(),
-      acoesJud: emptyItemCategoriaDadosPessoais(),
-      penalidadesAdm: emptyItemCategoriaDadosPessoais(),
-    },
-    habitosConsumo: {
-      dadosBensServicos: emptyItemCategoriaDadosPessoais(),
-    },
-    residenciais: {
-      dadosResidencia: emptyItemCategoriaDadosPessoais(),
-    },
-    educacaoTreinamento: {
-      academicosEscolares: emptyItemCategoriaDadosPessoais(),
-      registroFinanceiro: emptyItemCategoriaDadosPessoais(),
-      qualificacaoExperienciaProf: emptyItemCategoriaDadosPessoais(),
-    },
-    profissaoEmprego: {
-      empregoAtual: emptyItemCategoriaDadosPessoais(),
-      recrutamento: emptyItemCategoriaDadosPessoais(),
-      rescisao: emptyItemCategoriaDadosPessoais(),
-      carreira: emptyItemCategoriaDadosPessoais(),
-      absenteismoDisciplina: emptyItemCategoriaDadosPessoais(),
-      avaliacaoDesempenho: emptyItemCategoriaDadosPessoais(),
-    },
-    regVideoImgVoz: {
-      videoImagem: emptyItemCategoriaDadosPessoais(),
-      imagemVigilancia: emptyItemCategoriaDadosPessoais(),
-      voz: emptyItemCategoriaDadosPessoais(),
-    },
-    outros: {
-      outros: [],
-    },
-  },
-  dadosPessoaisSensiveis: false,
-  categoriaDadosPessoaisSensiveis: {
-    origemRacialEtnica: emptyItemCategoriaDadosPessoais(),
-    conviccaoReligiosa: emptyItemCategoriaDadosPessoais(),
-    opiniaoPolitica: emptyItemCategoriaDadosPessoais(),
-    filiacaoSindicato: emptyItemCategoriaDadosPessoais(),
-    filiacaoOrganizacaoReligiosa: emptyItemCategoriaDadosPessoais(),
-    filiacaoCrencaFilosofica: emptyItemCategoriaDadosPessoais(),
-    filiacaoPreferenciaPolitica: emptyItemCategoriaDadosPessoais(),
-    saudeVidaSexual: emptyItemCategoriaDadosPessoais(),
-    geneticos: emptyItemCategoriaDadosPessoais(),
-    biometricos: emptyItemCategoriaDadosPessoais(),
-  },
-  frequenciaTratamento: "",
-  quantidadeDadosTratados: "",
-  categoriasTitulares: {
-    categorias: [emptyItemCategoriaTitulares()],
-    criancasAdolescentes: [],
-    outrosGruposVulneraveis: [],
-  },
-  compartilhamentoDadosPessoais: [],
-  medidasSegurancaPrivacidade: [],
-  transferenciaInternacional: [],
-  contratoServicosTITratamentoDados: [],
-  riscosPrivacidade: [],
-  observacoesProcesso: [],
-});
+// export const emptyFullCaseObject = (): FullCaseObject => ({
+//   nome: "",
+//   ref: "",
+//   area: "",
+//   aprovado: false,
+//   criador: "" ,
+//   dataCriacao: new Date().toDateString(),
+//   dataAtualizacao: new Date().toDateString(),
+//   controlador: emptyAgenteTratamento(),
+//   encarregado: emptyAgenteTratamento(),
+//   extensaoEncarregado: emptyAgenteTratamento(),
+//   areaTratamentoDados: emptyAgenteTratamento(),
+//   operador: emptyAgenteTratamento(),
+//   fasesCicloTratamento: {
+//     coleta: false,
+//     retencao: false,
+//     processamento: false,
+//     compartilhamento: false,
+//     eliminacao: false,
+//     verbos: [],
+//   },
+//   descricaoFluxoTratamento: "",
+//   abrangenciaGeografica: "",
+//   fonteDados: "",
+//   finalidadeTratamento: {
+//     hipoteseTratamento: hipotesesTratamento.consentimento,
+//     descricaoFinalidade: "",
+//     previsaoLegal: "",
+//     resultadosTitular: "",
+//     beneficiosEsperados: "",
+//   },
+//   categoriaDadosPessoais: {
+//     identificacao: {
+//       idPessoal: emptyItemCategoriaDadosPessoais(),
+//       idGov: emptyItemCategoriaDadosPessoais(),
+//       idEletronica: emptyItemCategoriaDadosPessoais(),
+//       locEletronica: emptyItemCategoriaDadosPessoais(),
+//     },
+//     financeiros: {
+//       idFin: emptyItemCategoriaDadosPessoais(),
+//       recursosFin: emptyItemCategoriaDadosPessoais(),
+//       dividasDespesas: emptyItemCategoriaDadosPessoais(),
+//       solvencia: emptyItemCategoriaDadosPessoais(),
+//       emprestimosHipotecaCredito: emptyItemCategoriaDadosPessoais(),
+//       assistenciaFin: emptyItemCategoriaDadosPessoais(),
+//       apoliceSeguro: emptyItemCategoriaDadosPessoais(),
+//       planoPensao: emptyItemCategoriaDadosPessoais(),
+//       transacaoFin: emptyItemCategoriaDadosPessoais(),
+//       compensacao: emptyItemCategoriaDadosPessoais(),
+//       atividadeProfissional: emptyItemCategoriaDadosPessoais(),
+//       acordosAjustes: emptyItemCategoriaDadosPessoais(),
+//       autorizacoesConsentimentos: emptyItemCategoriaDadosPessoais(),
+//     },
+//     caracteristicas: {
+//       detalhesPessoais: emptyItemCategoriaDadosPessoais(),
+//       detalhesMilitares: emptyItemCategoriaDadosPessoais(),
+//       situacaoImigracao: emptyItemCategoriaDadosPessoais(),
+//       descricaoFisica: emptyItemCategoriaDadosPessoais(),
+//     },
+//     habitos: {
+//       habitos: emptyItemCategoriaDadosPessoais(),
+//       estiloVida: emptyItemCategoriaDadosPessoais(),
+//       viagensDeslocamento: emptyItemCategoriaDadosPessoais(),
+//       contatosSociais: emptyItemCategoriaDadosPessoais(),
+//       posses: emptyItemCategoriaDadosPessoais(),
+//       denunciasIncidentesAcidentes: emptyItemCategoriaDadosPessoais(),
+//       distincoes: emptyItemCategoriaDadosPessoais(),
+//       usoMidia: emptyItemCategoriaDadosPessoais(),
+//     },
+//     caracteristicasPsicologicas: {
+//       descricaoPsi: emptyItemCategoriaDadosPessoais(),
+//     },
+//     composicaoFamiliar: {
+//       casamentoCoabitacao: emptyItemCategoriaDadosPessoais(),
+//       historicoConjugal: emptyItemCategoriaDadosPessoais(),
+//       membrosFamilia: emptyItemCategoriaDadosPessoais(),
+//     },
+//     interessesLazer: {
+//       atividadesInteressesLaz: emptyItemCategoriaDadosPessoais(),
+//     },
+//     associacoes: {
+//       outrasAssociacoesNaoSensiveis: emptyItemCategoriaDadosPessoais(),
+//     },
+//     processoJudAdmCrim: {
+//       suspeitas: emptyItemCategoriaDadosPessoais(),
+//       condenacoesSentencas: emptyItemCategoriaDadosPessoais(),
+//       acoesJud: emptyItemCategoriaDadosPessoais(),
+//       penalidadesAdm: emptyItemCategoriaDadosPessoais(),
+//     },
+//     habitosConsumo: {
+//       dadosBensServicos: emptyItemCategoriaDadosPessoais(),
+//     },
+//     residenciais: {
+//       dadosResidencia: emptyItemCategoriaDadosPessoais(),
+//     },
+//     educacaoTreinamento: {
+//       academicosEscolares: emptyItemCategoriaDadosPessoais(),
+//       registroFinanceiro: emptyItemCategoriaDadosPessoais(),
+//       qualificacaoExperienciaProf: emptyItemCategoriaDadosPessoais(),
+//     },
+//     profissaoEmprego: {
+//       empregoAtual: emptyItemCategoriaDadosPessoais(),
+//       recrutamento: emptyItemCategoriaDadosPessoais(),
+//       rescisao: emptyItemCategoriaDadosPessoais(),
+//       carreira: emptyItemCategoriaDadosPessoais(),
+//       absenteismoDisciplina: emptyItemCategoriaDadosPessoais(),
+//       avaliacaoDesempenho: emptyItemCategoriaDadosPessoais(),
+//     },
+//     regVideoImgVoz: {
+//       videoImagem: emptyItemCategoriaDadosPessoais(),
+//       imagemVigilancia: emptyItemCategoriaDadosPessoais(),
+//       voz: emptyItemCategoriaDadosPessoais(),
+//     },
+//     outros: {
+//       outros: [],
+//     },
+//   },
+//   dadosPessoaisSensiveis: false,
+//   categoriaDadosPessoaisSensiveis: {
+//     origemRacialEtnica: emptyItemCategoriaDadosPessoais(),
+//     conviccaoReligiosa: emptyItemCategoriaDadosPessoais(),
+//     opiniaoPolitica: emptyItemCategoriaDadosPessoais(),
+//     filiacaoSindicato: emptyItemCategoriaDadosPessoais(),
+//     filiacaoOrganizacaoReligiosa: emptyItemCategoriaDadosPessoais(),
+//     filiacaoCrencaFilosofica: emptyItemCategoriaDadosPessoais(),
+//     filiacaoPreferenciaPolitica: emptyItemCategoriaDadosPessoais(),
+//     saudeVidaSexual: emptyItemCategoriaDadosPessoais(),
+//     geneticos: emptyItemCategoriaDadosPessoais(),
+//     biometricos: emptyItemCategoriaDadosPessoais(),
+//   },
+//   frequenciaTratamento: "",
+//   quantidadeDadosTratados: "",
+//   categoriasTitulares: {
+//     categorias: [emptyItemCategoriaTitulares()],
+//     criancasAdolescentes: [],
+//     outrosGruposVulneraveis: [],
+//   },
+//   compartilhamentoDadosPessoais: [],
+//   medidasSegurancaPrivacidade: [],
+//   transferenciaInternacional: [],
+//   contratoServicosTITratamentoDados: [],
+//   riscosPrivacidade: [],
+//   observacoesProcesso: [],
+// });

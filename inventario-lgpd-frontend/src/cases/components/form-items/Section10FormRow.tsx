@@ -8,7 +8,7 @@ import { useFormikContext, getIn } from "formik";
 import {
   categoriaTitulares,
   FullCaseObject,
-} from "../../../shared/models/FullCase.model";
+} from "../../../shared/models/cases.model";
 
 const Section10FormRow = (props: {
   label: string;

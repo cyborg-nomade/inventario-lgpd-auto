@@ -1,8 +1,8 @@
 /**
  * Required External Modules and Interfaces
  */
-
 import express from "express";
+
 import {
   getUsers,
   getUserById,
@@ -24,12 +24,10 @@ export const usersRouter = express.Router();
 
 // - GET users/
 //   - retorna todos os usuários cadastrados
-
 usersRouter.get("/", getUsers);
 
 // - POST users/
 //   - registra um novo usuário
-
 usersRouter.post(
   "/",
   [check("username").not().isEmpty(), check("password").isLength({ min: 8 })],
@@ -38,20 +36,16 @@ usersRouter.post(
 
 // - POST users/login
 //    - faz login do usuário
-
 usersRouter.post("/login", loginUser);
 
 // - GET users/:uid
 //   - retorna o usuário especificado
-
 usersRouter.get("/:uid", getUserById);
 
 // - PUT users/:uid
 //   - edita o usuário especificado
-
 usersRouter.put("/:uid", updateUser);
 
 // - DELETE users/:uid
 //   - elimina o usuário especificado
-
 usersRouter.delete("/:uid", removeUser);

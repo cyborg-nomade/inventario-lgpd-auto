@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { useFormikContext, getIn } from "formik";
 
-import { FullCaseObject } from "../../../shared/models/FullCase.model";
+import { FullCaseObject } from "../../../shared/models/cases.model";
 
 const Section14FormRow = (props: {
   disabled: boolean;
