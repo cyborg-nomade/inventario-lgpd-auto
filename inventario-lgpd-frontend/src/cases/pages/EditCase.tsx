@@ -80,6 +80,7 @@ const EditCase = () => {
       navigate(`/`);
     } catch (err) {
       console.log(err);
+      setFullCase(item);
     }
   };
 
