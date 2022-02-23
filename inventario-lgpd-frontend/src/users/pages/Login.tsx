@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -13,6 +13,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { BaseUser, User } from "./../../shared/models/users.model";
 import { AuthContext } from "./../../shared/context/auth-context";
 import { CONNSTR } from "./../../App";
+import { useHttpClient } from "./../../shared/hooks/http-hook";
 
 const schema = yup.object().shape({
   username: yup.string().required(),
@@ -31,38 +32,25 @@ const Login = () => {
   const authContext = useContext(AuthContext);
   let navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { isLoading, error, sendRequest } = useHttpClient();
 
   const submitLoginHandler = async (user: BaseUser) => {
-    setIsLoading(true);
-
     try {
-      const response = await fetch(`${CONNSTR}/users/login`, {
-        method: "POST",
-        body: JSON.stringify(user),
-        headers: {
+      const responseData = await sendRequest(
+        `${CONNSTR}/users/login`,
+        "POST",
+        JSON.stringify(user),
+        {
           "Content-Type": "application/json",
-        },
-      });
-
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        throw new Error(responseData.message);
-      }
+        }
+      );
 
       const receivedUser: User = responseData.user;
 
-      setIsLoading(false);
-
       authContext.login(receivedUser.id, receivedUser.isComite);
       navigate(`/${receivedUser.id}/cases`);
-    } catch (error: any) {
-      setIsLoading(false);
-
+    } catch (error) {
       console.log(error);
-      setError(error.message);
     }
   };
 
@@ -127,7 +115,7 @@ const Login = () => {
                       isInvalid={!!errors.password}
                     />
                     <Form.Control.Feedback type="invalid">
-                      A senha deve ter pelo menos 6 caracteres, um caracter
+                      A senha deve ter pelo menos 8 caracteres, um caracter
                       especial, uma letra maiúscula e um número
                     </Form.Control.Feedback>
                   </Form.Group>
