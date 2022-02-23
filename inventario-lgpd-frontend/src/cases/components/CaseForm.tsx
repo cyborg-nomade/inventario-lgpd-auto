@@ -604,9 +604,12 @@ const CaseForm = (props: {
   approve?: boolean;
   onSubmit: onSubmitFn;
 }) => {
+  console.log(props.item);
+
   const [isEditing, setIsEditing] = useState(props.new || false);
   const [showModal, setShowModal] = useState(false);
   let navigate = useNavigate();
+  const cid = useParams().cid || "";
 
   const onStartEditing = () => {
     setIsEditing(true);
@@ -615,8 +618,6 @@ const CaseForm = (props: {
   const onCancel = () => {
     navigate(`/`);
   };
-
-  const cid = useParams().cid || "";
 
   const handleShowDeleteModal = () => {
     setShowModal(true);
@@ -660,6 +661,7 @@ const CaseForm = (props: {
       </Modal>
       <Formik
         // validationSchema={schema}
+        enableReinitialize={true}
         onSubmit={props.onSubmit!}
         initialValues={props.item}
       >
