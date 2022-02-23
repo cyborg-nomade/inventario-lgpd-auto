@@ -1,31 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useContext } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 
 import { CONNSTR } from "../../App";
 import { CaseItemObject } from "../../shared/models/cases.model";
-import CasesList from "../../cases/components/CasesList";
+import { AuthContext } from "../../shared/context/auth-context";
 import { useHttpClient } from "./../../shared/hooks/http-hook";
+import CasesList from "../../cases/components/CasesList";
 
 const UserCasesList = () => {
-  const uid = useParams().uid;
+  const uid = useContext(AuthContext).userId;
 
   const [cases, setCases] = useState<CaseItemObject[]>([]);
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   useEffect(() => {
-    const getAllCases = async () => {
+    const getUserCases = async () => {
       const responseData = await sendRequest(`${CONNSTR}/cases/user/${uid}`);
-
       const loadedCases: CaseItemObject[] = responseData.cases;
-
       setCases(loadedCases);
     };
 
-    getAllCases().catch((error) => {
+    getUserCases().catch((error) => {
       console.log(error);
     });
   }, [uid, sendRequest]);
