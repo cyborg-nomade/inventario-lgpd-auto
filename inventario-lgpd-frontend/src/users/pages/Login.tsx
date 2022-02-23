@@ -32,7 +32,7 @@ const Login = () => {
   const authContext = useContext(AuthContext);
   let navigate = useNavigate();
 
-  const { isLoading, error, sendRequest } = useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   const submitLoginHandler = async (user: BaseUser) => {
     try {
@@ -137,7 +137,9 @@ const Login = () => {
           className="justify-content-center mx-auto"
           style={{ width: "28rem" }}
         >
-          <Alert variant="danger">{error}</Alert>
+          <Alert variant="danger" onClose={clearError} dismissible>
+            {error}
+          </Alert>
         </Row>
       )}
     </React.Fragment>

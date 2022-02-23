@@ -7,7 +7,7 @@ import Row from "react-bootstrap/Row";
 import { CONNSTR } from "../../App";
 import {
   emptyFullCaseObject,
-  FullCaseObject,
+  BaseFullCaseObject,
 } from "../../shared/models/cases.model";
 import CaseForm from "../components/CaseForm";
 
@@ -16,7 +16,7 @@ const ApproveCase = () => {
 
   let navigate = useNavigate();
 
-  const [fullCase, setFullCase] = useState<FullCaseObject>(
+  const [fullCase, setFullCase] = useState<BaseFullCaseObject>(
     emptyFullCaseObject()
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +37,7 @@ const ApproveCase = () => {
 
       const responseData = await response.json();
 
-      let loadedCase: FullCaseObject = emptyFullCaseObject();
+      let loadedCase: BaseFullCaseObject = emptyFullCaseObject();
 
       console.log(loadedCase.fasesCicloTratamento.verbos);
       console.log(responseData.fasesCicloTratamento.verbos);
@@ -97,7 +97,7 @@ const ApproveCase = () => {
     );
   }
 
-  const submitFormHandler = async (item: FullCaseObject) => {
+  const submitFormHandler = async (item: BaseFullCaseObject) => {
     console.log(item);
     item.aprovado = true;
 

@@ -7,20 +7,19 @@ import Row from "react-bootstrap/Row";
 import { CONNSTR } from "./../../App";
 
 import {
-  FullCaseObject,
-  emptyFullCaseObject,
+  BaseFullCaseObject,
+  emptyBaseFullCaseObject,
 } from "../../shared/models/cases.model";
 import CaseForm from "../components/CaseForm";
-import { USERS } from "./AllCasesList";
 
 const EditCase = () => {
-  const cid = useParams().cid || 0;
-  const uid = useParams().uid || 101;
+  const cid = useParams().cid || "";
+  const uid = useParams().uid || "";
 
   let navigate = useNavigate();
 
-  const [fullCase, setFullCase] = useState<FullCaseObject>(
-    emptyFullCaseObject()
+  const [fullCase, setFullCase] = useState<BaseFullCaseObject>(
+    emptyBaseFullCaseObject()
   );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -40,7 +39,7 @@ const EditCase = () => {
 
       const responseData = await response.json();
 
-      let loadedCase: FullCaseObject = emptyFullCaseObject();
+      let loadedCase: BaseFullCaseObject = emptyBaseFullCaseObject();
 
       console.log(loadedCase.fasesCicloTratamento.verbos);
       console.log(responseData.fasesCicloTratamento.verbos);
@@ -76,7 +75,7 @@ const EditCase = () => {
     });
 
     return () => {
-      setFullCase(emptyFullCaseObject());
+      setFullCase(emptyBaseFullCaseObject());
       setIsLoading(false);
       setError(null);
     };
@@ -100,11 +99,11 @@ const EditCase = () => {
     );
   }
 
-  const submitFormHandler = async (item: FullCaseObject) => {
+  const submitFormHandler = async (item: BaseFullCaseObject) => {
     console.log(item);
 
     item.area = item.extensaoEncarregado.area || "";
-    item.criador = USERS[+uid - 1];
+    item.criador = uid;
     for (const value of Object.values(item.categoriaDadosPessoaisSensiveis)) {
       if (value.descricao !== "Não se aplica") {
         item.dadosPessoaisSensiveis = true;

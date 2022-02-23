@@ -14,7 +14,7 @@ const UserCasesList = () => {
 
   const [cases, setCases] = useState<CaseItemObject[]>([]);
 
-  const { isLoading, error, sendRequest } = useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   useEffect(() => {
     const getAllCases = async () => {
@@ -40,20 +40,17 @@ const UserCasesList = () => {
     );
   }
 
-  if (error) {
-    return (
-      <Row className="justify-content-center">
-        <Alert variant="danger">{error}</Alert>
-      </Row>
-    );
-  }
-
-  const filteredCases = cases.filter((item) => item.criador.userCode === uid);
-
   return (
     <React.Fragment>
       <h1>Página Inicial - Todos os seus itens</h1>
-      <CasesList items={filteredCases} />
+      {error && (
+        <Row className="justify-content-center">
+          <Alert variant="danger" onClose={clearError} dismissible>
+            {error}
+          </Alert>
+        </Row>
+      )}
+      <CasesList items={cases} />
     </React.Fragment>
   );
 };

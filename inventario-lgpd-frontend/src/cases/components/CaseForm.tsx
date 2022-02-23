@@ -22,7 +22,7 @@ import {
   emptyItemObservacoesProcesso,
   emptyItemRiscoPrivacidade,
   emptyItemTransferenciaInternacional,
-  FullCaseObject,
+  BaseFullCaseObject,
   verbosTratamento,
 } from "../../shared/models/cases.model";
 import TagPicker from "../../shared/components/UI/TagPicker";
@@ -37,7 +37,7 @@ import Section15FormRow from "./form-items/Section15FormRow";
 import Section16FormRow from "./form-items/Section16FormRow";
 import { CONNSTR } from "../../App";
 
-type onSubmitFn = (item: FullCaseObject) => void;
+type onSubmitFn = (item: BaseFullCaseObject) => void;
 
 // const schema = yup.object().shape({
 //   nome: yup.string().required(),
@@ -598,7 +598,7 @@ type onSubmitFn = (item: FullCaseObject) => void;
 // });
 
 const CaseForm = (props: {
-  item: FullCaseObject;
+  item: BaseFullCaseObject;
   new?: boolean;
   edit?: boolean;
   approve?: boolean;

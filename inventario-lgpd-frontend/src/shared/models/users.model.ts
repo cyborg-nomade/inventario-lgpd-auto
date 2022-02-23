@@ -9,10 +9,10 @@ export interface User extends BaseUser {
   id: string;
 }
 
-export const emptyUser = (): User => ({
-  username: "",
-  password: "",
-  userCode: "",
-  isComite: false,
-  id: "",
-});
+// export const emptyUser = (): User => ({
+//   username: "",
+//   password: "",
+//   userCode: "",
+//   isComite: false,
+//   id: "",
+// });
