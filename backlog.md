@@ -1,6 +1,6 @@
 # connect front and backend
 
-1- POST call to create new case
+1- POST call to create new case (OK)
 2- GET calls to load lists
 3- GET calls to populate edit / approve form
 4- PUT calls to edit cases
