@@ -24,6 +24,8 @@ export const useHttpClient = () => {
           signal: httpAbortController.signal,
         });
 
+        console.log(response);
+
         const responseData = await response.json();
 
         activeHttpRequests.current = activeHttpRequests.current.filter(

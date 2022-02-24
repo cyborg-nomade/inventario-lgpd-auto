@@ -422,8 +422,6 @@ export const update = async (
     throw new Error("Não foi encontrado um caso de uso com o id fornecido!");
   }
 
-  console.log(updatedCase);
-
   try {
     await updatedCase.updateOne(caseUpdate);
   } catch (error) {
@@ -472,8 +470,6 @@ export const remove = async (id: string): Promise<FullCaseObject> => {
   if (!caseToRemoveUser) {
     throw new Error("Não foi encontrado um usuário com o id fornecido!");
   }
-
-  console.log(caseToRemoveUser);
 
   try {
     const session = await mongoose.startSession();

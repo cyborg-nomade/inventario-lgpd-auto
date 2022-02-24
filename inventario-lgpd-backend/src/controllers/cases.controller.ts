@@ -63,7 +63,9 @@ export const removeCase = async (req: Request, res: Response) => {
     const id: string = req.params.cid;
 
     const removedCase = await CaseService.remove(id);
-    return res.status(200).send({ case: removedCase });
+    return res
+      .status(200)
+      .send({ message: "Caso deletado com sucesso", case: removedCase });
   } catch (error: any) {
     res.status(500).send({ message: error.message });
   }

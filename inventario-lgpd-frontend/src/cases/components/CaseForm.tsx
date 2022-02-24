@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-
+import { useNavigate, useParams } from "react-router-dom";
+import { Formik, getIn, FieldArray } from "formik";
+// import * as yup from "yup";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -9,10 +11,10 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Modal from "react-bootstrap/Modal";
-import { Formik, getIn, FieldArray } from "formik";
-// import * as yup from "yup";
-import { useNavigate, useParams } from "react-router-dom";
+import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
 
+import { CONNSTR } from "../../App";
 import {
   emptyItemCategoriaDadosPessoais,
   emptyItemCategoriaTitulares,
@@ -25,6 +27,7 @@ import {
   BaseFullCaseObject,
   verbosTratamento,
 } from "../../shared/models/cases.model";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 import TagPicker from "../../shared/components/UI/TagPicker";
 import Section6FormRow from "./form-items/Section6FormRow";
 import Section7FormRow from "./form-items/Section7FormRow";
@@ -35,7 +38,6 @@ import Section13FormRow from "./form-items/Section13FormRow";
 import Section14FormRow from "./form-items/Section14FormRow";
 import Section15FormRow from "./form-items/Section15FormRow";
 import Section16FormRow from "./form-items/Section16FormRow";
-import { CONNSTR } from "../../App";
 
 type onSubmitFn = (item: BaseFullCaseObject) => void;
 
@@ -604,8 +606,6 @@ const CaseForm = (props: {
   approve?: boolean;
   onSubmit: onSubmitFn;
 }) => {
-  console.log(props.item);
-
   const [isEditing, setIsEditing] = useState(props.new || false);
   const [showModal, setShowModal] = useState(false);
   let navigate = useNavigate();
@@ -627,19 +627,37 @@ const CaseForm = (props: {
     setShowModal(false);
   };
 
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
   const onDelete = async (itemId: string) => {
     console.log(itemId);
 
-    console.log(`${CONNSTR}cases.json/${itemId}.json`);
+    try {
+      const responseData = await sendRequest(
+        `${CONNSTR}/cases/${itemId}`,
+        "DELETE",
+        {
+          "Content-Type": "application/json",
+        }
+      );
 
-    const response = await fetch(`${CONNSTR}cases/${itemId}.json`, {
-      method: "DELETE",
-    });
-
-    const data = await response.json();
-    console.log(data);
-    navigate(`/`);
+      console.log(responseData);
+      navigate(`/`);
+    } catch (err) {
+      console.log(err);
+      handleCloseModal();
+    }
   };
+
+  if (isLoading) {
+    return (
+      <Row className="justify-content-center">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </Row>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -659,6 +677,13 @@ const CaseForm = (props: {
           </Button>
         </Modal.Footer>
       </Modal>
+      {error && (
+        <Row className="justify-content-center">
+          <Alert variant="danger" onClose={clearError} dismissible>
+            Ocorreu um erro: {error}
+          </Alert>
+        </Row>
+      )}
       <Formik
         // validationSchema={schema}
         enableReinitialize={true}

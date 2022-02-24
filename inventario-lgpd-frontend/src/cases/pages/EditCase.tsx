@@ -8,7 +8,6 @@ import { CONNSTR } from "./../../App";
 import {
   BaseFullCaseObject,
   emptyBaseFullCaseObject,
-  FullCaseObject,
 } from "../../shared/models/cases.model";
 import { useHttpClient } from "./../../shared/hooks/http-hook";
 import CaseForm from "../components/CaseForm";
