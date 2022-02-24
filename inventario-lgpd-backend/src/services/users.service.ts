@@ -98,6 +98,8 @@ export const create = async (receivedUser: BaseUser): Promise<User> => {
   try {
     await newUser.save();
   } catch (error) {
+    console.log(error);
+
     throw new Error("Não foi possível salvar dados na base");
   }
 

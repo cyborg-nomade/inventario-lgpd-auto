@@ -27,12 +27,6 @@ export const usersRouter = express.Router();
 //    - faz login do usuário
 usersRouter.post("/login", loginUser);
 
-usersRouter.use(checkAuth);
-
-// - GET users/
-//   - retorna todos os usuários cadastrados
-usersRouter.get("/", getUsers);
-
 // - POST users/
 //   - registra um novo usuário
 usersRouter.post(
@@ -40,6 +34,12 @@ usersRouter.post(
   [check("username").not().isEmpty(), check("password").isLength({ min: 8 })],
   registerUser
 );
+
+usersRouter.use(checkAuth);
+
+// - GET users/
+//   - retorna todos os usuários cadastrados
+usersRouter.get("/", getUsers);
 
 // - GET users/:uid
 //   - retorna o usuário especificado

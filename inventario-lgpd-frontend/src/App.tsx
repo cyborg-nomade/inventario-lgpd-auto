@@ -20,34 +20,34 @@ import AllCasesPage from "./cases/pages/AllCasesPage";
 export const CONNSTR = "http://localhost:7000/api";
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState("");
   const [isComite, setIsComite] = useState(false);
   const [userId, setUserId] = useState("");
 
-  const login = useCallback((uid: string, ic: boolean) => {
-    console.log(uid, ic);
+  const login = useCallback((uid: string, ic: boolean, token: string) => {
+    console.log(uid, ic, token);
 
-    setIsLoggedIn(true);
+    setToken(token);
     setUserId(uid);
     setIsComite(ic);
   }, []);
 
   const logout = useCallback(() => {
-    setIsLoggedIn(false);
+    setToken("");
     setIsComite(false);
     setUserId("");
   }, []);
 
   let routes;
 
-  if (!isLoggedIn) {
+  if (!token) {
     routes = (
       <React.Fragment>
         <Route path="/" element={<Login />} />
         <Route path="*" element={<Navigate to="/" />} />
       </React.Fragment>
     );
-  } else if (isLoggedIn && !isComite) {
+  } else if (token && !isComite) {
     routes = (
       <React.Fragment>
         <Route path="/:uid/cases" element={<UserPage />}>
@@ -78,7 +78,7 @@ const App = () => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, login, logout, isComite, userId }}
+      value={{ isLoggedIn: !!token, login, logout, isComite, userId, token }}
     >
       <MainHeader />
       <Container className="mt-5">

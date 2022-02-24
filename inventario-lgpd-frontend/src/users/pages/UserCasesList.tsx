@@ -10,7 +10,7 @@ import { useHttpClient } from "./../../shared/hooks/http-hook";
 import CasesList from "../../cases/components/CasesList";
 
 const UserCasesList = () => {
-  const uid = useContext(AuthContext).userId;
+  const { userId: uid, token } = useContext(AuthContext);
 
   const [cases, setCases] = useState<CaseItemObject[]>([]);
 
@@ -18,7 +18,18 @@ const UserCasesList = () => {
 
   useEffect(() => {
     const getUserCases = async () => {
-      const responseData = await sendRequest(`${CONNSTR}/cases/user/${uid}`);
+      console.log(token);
+
+      const responseData = await sendRequest(
+        `${CONNSTR}/cases/user/${uid}`,
+        undefined,
+        undefined,
+        {
+          Authorization: "Bearer " + token,
+        }
+      );
+      console.log(responseData);
+
       const loadedCases: CaseItemObject[] = responseData.cases;
       setCases(loadedCases);
     };
@@ -26,7 +37,7 @@ const UserCasesList = () => {
     getUserCases().catch((error) => {
       console.log(error);
     });
-  }, [uid, sendRequest]);
+  }, [uid, sendRequest, token]);
 
   if (isLoading) {
     return (

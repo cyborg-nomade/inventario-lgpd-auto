@@ -47,7 +47,11 @@ const Login = () => {
 
       const receivedUser: User = responseData.user;
 
-      authContext.login(receivedUser.id, receivedUser.isComite);
+      authContext.login(
+        receivedUser.id,
+        receivedUser.isComite,
+        responseData.token
+      );
       navigate(`/${receivedUser.id}/cases`);
     } catch (error) {
       console.log(error);
