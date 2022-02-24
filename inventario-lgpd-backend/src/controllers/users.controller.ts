@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 import { BaseUser, User } from "../models/users.model";
 import * as UserService from "../services/users.service";
@@ -78,13 +80,40 @@ export const loginUser = async (req: Request, res: Response) => {
       userToLogin.username
     );
 
-    if (!identifiedUser || identifiedUser.password !== userToLogin.password) {
+    if (!identifiedUser) {
       return res.status(401).send({ message: "Credenciais incorretas!" });
     }
 
-    identifiedUser.password = "";
+    let isValidPassword;
+    try {
+      isValidPassword = await bcrypt.compare(
+        userToLogin.password,
+        identifiedUser.user.password
+      );
+    } catch (err) {
+      return res.status(500).send({ message: "Erro no login!" });
+    }
 
-    res.status(200).send({ message: "Usuário logado!", user: identifiedUser });
+    if (!isValidPassword) {
+      return res.status(401).send({ message: "Credenciais incorretas!" });
+    }
+
+    identifiedUser.user.password = "";
+
+    let token;
+    try {
+      token = jwt.sign(
+        { userId: identifiedUser.id, username: identifiedUser.user.username },
+        "supersecret_dont_share",
+        { expiresIn: "1h" }
+      );
+    } catch (err) {
+      return res.status(500).send({ message: "Erro no login!" });
+    }
+
+    res
+      .status(200)
+      .send({ message: "Usuário logado!", user: identifiedUser.user, token });
   } catch (error: any) {
     res.status(500).send({ message: error.message });
   }

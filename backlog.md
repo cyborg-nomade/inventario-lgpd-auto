@@ -1,9 +1,8 @@
-# connect front and backend
+# create authentication / authoriation
 
-1- POST call to create new case (OK)
-2- GET calls to load lists (OK)
-3- GET calls to populate edit / approve form (OK)
-4- PUT calls to edit cases (OK)
-5- DELETE calls to remove cases (OK)
-6- POST calls for logging in (OK)
-7- error handling (front and backend) (OK)
+1- hash passwords on the backend (OK)
+2- create tokens on login route (OK)
+3- adapt frontend to receive and store tokens
+4- use tokens in requests to the backend
+5- add auto-login
+6- manage token expiration

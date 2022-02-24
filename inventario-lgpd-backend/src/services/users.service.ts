@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import bcrypt from "bcryptjs";
 
 /**
  * Data Model Interfaces
@@ -42,7 +42,9 @@ export const find = async (id: string): Promise<User> => {
   return foundUser.toObject({ getters: true });
 };
 
-export const findByUserName = async (username: string): Promise<User> => {
+export const findByUserName = async (
+  username: string
+): Promise<{ user: User; id: string }> => {
   let foundUser;
 
   try {
@@ -57,12 +59,11 @@ export const findByUserName = async (username: string): Promise<User> => {
     throw new Error("Usuário não encontrado!");
   }
 
-  return foundUser.toObject({ getters: true });
+  return { user: foundUser.toObject({ getters: true }), id: foundUser.id };
 };
 
 export const create = async (receivedUser: BaseUser): Promise<User> => {
   const isComite = receivedUser.username.includes("comite"); // TO-DO: define function for assigning comite status
-  const userCode = uuidv4();
   const cases: Types.ObjectId[] = [];
 
   let hasUser;
@@ -79,7 +80,20 @@ export const create = async (receivedUser: BaseUser): Promise<User> => {
     throw new Error("Já existe um usuário com este nome!");
   }
 
-  const newUser = new UserModel({ isComite, userCode, cases, ...receivedUser });
+  let hashedPassword;
+
+  try {
+    hashedPassword = await bcrypt.hash(receivedUser.password, 12);
+  } catch (error) {
+    throw new Error("Não foi possível criar o usuário");
+  }
+
+  const newUser = new UserModel({
+    ...receivedUser,
+    isComite,
+    cases,
+    password: hashedPassword,
+  });
 
   try {
     await newUser.save();

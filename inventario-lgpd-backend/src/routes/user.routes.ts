@@ -12,6 +12,7 @@ import {
   loginUser,
 } from "../controllers/users.controller";
 import { check } from "express-validator";
+import { checkAuth } from "../middleware/check-auth.middleware";
 
 /**
  * Router Definition
@@ -21,6 +22,12 @@ export const usersRouter = express.Router();
 /**
  * Controller Definitions
  */
+
+// - POST users/login
+//    - faz login do usuário
+usersRouter.post("/login", loginUser);
+
+usersRouter.use(checkAuth);
 
 // - GET users/
 //   - retorna todos os usuários cadastrados
@@ -33,10 +40,6 @@ usersRouter.post(
   [check("username").not().isEmpty(), check("password").isLength({ min: 8 })],
   registerUser
 );
-
-// - POST users/login
-//    - faz login do usuário
-usersRouter.post("/login", loginUser);
 
 // - GET users/:uid
 //   - retorna o usuário especificado
