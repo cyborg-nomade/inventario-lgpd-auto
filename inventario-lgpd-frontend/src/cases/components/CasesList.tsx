@@ -61,6 +61,8 @@ const headers: {
 ];
 
 const CasesList = (props: { items: CaseItemObject[] }) => {
+  console.log(props);
+
   let navigate = useNavigate();
 
   if (props.items.length === 0) {
@@ -80,6 +82,8 @@ const CasesList = (props: { items: CaseItemObject[] }) => {
   });
 
   const handleRowClick = (row: CaseItemObject) => {
+    console.log(row.id);
+
     navigate(`${row.id}`);
   };
 

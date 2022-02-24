@@ -128,12 +128,15 @@ interface AgenteTratamento {
   email?: string;
 }
 
-const agenteTratamentoSchema = new Schema<AgenteTratamento>({
-  nome: String,
-  area: String,
-  telefone: String,
-  email: String,
-});
+const agenteTratamentoSchema = new Schema<AgenteTratamento>(
+  {
+    nome: String,
+    area: String,
+    telefone: String,
+    email: String,
+  },
+  { _id: false }
+);
 
 export interface itemCategoriaDadosPessoais {
   descricao: string;
@@ -148,7 +151,8 @@ const itemCategoriaDadosPessoaisSchema = new Schema<itemCategoriaDadosPessoais>(
     tempoRetencao: String,
     fonteRetencao: String,
     caminhoRedeSistema: String,
-  }
+  },
+  { _id: false }
 );
 
 interface itemCategoriaTitulares {
@@ -156,10 +160,13 @@ interface itemCategoriaTitulares {
   descricao: string;
 }
 
-const itemCategoriaTitularesSchema = new Schema<itemCategoriaTitulares>({
-  tipoCategoria: String,
-  descricao: String,
-});
+const itemCategoriaTitularesSchema = new Schema<itemCategoriaTitulares>(
+  {
+    tipoCategoria: String,
+    descricao: String,
+  },
+  { _id: false }
+);
 
 interface itemCompartilhamentoDados {
   nomeInstituicao: string;
@@ -167,11 +174,14 @@ interface itemCompartilhamentoDados {
   finalidadeCompartilhamento: string;
 }
 
-const itemCompartilhamentoDadosSchema = new Schema<itemCompartilhamentoDados>({
-  nomeInstituicao: String,
-  dadosCompartilhados: String,
-  finalidadeCompartilhamento: String,
-});
+const itemCompartilhamentoDadosSchema = new Schema<itemCompartilhamentoDados>(
+  {
+    nomeInstituicao: String,
+    dadosCompartilhados: String,
+    finalidadeCompartilhamento: String,
+  },
+  { _id: false }
+);
 
 interface itemMedidasSegurancaPrivacidade {
   tipo: tipoMedidaSegurancaPrivacidade;
@@ -179,10 +189,13 @@ interface itemMedidasSegurancaPrivacidade {
 }
 
 const itemMedidasSegurancaPrivacidadeSchema =
-  new Schema<itemMedidasSegurancaPrivacidade>({
-    tipo: String,
-    descricaoControles: String,
-  });
+  new Schema<itemMedidasSegurancaPrivacidade>(
+    {
+      tipo: String,
+      descricaoControles: String,
+    },
+    { _id: false }
+  );
 
 interface itemTransferenciaInternacional {
   nomeOrganizacao: string;
@@ -192,12 +205,15 @@ interface itemTransferenciaInternacional {
 }
 
 const itemTransferenciaInternacionalSchema =
-  new Schema<itemTransferenciaInternacional>({
-    nomeOrganizacao: String,
-    pais: String,
-    dadosTransferidos: String,
-    tipoGarantia: String,
-  });
+  new Schema<itemTransferenciaInternacional>(
+    {
+      nomeOrganizacao: String,
+      pais: String,
+      dadosTransferidos: String,
+      tipoGarantia: String,
+    },
+    { _id: false }
+  );
 
 interface itemContratoTI {
   numeroContrato: string;
@@ -206,30 +222,39 @@ interface itemContratoTI {
   emailGestorContrato: string;
 }
 
-const itemContratoTISchema = new Schema<itemContratoTI>({
-  numeroContrato: String,
-  numeroProcessoContratacao: String,
-  objetoContrato: String,
-  emailGestorContrato: String,
-});
+const itemContratoTISchema = new Schema<itemContratoTI>(
+  {
+    numeroContrato: String,
+    numeroProcessoContratacao: String,
+    objetoContrato: String,
+    emailGestorContrato: String,
+  },
+  { _id: false }
+);
 
 interface itemRiscoPrivacidade {
   tipoRisco: tipoRiscoPrivacidade;
   observacoes: string;
 }
 
-const itemRiscoPrivacidadeSchema = new Schema<itemRiscoPrivacidade>({
-  tipoRisco: String,
-  observacoes: String,
-});
+const itemRiscoPrivacidadeSchema = new Schema<itemRiscoPrivacidade>(
+  {
+    tipoRisco: String,
+    observacoes: String,
+  },
+  { _id: false }
+);
 
 interface itemObservacoesProcesso {
   descricaoObs: string;
 }
 
-const itemObservacoesProcessoSchema = new Schema<itemObservacoesProcesso>({
-  descricaoObs: String,
-});
+const itemObservacoesProcessoSchema = new Schema<itemObservacoesProcesso>(
+  {
+    descricaoObs: String,
+  },
+  { _id: false }
+);
 
 export interface CaseItemObject {
   nome: string;

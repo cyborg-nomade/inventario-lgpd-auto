@@ -1,86 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 
 import { CONNSTR } from "./../../App";
-
 import {
-  FullCaseObject,
-  emptyFullCaseObject,
+  BaseFullCaseObject,
+  emptyBaseFullCaseObject,
 } from "../../shared/models/cases.model";
+import { AuthContext } from "../../shared/context/auth-context";
+import { useHttpClient } from "./../../shared/hooks/http-hook";
 import CaseForm from "../components/CaseForm";
-import { USERS } from "./AllCasesList";
 
 const EditCase = () => {
-  const cid = useParams().cid || 0;
-  const uid = useParams().uid || 101;
+  const cid = useParams().cid || "";
+
+  const uid = useContext(AuthContext).userId;
 
   let navigate = useNavigate();
 
-  const [fullCase, setFullCase] = useState<FullCaseObject>(
-    emptyFullCaseObject()
+  const [fullCase, setFullCase] = useState<BaseFullCaseObject>(
+    emptyBaseFullCaseObject()
   );
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   useEffect(() => {
-    const getAllCases = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      const response = await fetch(`${CONNSTR}cases/${cid}.json`);
-
-      if (!response.ok) {
-        throw new Error("Algo deu errado!");
-      }
-
-      console.log(response);
-
-      const responseData = await response.json();
-
-      let loadedCase: FullCaseObject = emptyFullCaseObject();
-
-      console.log(loadedCase.fasesCicloTratamento.verbos);
-      console.log(responseData.fasesCicloTratamento.verbos);
-
-      loadedCase = {
-        ...loadedCase,
-        ...responseData,
-        fasesCicloTratamento: {
-          ...loadedCase.fasesCicloTratamento,
-          ...responseData.fasesCicloTratamento,
-          verbos:
-            responseData.fasesCicloTratamento.verbos ??
-            loadedCase.fasesCicloTratamento.verbos,
-        },
-        categoriaDadosPessoais: {
-          ...responseData.categoriaDadosPessoais,
-          outros: {
-            ...loadedCase.categoriaDadosPessoais.outros,
-            ...responseData.categoriaDadosPessoais.outros,
-          },
-        },
-      };
-
-      console.log(loadedCase.fasesCicloTratamento.verbos);
-
+    const getCaseToEdit = async () => {
+      const responseData = await sendRequest(`${CONNSTR}/cases/${cid}`);
+      let loadedCase = responseData.case;
       setFullCase(loadedCase);
-      setIsLoading(false);
     };
 
-    getAllCases().catch((error) => {
-      setIsLoading(false);
-      setError(error.message);
+    getCaseToEdit().catch((error) => {
+      console.log(error);
     });
 
-    return () => {
-      setFullCase(emptyFullCaseObject());
-      setIsLoading(false);
-      setError(null);
-    };
-  }, [cid]);
+    // return () => {
+    //   setFullCase(emptyFullCaseObject());
+    // };
+  }, [cid, sendRequest]);
 
   if (isLoading) {
     return (
@@ -92,19 +52,11 @@ const EditCase = () => {
     );
   }
 
-  if (error) {
-    return (
-      <Row className="justify-content-center">
-        <Alert variant="danger">{error}</Alert>
-      </Row>
-    );
-  }
-
-  const submitFormHandler = async (item: FullCaseObject) => {
+  const submitFormHandler = async (item: BaseFullCaseObject) => {
     console.log(item);
 
     item.area = item.extensaoEncarregado.area || "";
-    item.criador = USERS[+uid - 1];
+    item.criador = uid;
     for (const value of Object.values(item.categoriaDadosPessoaisSensiveis)) {
       if (value.descricao !== "Não se aplica") {
         item.dadosPessoaisSensiveis = true;
@@ -112,24 +64,35 @@ const EditCase = () => {
     }
 
     console.log(item);
-    console.log(`${CONNSTR}cases.json/${cid}.json`);
 
-    const response = await fetch(`${CONNSTR}cases/${cid}.json`, {
-      method: "PUT",
-      body: JSON.stringify(item),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const responseData = await sendRequest(
+        `${CONNSTR}/cases/${cid}`,
+        "PUT",
+        JSON.stringify(item),
+        {
+          "Content-Type": "application/json",
+        }
+      );
 
-    const data = await response.json();
-    console.log(data);
-    navigate(`/`);
+      console.log(responseData);
+      navigate(`/`);
+    } catch (err) {
+      console.log(err);
+      setFullCase(item);
+    }
   };
 
   return (
     <React.Fragment>
       <h1>Editar Item</h1>
+      {error && (
+        <Row className="justify-content-center">
+          <Alert variant="danger" onClose={clearError} dismissible>
+            Ocorreu um erro: {error}
+          </Alert>
+        </Row>
+      )}
       <CaseForm item={fullCase} edit={true} onSubmit={submitFormHandler} />
     </React.Fragment>
   );

@@ -316,13 +316,9 @@ export const findAll = async (): Promise<CaseItemObject[]> => {
     throw new Error("Nenhum caso encontrado na base de dados!");
   }
 
-  const reducedCases: CaseItemObject[] = allStoredCases
+  return allStoredCases
     .map((c) => c.toObject({ getters: true }))
-    .map((c) => {
-      return { ...reduceCaseObject(c), id: c.id };
-    });
-
-  return reducedCases;
+    .map((c) => ({ ...reduceCaseObject(c), id: c.id }));
 };
 
 export const findByUser = async (uid: string): Promise<CaseItemObject[]> => {
@@ -346,7 +342,9 @@ export const findByUser = async (uid: string): Promise<CaseItemObject[]> => {
 
   return foundCases
     .map((c) => c.toObject({ getters: true }))
-    .map((c) => reduceCaseObject(c));
+    .map((c) => {
+      return { ...reduceCaseObject(c), id: c.id };
+    });
 };
 
 export const find = async (id: string): Promise<FullCaseObject> => {
@@ -424,8 +422,6 @@ export const update = async (
     throw new Error("Não foi encontrado um caso de uso com o id fornecido!");
   }
 
-  console.log(updatedCase);
-
   try {
     await updatedCase.updateOne(caseUpdate);
   } catch (error) {
@@ -474,8 +470,6 @@ export const remove = async (id: string): Promise<FullCaseObject> => {
   if (!caseToRemoveUser) {
     throw new Error("Não foi encontrado um usuário com o id fornecido!");
   }
-
-  console.log(caseToRemoveUser);
 
   try {
     const session = await mongoose.startSession();

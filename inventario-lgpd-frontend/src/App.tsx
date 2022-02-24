@@ -17,26 +17,25 @@ import ApproveCase from "./cases/pages/ApproveCase";
 import ApprovePage from "./cases/pages/ApprovePage";
 import AllCasesPage from "./cases/pages/AllCasesPage";
 
-export const CONNSTR =
-  "https://inventario-lgpd-auto-default-rtdb.firebaseio.com/";
+export const CONNSTR = "http://localhost:7000/api";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isComite, setIsComite] = useState(false);
-  const [userCode, setUserCode] = useState("");
+  const [userId, setUserId] = useState("");
 
-  const login = useCallback((uc: string, ic: boolean) => {
-    console.log(uc, ic);
+  const login = useCallback((uid: string, ic: boolean) => {
+    console.log(uid, ic);
 
     setIsLoggedIn(true);
-    setUserCode(uc);
+    setUserId(uid);
     setIsComite(ic);
   }, []);
 
   const logout = useCallback(() => {
     setIsLoggedIn(false);
     setIsComite(false);
-    setUserCode("");
+    setUserId("");
   }, []);
 
   let routes;
@@ -56,8 +55,8 @@ const App = () => {
           <Route path="new" element={<NewCase />} />
           <Route path=":cid" element={<EditCase />} />
         </Route>
-        <Route path="/" element={<Navigate to={`../${userCode}/cases`} />} />
-        <Route path="/*" element={<Navigate to={`../${userCode}/cases`} />} />
+        <Route path="/" element={<Navigate to={`../${userId}/cases`} />} />
+        <Route path="/*" element={<Navigate to={`../${userId}/cases`} />} />
       </React.Fragment>
     );
   } else {
@@ -79,7 +78,7 @@ const App = () => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, login, logout, isComite, userCode }}
+      value={{ isLoggedIn, login, logout, isComite, userId }}
     >
       <MainHeader />
       <Container className="mt-5">
