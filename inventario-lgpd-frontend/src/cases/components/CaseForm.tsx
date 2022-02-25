@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik, getIn, FieldArray } from "formik";
 // import * as yup from "yup";
@@ -38,6 +38,7 @@ import Section13FormRow from "./form-items/Section13FormRow";
 import Section14FormRow from "./form-items/Section14FormRow";
 import Section15FormRow from "./form-items/Section15FormRow";
 import Section16FormRow from "./form-items/Section16FormRow";
+import { AuthContext } from "../../shared/context/auth-context";
 
 type onSubmitFn = (item: BaseFullCaseObject) => void;
 
@@ -606,6 +607,8 @@ const CaseForm = (props: {
   approve?: boolean;
   onSubmit: onSubmitFn;
 }) => {
+  const { token } = useContext(AuthContext);
+
   const [isEditing, setIsEditing] = useState(props.new || false);
   const [showModal, setShowModal] = useState(false);
   let navigate = useNavigate();
@@ -636,8 +639,10 @@ const CaseForm = (props: {
       const responseData = await sendRequest(
         `${CONNSTR}/cases/${itemId}`,
         "DELETE",
+        undefined,
         {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         }
       );
 

@@ -16,7 +16,7 @@ import CaseForm from "../components/CaseForm";
 const EditCase = () => {
   const cid = useParams().cid || "";
 
-  const uid = useContext(AuthContext).userId;
+  const { userId: uid, token } = useContext(AuthContext);
 
   let navigate = useNavigate();
 
@@ -28,7 +28,12 @@ const EditCase = () => {
 
   useEffect(() => {
     const getCaseToEdit = async () => {
-      const responseData = await sendRequest(`${CONNSTR}/cases/${cid}`);
+      const responseData = await sendRequest(
+        `${CONNSTR}/cases/${cid}`,
+        undefined,
+        undefined,
+        { Authorization: "Bearer " + token }
+      );
       let loadedCase = responseData.case;
       setFullCase(loadedCase);
     };
@@ -40,7 +45,7 @@ const EditCase = () => {
     // return () => {
     //   setFullCase(emptyFullCaseObject());
     // };
-  }, [cid, sendRequest]);
+  }, [cid, sendRequest, token]);
 
   if (isLoading) {
     return (
@@ -72,6 +77,7 @@ const EditCase = () => {
         JSON.stringify(item),
         {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         }
       );
 

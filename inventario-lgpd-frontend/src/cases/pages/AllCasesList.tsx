@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
@@ -7,15 +7,23 @@ import { CONNSTR } from "./../../App";
 import { CaseItemObject } from "../../shared/models/cases.model";
 import { useHttpClient } from "./../../shared/hooks/http-hook";
 import CasesList from "../components/CasesList";
+import { AuthContext } from "../../shared/context/auth-context";
 
 const AllCasesList = () => {
+  const { token } = useContext(AuthContext);
+
   const [cases, setCases] = useState<CaseItemObject[]>([]);
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   useEffect(() => {
     const getAllCases = async () => {
-      const responseData = await sendRequest(`${CONNSTR}/cases/`);
+      const responseData = await sendRequest(
+        `${CONNSTR}/cases/`,
+        undefined,
+        undefined,
+        { Authorization: "Bearer " + token }
+      );
       const loadedCases: CaseItemObject[] = responseData.cases;
       setCases(loadedCases);
     };
@@ -23,7 +31,7 @@ const AllCasesList = () => {
     getAllCases().catch((error) => {
       console.log(error);
     });
-  }, [sendRequest]);
+  }, [sendRequest, token]);
 
   if (isLoading) {
     return (
