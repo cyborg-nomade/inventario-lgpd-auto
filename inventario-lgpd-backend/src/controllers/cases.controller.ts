@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 
 import { CaseItemObject, FullCaseObject } from "../models/cases.model";
 import * as CaseService from "../services/cases.service";
-import HttpException from "./../common/http-exception";
 
 export const getCases = async (req: Request, res: Response) => {
   try {
@@ -10,7 +9,7 @@ export const getCases = async (req: Request, res: Response) => {
 
     res.status(200).send({ cases: cases });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
+    res.status(error.status).send({ message: error.message });
   }
 };
 
