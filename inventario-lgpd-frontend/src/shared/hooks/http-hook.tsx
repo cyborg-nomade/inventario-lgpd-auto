@@ -1,8 +1,10 @@
 import { useState, useCallback, useRef, useEffect } from "react";
+import HttpException from "./../common/http-exception";
 
 export const useHttpClient = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isWarning, setIsWarning] = useState(false);
 
   const activeHttpRequests = useRef<AbortController[]>([]);
 
@@ -36,7 +38,7 @@ export const useHttpClient = () => {
         );
 
         if (!response.ok) {
-          throw new Error(responseData.message);
+          throw new HttpException(response.status, responseData.message);
         }
 
         setIsLoading(false);
@@ -44,6 +46,9 @@ export const useHttpClient = () => {
       } catch (error: any) {
         setIsLoading(false);
         setError(error.message);
+        if (error.status > 402 && error.status < 500) {
+          setIsWarning(true);
+        }
         throw error;
       }
     },
@@ -60,5 +65,5 @@ export const useHttpClient = () => {
     };
   }, []);
 
-  return { isLoading, error, sendRequest, clearError };
+  return { isLoading, error, isWarning, sendRequest, clearError };
 };

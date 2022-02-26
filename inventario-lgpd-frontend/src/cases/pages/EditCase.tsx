@@ -24,7 +24,8 @@ const EditCase = () => {
     emptyBaseFullCaseObject()
   );
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, isWarning, sendRequest, clearError } =
+    useHttpClient();
 
   useEffect(() => {
     const getCaseToEdit = async () => {
@@ -93,11 +94,13 @@ const EditCase = () => {
     <React.Fragment>
       <h1>Editar Item</h1>
       {error && (
-        <Row className="justify-content-center">
-          <Alert variant="danger" onClose={clearError} dismissible>
-            Ocorreu um erro: {error}
-          </Alert>
-        </Row>
+        <Alert
+          variant={isWarning ? "warning" : "danger"}
+          onClose={clearError}
+          dismissible
+        >
+          Ocorreu um erro: {error}
+        </Alert>
       )}
       <CaseForm item={fullCase} edit={true} onSubmit={submitFormHandler} />
     </React.Fragment>

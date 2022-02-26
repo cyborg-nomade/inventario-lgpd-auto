@@ -21,7 +21,8 @@ const NewCase = () => {
     emptyBaseFullCaseObject()
   );
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, isWarning, sendRequest, clearError } =
+    useHttpClient();
 
   const submitFormHandler = async (item: BaseFullCaseObject) => {
     console.log(item);
@@ -69,11 +70,13 @@ const NewCase = () => {
     <React.Fragment>
       <h1>Registrar Novo Item</h1>
       {error && (
-        <Row className="justify-content-center">
-          <Alert variant="danger" onClose={clearError} dismissible>
-            Ocorreu um erro: {error}
-          </Alert>
-        </Row>
+        <Alert
+          variant={isWarning ? "warning" : "danger"}
+          onClose={clearError}
+          dismissible
+        >
+          Ocorreu um erro: {error}
+        </Alert>
       )}
       <CaseForm new={true} onSubmit={submitFormHandler} item={fullCase} />
     </React.Fragment>

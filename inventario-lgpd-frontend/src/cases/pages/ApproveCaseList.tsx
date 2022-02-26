@@ -14,7 +14,8 @@ const ApproveCaseList = () => {
 
   const [cases, setCases] = useState<CaseItemObject[]>([]);
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, isWarning, sendRequest, clearError } =
+    useHttpClient();
 
   useEffect(() => {
     const getAllCases = async () => {
@@ -49,11 +50,13 @@ const ApproveCaseList = () => {
     <React.Fragment>
       <h1>Aprovações Pendentes</h1>
       {error && (
-        <Row className="justify-content-center">
-          <Alert variant="danger" onClose={clearError} dismissible>
-            {error}
-          </Alert>
-        </Row>
+        <Alert
+          variant={isWarning ? "warning" : "danger"}
+          onClose={clearError}
+          dismissible
+        >
+          {error}
+        </Alert>
       )}
       <CasesList items={notApprovedCases} />
     </React.Fragment>

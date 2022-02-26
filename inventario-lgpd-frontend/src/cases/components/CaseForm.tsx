@@ -683,11 +683,9 @@ const CaseForm = (props: {
         </Modal.Footer>
       </Modal>
       {error && (
-        <Row className="justify-content-center">
-          <Alert variant="danger" onClose={clearError} dismissible>
-            Ocorreu um erro: {error}
-          </Alert>
-        </Row>
+        <Alert variant="danger" onClose={clearError} dismissible>
+          Ocorreu um erro: {error}
+        </Alert>
       )}
       <Formik
         // validationSchema={schema}

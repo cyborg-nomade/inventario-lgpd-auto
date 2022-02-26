@@ -14,7 +14,8 @@ const UserCasesList = () => {
 
   const [cases, setCases] = useState<CaseItemObject[]>([]);
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, isWarning, sendRequest, clearError } =
+    useHttpClient();
 
   useEffect(() => {
     const getUserCases = async () => {
@@ -53,11 +54,13 @@ const UserCasesList = () => {
     <React.Fragment>
       <h1>Página Inicial - Todos os seus itens</h1>
       {error && (
-        <Row className="justify-content-center">
-          <Alert variant="danger" onClose={clearError} dismissible>
-            {error}
-          </Alert>
-        </Row>
+        <Alert
+          variant={isWarning ? "warning" : "danger"}
+          onClose={clearError}
+          dismissible
+        >
+          {error}
+        </Alert>
       )}
       <CasesList items={cases} />
     </React.Fragment>
