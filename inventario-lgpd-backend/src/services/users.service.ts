@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
  */
 import mongoose, { Types } from "mongoose";
 import { BaseUser, User, UserModel } from "../models/users.model";
+import HttpException from "./../common/http-exception";
 
 /**
  * Service Methods
@@ -14,7 +15,7 @@ export const findAll = async (): Promise<User[]> => {
   try {
     users = await UserModel.find({}, "-password");
   } catch (error) {
-    throw new Error("Não foi possível recuperar dados da base");
+    throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
   return users.map((user) => user.toObject({ getters: true }));
@@ -24,7 +25,7 @@ export const find = async (id: string): Promise<User> => {
   let foundUser;
 
   if (!mongoose.isValidObjectId(id)) {
-    throw new Error("Id fornecida é inválida para a busca");
+    throw new HttpException(400, "Id fornecida é inválida para a busca");
   }
 
   try {
@@ -32,11 +33,11 @@ export const find = async (id: string): Promise<User> => {
   } catch (error) {
     console.log(error);
 
-    throw new Error("Não foi possível recuperar dados da base");
+    throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
   if (!foundUser) {
-    throw new Error("Usuário não encontrado!");
+    throw new HttpException(404, "Usuário não encontrado!");
   }
 
   return foundUser.toObject({ getters: true });
@@ -52,11 +53,11 @@ export const findByUserName = async (
       username: username,
     });
   } catch (error) {
-    throw new Error("Não foi possível recuperar dados da base");
+    throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
   if (!foundUser) {
-    throw new Error("Usuário não encontrado!");
+    throw new HttpException(404, "Usuário não encontrado!");
   }
 
   return { user: foundUser.toObject({ getters: true }), id: foundUser.id };
@@ -73,11 +74,11 @@ export const create = async (receivedUser: BaseUser): Promise<User> => {
       username: receivedUser.username,
     });
   } catch (error) {
-    throw new Error("Não foi possível recuperar dados da base");
+    throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
   if (hasUser) {
-    throw new Error("Já existe um usuário com este nome!");
+    throw new HttpException(400, "Já existe um usuário com este nome!");
   }
 
   let hashedPassword;
@@ -85,7 +86,7 @@ export const create = async (receivedUser: BaseUser): Promise<User> => {
   try {
     hashedPassword = await bcrypt.hash(receivedUser.password, 12);
   } catch (error) {
-    throw new Error("Não foi possível criar o usuário");
+    throw new HttpException(500, "Não foi possível criar o usuário");
   }
 
   const newUser = new UserModel({
@@ -100,7 +101,7 @@ export const create = async (receivedUser: BaseUser): Promise<User> => {
   } catch (error) {
     console.log(error);
 
-    throw new Error("Não foi possível salvar dados na base");
+    throw new HttpException(500, "Não foi possível salvar dados na base");
   }
 
   return newUser.toObject({ getters: true });
@@ -115,27 +116,33 @@ export const update = async (
   try {
     updatedUser = await UserModel.findById(id);
   } catch (error) {
-    throw new Error("Não foi possível recuperar dados da base");
+    throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
   if (!updatedUser) {
-    throw new Error("Não foi encontrado um usuário com o id fornecido!");
+    throw new HttpException(
+      400,
+      "Não foi encontrado um usuário com o id fornecido!"
+    );
   }
 
   try {
     await updatedUser.updateOne(userUpdate);
   } catch (error) {
-    throw new Error("Não foi possível recuperar dados da base");
+    throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
   try {
     updatedUser = await UserModel.findById(id);
   } catch (error) {
-    throw new Error("Não foi possível recuperar dados da base");
+    throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
   if (!updatedUser) {
-    throw new Error("Não foi encontrado um usuário com o id fornecido!");
+    throw new HttpException(
+      404,
+      "Não foi encontrado um usuário com o id fornecido!"
+    );
   }
 
   return updatedUser.toObject({ getters: true });
@@ -147,7 +154,7 @@ export const remove = async (id: string): Promise<null | User> => {
   try {
     userToRemove = await UserModel.findById(id);
   } catch (error) {
-    throw new Error("Não foi possível recuperar dados da base");
+    throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
   if (!userToRemove) {
@@ -157,7 +164,7 @@ export const remove = async (id: string): Promise<null | User> => {
   try {
     await userToRemove.remove();
   } catch (error) {
-    throw new Error("Erro na conexão de banco de dados");
+    throw new HttpException(500, "Erro na conexão de banco de dados");
   }
 
   return userToRemove.toObject({ getters: true });

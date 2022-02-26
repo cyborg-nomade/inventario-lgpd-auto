@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { CaseItemObject, FullCaseObject } from "../models/cases.model";
 import * as CaseService from "../services/cases.service";
+import HttpException from "./../common/http-exception";
 
 export const getCases = async (req: Request, res: Response) => {
   try {
@@ -20,7 +21,7 @@ export const getCasesByUser = async (req: Request, res: Response) => {
 
     res.status(200).send({ cases: userCases });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
+    res.status(error.status).send({ message: error.message });
   }
 };
 
@@ -31,7 +32,7 @@ export const getCasesById = async (req: Request, res: Response) => {
 
     return res.status(200).send({ case: reqCase });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
+    res.status(error.status).send({ message: error.message });
   }
 };
 
@@ -42,7 +43,7 @@ export const registerCase = async (req: Request, res: Response) => {
     const newCase = await CaseService.create(receivedCase);
     res.status(201).send({ case: newCase });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
+    res.status(error.status).send({ message: error.message });
   }
 };
 
@@ -54,7 +55,7 @@ export const updateCase = async (req: Request, res: Response) => {
     const updatedCase = await CaseService.update(id, caseUpdate);
     return res.status(200).send({ case: updatedCase });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
+    res.status(error.status).send({ message: error.message });
   }
 };
 
@@ -67,6 +68,6 @@ export const removeCase = async (req: Request, res: Response) => {
       .status(200)
       .send({ message: "Caso deletado com sucesso", case: removedCase });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
+    res.status(error.status).send({ message: error.message });
   }
 };

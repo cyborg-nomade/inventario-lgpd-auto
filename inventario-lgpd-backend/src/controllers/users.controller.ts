@@ -12,7 +12,7 @@ export const getUsers = async (req: Request, res: Response) => {
 
     res.status(200).send({ users: users });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
+    res.status(error.status).send({ message: error.message });
   }
 };
 
@@ -23,7 +23,7 @@ export const getUserById = async (req: Request, res: Response) => {
 
     return res.status(200).send({ user: reqUser });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
+    res.status(error.status).send({ message: error.message });
   }
 };
 
@@ -31,7 +31,7 @@ export const registerUser = async (req: Request, res: Response) => {
   try {
     const error = validationResult(req);
     if (!error.isEmpty()) {
-      return res.status(422).send({ message: "Requisição inválida!" });
+      return res.status(400).send({ message: "Requisição inválida!" });
     }
 
     const receivedUser: BaseUser = req.body;
@@ -39,7 +39,7 @@ export const registerUser = async (req: Request, res: Response) => {
     const newUser = await UserService.create(receivedUser);
     res.status(201).send({ user: newUser });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
+    res.status(error.status).send({ message: error.message });
   }
 };
 
@@ -51,7 +51,7 @@ export const updateUser = async (req: Request, res: Response) => {
     const updatedUser = await UserService.update(id, userUpdate);
     return res.status(200).send({ user: updatedUser });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
+    res.status(error.status).send({ message: error.message });
   }
 };
 
@@ -68,7 +68,7 @@ export const removeUser = async (req: Request, res: Response) => {
 
     res.status(404).send({ message: "Usuário não encontrado" });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
+    res.status(error.status).send({ message: error.message });
   }
 };
 
@@ -90,8 +90,8 @@ export const loginUser = async (req: Request, res: Response) => {
         userToLogin.password,
         identifiedUser.user.password
       );
-    } catch (err) {
-      return res.status(500).send({ message: "Erro no login!" });
+    } catch (error: any) {
+      return res.status(error.status).send({ message: "Erro no login!" });
     }
 
     if (!isValidPassword) {
@@ -115,6 +115,6 @@ export const loginUser = async (req: Request, res: Response) => {
       .status(200)
       .send({ message: "Usuário logado!", user: identifiedUser.user, token });
   } catch (error: any) {
-    res.status(500).send({ message: error.message });
+    res.status(error.status).send({ message: error.message });
   }
 };
