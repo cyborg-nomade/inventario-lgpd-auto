@@ -58,7 +58,7 @@ export const updateCase = async (req: Request, res: Response) => {
       !userUpdating.isComite &&
       caseUpdate.criador.toString() !== req.userData.userId
     ) {
-      return res.status(404).send({
+      return res.status(401).send({
         message: "Você não tem permissão para executar esta operação",
       });
     }
@@ -81,7 +81,7 @@ export const removeCase = async (req: Request, res: Response) => {
       !userDeleting.isComite &&
       caseToDelete.criador.toString() !== req.userData.userId
     ) {
-      return res.status(404).send({
+      return res.status(401).send({
         message: "Você não tem permissão para executar esta operação",
       });
     }
