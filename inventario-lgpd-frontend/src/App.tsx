@@ -25,11 +25,13 @@ const App = () => {
   const [userId, setUserId] = useState("");
 
   const login = useCallback((uid: string, ic: boolean, token: string) => {
-    console.log(uid, ic, token);
-
     setToken(token);
     setUserId(uid);
     setIsComite(ic);
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({ token, uid, isComite: ic })
+    );
   }, []);
 
   const logout = useCallback(() => {
