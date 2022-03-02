@@ -22,10 +22,12 @@ export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
+      console.log("no token received");
       throw new HttpException(401, "Falha na autenticação");
     }
 
     if (!process.env.SECRET) {
+      console.log("no secret env variable");
       process.exit(1);
     }
 
@@ -39,6 +41,10 @@ export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
     };
     next();
   } catch (err: any) {
+    console.log("auth error:");
+
+    console.log(err);
+
     return res.status(401).send({ message: "Falha na autenticação" });
   }
 };

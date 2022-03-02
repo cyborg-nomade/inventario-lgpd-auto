@@ -20,8 +20,6 @@ export const useHttpClient = () => {
       activeHttpRequests.current.push(httpAbortController);
 
       try {
-        console.log(headers);
-
         const response = await fetch(url, {
           method,
           body,
@@ -44,6 +42,9 @@ export const useHttpClient = () => {
         setIsLoading(false);
         return responseData;
       } catch (error: any) {
+        console.log("hook error log:");
+        console.log(error);
+
         setIsLoading(false);
         setError(error.message);
         if (error.status > 402 && error.status < 500) {

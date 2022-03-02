@@ -104,7 +104,7 @@ export const loginUser = async (req: Request, res: Response) => {
     try {
       token = jwt.sign(
         { userId: identifiedUser.id, username: identifiedUser.user.username },
-        "supersecret_dont_share",
+        process.env.SECRET as string,
         { expiresIn: "1h" }
       );
     } catch (err) {
