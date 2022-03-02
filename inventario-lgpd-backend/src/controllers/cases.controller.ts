@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 
 import { CaseItemObject, FullCaseObject } from "../models/cases.model";
 import * as CaseService from "../services/cases.service";
+import * as UserService from "../services/users.service";
 
 export const getCases = async (req: Request, res: Response) => {
   try {
@@ -51,6 +52,17 @@ export const updateCase = async (req: Request, res: Response) => {
     const id: string = req.params.cid;
     const caseUpdate: FullCaseObject = req.body;
 
+    const userUpdating = await UserService.find(req.userData.userId);
+
+    if (
+      !userUpdating.isComite &&
+      caseUpdate.criador.toString() !== req.userData.userId
+    ) {
+      return res.status(404).send({
+        message: "Você não tem permissão para executar esta operação",
+      });
+    }
+
     const updatedCase = await CaseService.update(id, caseUpdate);
     return res.status(200).send({ case: updatedCase });
   } catch (error: any) {
@@ -61,6 +73,18 @@ export const updateCase = async (req: Request, res: Response) => {
 export const removeCase = async (req: Request, res: Response) => {
   try {
     const id: string = req.params.cid;
+
+    const userDeleting = await UserService.find(req.userData.userId);
+    const caseToDelete = await CaseService.find(id);
+
+    if (
+      !userDeleting.isComite &&
+      caseToDelete.criador.toString() !== req.userData.userId
+    ) {
+      return res.status(404).send({
+        message: "Você não tem permissão para executar esta operação",
+      });
+    }
 
     const removedCase = await CaseService.remove(id);
     return res
