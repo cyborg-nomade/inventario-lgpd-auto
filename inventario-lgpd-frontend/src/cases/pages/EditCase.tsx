@@ -14,18 +14,17 @@ import { useHttpClient } from "./../../shared/hooks/http-hook";
 import CaseForm from "../components/CaseForm";
 
 const EditCase = () => {
-  const cid = useParams().cid || "";
-
-  const { userId: uid, token } = useContext(AuthContext);
-
-  let navigate = useNavigate();
-
   const [fullCase, setFullCase] = useState<BaseFullCaseObject>(
     emptyBaseFullCaseObject()
   );
 
+  const { userId: uid, token } = useContext(AuthContext);
+
   const { isLoading, error, isWarning, sendRequest, clearError } =
     useHttpClient();
+
+  const cid = useParams().cid || "";
+  let navigate = useNavigate();
 
   useEffect(() => {
     const getCaseToEdit = async () => {
@@ -42,10 +41,6 @@ const EditCase = () => {
     getCaseToEdit().catch((error) => {
       console.log(error);
     });
-
-    // return () => {
-    //   setFullCase(emptyFullCaseObject());
-    // };
   }, [cid, sendRequest, token]);
 
   if (isLoading) {
@@ -59,8 +54,6 @@ const EditCase = () => {
   }
 
   const submitFormHandler = async (item: BaseFullCaseObject) => {
-    console.log(item);
-
     item.area = item.extensaoEncarregado.area || "";
     item.criador = uid;
     for (const value of Object.values(item.categoriaDadosPessoaisSensiveis)) {
@@ -69,10 +62,8 @@ const EditCase = () => {
       }
     }
 
-    console.log(item);
-
     try {
-      const responseData = await sendRequest(
+      await sendRequest(
         `${CONNSTR}/cases/${cid}`,
         "PUT",
         JSON.stringify(item),
@@ -82,7 +73,6 @@ const EditCase = () => {
         }
       );
 
-      console.log(responseData);
       navigate(`/`);
     } catch (err) {
       console.log(err);

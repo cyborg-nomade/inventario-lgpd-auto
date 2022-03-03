@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
+import { useFormikContext, getIn } from "formik";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useFormikContext, getIn } from "formik";
 
 import {
   FullCaseObject,
@@ -28,7 +28,6 @@ const Section15FormRow = (props: {
   ) => {
     setObservacoes(event.currentTarget.value);
   };
-
   const handleBlurObservacoes = (event: React.FocusEvent<HTMLInputElement>) => {
     handleBlur(event);
     setFieldValue(`${props.name}.observacoes`, observacoes, true);

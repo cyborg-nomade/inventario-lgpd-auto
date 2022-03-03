@@ -9,21 +9,22 @@ import {
   emptyFullCaseObject,
   BaseFullCaseObject,
 } from "../../shared/models/cases.model";
-import CaseForm from "../components/CaseForm";
-import { useHttpClient } from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import CaseForm from "../components/CaseForm";
 
 const ApproveCase = () => {
-  const cid = useParams().cid;
-  let navigate = useNavigate();
-  const { token } = useContext(AuthContext);
-
   const [fullCase, setFullCase] = useState<BaseFullCaseObject>(
     emptyFullCaseObject()
   );
 
+  const { token } = useContext(AuthContext);
+
   const { isLoading, error, isWarning, sendRequest, clearError } =
     useHttpClient();
+
+  const cid = useParams().cid;
+  let navigate = useNavigate();
 
   useEffect(() => {
     const getCaseToApprove = async () => {
@@ -44,11 +45,6 @@ const ApproveCase = () => {
     getCaseToApprove().catch((error) => {
       console.log(error);
     });
-
-    // return () => {
-    //   setFullCase(emptyFullCaseObject());
-
-    // };
   }, [cid, sendRequest, token]);
 
   if (isLoading) {
@@ -62,13 +58,10 @@ const ApproveCase = () => {
   }
 
   const submitFormHandler = async (item: BaseFullCaseObject) => {
-    console.log(item);
     item.aprovado = true;
 
-    console.log(item);
-
     try {
-      const responseData = await sendRequest(
+      await sendRequest(
         `${CONNSTR}/cases/${cid}`,
         "PUT",
         JSON.stringify(item),
@@ -78,7 +71,6 @@ const ApproveCase = () => {
         }
       );
 
-      console.log(responseData);
       navigate(`/comite/cases`);
     } catch (err) {
       console.log(err);

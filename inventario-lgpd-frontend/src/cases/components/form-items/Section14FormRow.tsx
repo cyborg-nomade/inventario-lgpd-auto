@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
+import { useFormikContext, getIn } from "formik";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useFormikContext, getIn } from "formik";
 
 import { FullCaseObject } from "../../../shared/models/cases.model";
 
@@ -18,15 +18,12 @@ const Section14FormRow = (props: {
   const [numeroContrato, setNumeroContrato] = useState(
     getIn(values, `${props.name}.numeroContrato`)
   );
-
   const [numeroProcessoContratacao, setNumeroProcessoContratacao] = useState(
     getIn(values, `${props.name}.numeroProcessoContratacao`)
   );
-
   const [objetoContrato, setObjetoContrato] = useState(
     getIn(values, `${props.name}.objetoContrato`)
   );
-
   const [emailGestorContrato, setEmailGestorContrato] = useState(
     getIn(values, `${props.name}.emailGestorContrato`)
   );
@@ -36,25 +33,6 @@ const Section14FormRow = (props: {
   ) => {
     setNumeroContrato(event.currentTarget.value);
   };
-
-  const handleChangeNumeroProcessoContratacao = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setNumeroProcessoContratacao(event.currentTarget.value);
-  };
-
-  const handleChangeObjetoContrato = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setObjetoContrato(event.currentTarget.value);
-  };
-
-  const handleChangeEmailGestorContrato = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setEmailGestorContrato(event.currentTarget.value);
-  };
-
   const handleBlurNumeroContrato = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {
@@ -62,6 +40,11 @@ const Section14FormRow = (props: {
     setFieldValue(`${props.name}.numeroContrato`, numeroContrato, true);
   };
 
+  const handleChangeNumeroProcessoContratacao = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNumeroProcessoContratacao(event.currentTarget.value);
+  };
   const handleBlurNumeroProcessoContratacao = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {
@@ -73,6 +56,11 @@ const Section14FormRow = (props: {
     );
   };
 
+  const handleChangeObjetoContrato = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setObjetoContrato(event.currentTarget.value);
+  };
   const handleBlurObjetoContrato = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {
@@ -80,6 +68,11 @@ const Section14FormRow = (props: {
     setFieldValue(`${props.name}.objetoContrato`, objetoContrato, true);
   };
 
+  const handleChangeEmailGestorContrato = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setEmailGestorContrato(event.currentTarget.value);
+  };
   const handleBlurEmailGestorContrato = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
+import { useFormikContext, getIn } from "formik";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { useFormikContext, getIn } from "formik";
 import { FullCaseObject } from "../../../shared/models/cases.model";
 
 const Section11FormRow = (props: {
@@ -18,11 +18,9 @@ const Section11FormRow = (props: {
   const [nomeInstituicao, setNomeInstituicao] = useState(
     getIn(values, `${props.name}.nomeInstituicao`)
   );
-
   const [dadosCompartilhados, setDadosCompartilhados] = useState(
     getIn(values, `${props.name}.dadosCompartilhados`)
   );
-
   const [finalidadeCompartilhamento, setFinalidadeCompartilhamento] = useState(
     getIn(values, `${props.name}.finalidadeCompartilhamento`)
   );
@@ -32,19 +30,6 @@ const Section11FormRow = (props: {
   ) => {
     setNomeInstituicao(event.currentTarget.value);
   };
-
-  const handleChangeDadosCompartilhados = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setDadosCompartilhados(event.currentTarget.value);
-  };
-
-  const handleChangeFinalidadeCompartilhamento = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setFinalidadeCompartilhamento(event.currentTarget.value);
-  };
-
   const handleBlurNomeInstituicao = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {
@@ -52,6 +37,11 @@ const Section11FormRow = (props: {
     setFieldValue(`${props.name}.nomeInstituicao`, nomeInstituicao, true);
   };
 
+  const handleChangeDadosCompartilhados = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDadosCompartilhados(event.currentTarget.value);
+  };
   const handleBlurDadosCompartilhados = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {
@@ -63,6 +53,11 @@ const Section11FormRow = (props: {
     );
   };
 
+  const handleChangeFinalidadeCompartilhamento = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFinalidadeCompartilhamento(event.currentTarget.value);
+  };
   const handleBlurFinalidadeCompartilhamento = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {

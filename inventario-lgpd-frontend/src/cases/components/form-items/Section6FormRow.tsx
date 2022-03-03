@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
+import { useFormikContext, getIn } from "formik";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import { useFormikContext, getIn } from "formik";
 import {
   FullCaseObject,
   hipotesesTratamento,
@@ -28,7 +28,6 @@ const Section6FormRow = (props: {
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPropNameState(event.currentTarget.value);
   };
-
   const handleBlurInput = (event: React.FocusEvent<HTMLInputElement>) => {
     handleBlur(event);
     setFieldValue(props.name, propNameState, true);

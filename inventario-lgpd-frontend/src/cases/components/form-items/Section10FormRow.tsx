@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
+import { useFormikContext, getIn } from "formik";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { useFormikContext, getIn } from "formik";
 import {
   categoriaTitulares,
   FullCaseObject,
