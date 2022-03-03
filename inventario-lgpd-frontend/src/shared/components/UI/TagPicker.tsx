@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { WithContext as ReactTags } from "react-tag-input";
-import { verbosTratamento } from "../../models/cases.model";
 
+import { verbosTratamento } from "../../models/cases.model";
 import classes from "./TagPicker.module.css";
 
 const suggestions = Object.values(verbosTratamento).map((verbo) => {
@@ -24,8 +24,6 @@ const TagPicker = (props: {
   const [tags, setTags] = useState(props.value);
 
   const handleInputChange = () => {
-    console.log(tags);
-
     props.onChange(tags);
   };
 
