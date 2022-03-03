@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
+import { useFormikContext, getIn } from "formik";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { useFormikContext, getIn } from "formik";
 import {
   FullCaseObject,
   tipoGarantiaTranferenciaInternacional,
@@ -21,9 +21,7 @@ const Section13FormRow = (props: {
   const [nomeOrganizacao, setNomeOrganizacao] = useState(
     getIn(values, `${props.name}.nomeOrganizacao`)
   );
-
   const [pais, setPais] = useState(getIn(values, `${props.name}.pais`));
-
   const [dadosTransferidos, setDadosTransferidos] = useState(
     getIn(values, `${props.name}.dadosTransferidos`)
   );
@@ -33,17 +31,6 @@ const Section13FormRow = (props: {
   ) => {
     setNomeOrganizacao(event.currentTarget.value);
   };
-
-  const handleChangePais = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPais(event.currentTarget.value);
-  };
-
-  const handleChangeDadosTransferidos = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setDadosTransferidos(event.currentTarget.value);
-  };
-
   const handleBlurNomeOrganizacao = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {
@@ -51,11 +38,19 @@ const Section13FormRow = (props: {
     setFieldValue(`${props.name}.nomeOrganizacao`, nomeOrganizacao, true);
   };
 
+  const handleChangePais = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPais(event.currentTarget.value);
+  };
   const handleBlurPais = (event: React.FocusEvent<HTMLInputElement>) => {
     handleBlur(event);
     setFieldValue(`${props.name}.pais`, pais, true);
   };
 
+  const handleChangeDadosTransferidos = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDadosTransferidos(event.currentTarget.value);
+  };
   const handleBlurDadosTransferidos = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {

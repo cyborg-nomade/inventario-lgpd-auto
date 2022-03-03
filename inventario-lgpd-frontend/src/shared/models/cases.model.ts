@@ -1,5 +1,3 @@
-import { emptyUser, User } from "./users.model";
-
 export enum verbosTratamento {
   coleta = "coleta",
   producao = "producao",
@@ -174,8 +172,7 @@ interface itemObservacoesProcesso {
   descricaoObs: string;
 }
 
-export interface CaseItemObject {
-  id: string;
+export interface BaseCaseItemObject {
   nome: string;
   ref: string;
   area: string;
@@ -186,8 +183,12 @@ export interface CaseItemObject {
     descricaoFinalidade: string;
   };
   dadosPessoaisSensiveis: boolean;
-  criador: User;
+  criador: string;
   aprovado: boolean;
+}
+
+export interface CaseItemObject extends BaseCaseItemObject {
+  id: string;
 }
 
 export interface CaseItemObjectReduced {
@@ -222,7 +223,7 @@ export const reduceCaseObjectToList = (
 
 export type headersCaseItemObjectReduced = keyof CaseItemObjectReduced;
 
-export interface FullCaseObject extends CaseItemObject {
+export interface BaseFullCaseObject extends BaseCaseItemObject {
   controlador: AgenteTratamento;
   encarregado: AgenteTratamento;
   extensaoEncarregado: AgenteTratamento;
@@ -359,6 +360,10 @@ export interface FullCaseObject extends CaseItemObject {
   observacoesProcesso: itemObservacoesProcesso[];
 }
 
+export interface FullCaseObject extends BaseFullCaseObject {
+  id: string;
+}
+
 export const reduceCaseObject = (c: FullCaseObject): CaseItemObject => {
   const { hipoteseTratamento, descricaoFinalidade } = c.finalidadeTratamento;
 
@@ -441,7 +446,152 @@ export const emptyFullCaseObject = (): FullCaseObject => ({
   ref: "",
   area: "",
   aprovado: false,
-  criador: emptyUser(),
+  criador: "",
+  dataCriacao: new Date().toDateString(),
+  dataAtualizacao: new Date().toDateString(),
+  controlador: emptyAgenteTratamento(),
+  encarregado: emptyAgenteTratamento(),
+  extensaoEncarregado: emptyAgenteTratamento(),
+  areaTratamentoDados: emptyAgenteTratamento(),
+  operador: emptyAgenteTratamento(),
+  fasesCicloTratamento: {
+    coleta: false,
+    retencao: false,
+    processamento: false,
+    compartilhamento: false,
+    eliminacao: false,
+    verbos: [],
+  },
+  descricaoFluxoTratamento: "",
+  abrangenciaGeografica: "",
+  fonteDados: "",
+  finalidadeTratamento: {
+    hipoteseTratamento: hipotesesTratamento.consentimento,
+    descricaoFinalidade: "",
+    previsaoLegal: "",
+    resultadosTitular: "",
+    beneficiosEsperados: "",
+  },
+  categoriaDadosPessoais: {
+    identificacao: {
+      idPessoal: emptyItemCategoriaDadosPessoais(),
+      idGov: emptyItemCategoriaDadosPessoais(),
+      idEletronica: emptyItemCategoriaDadosPessoais(),
+      locEletronica: emptyItemCategoriaDadosPessoais(),
+    },
+    financeiros: {
+      idFin: emptyItemCategoriaDadosPessoais(),
+      recursosFin: emptyItemCategoriaDadosPessoais(),
+      dividasDespesas: emptyItemCategoriaDadosPessoais(),
+      solvencia: emptyItemCategoriaDadosPessoais(),
+      emprestimosHipotecaCredito: emptyItemCategoriaDadosPessoais(),
+      assistenciaFin: emptyItemCategoriaDadosPessoais(),
+      apoliceSeguro: emptyItemCategoriaDadosPessoais(),
+      planoPensao: emptyItemCategoriaDadosPessoais(),
+      transacaoFin: emptyItemCategoriaDadosPessoais(),
+      compensacao: emptyItemCategoriaDadosPessoais(),
+      atividadeProfissional: emptyItemCategoriaDadosPessoais(),
+      acordosAjustes: emptyItemCategoriaDadosPessoais(),
+      autorizacoesConsentimentos: emptyItemCategoriaDadosPessoais(),
+    },
+    caracteristicas: {
+      detalhesPessoais: emptyItemCategoriaDadosPessoais(),
+      detalhesMilitares: emptyItemCategoriaDadosPessoais(),
+      situacaoImigracao: emptyItemCategoriaDadosPessoais(),
+      descricaoFisica: emptyItemCategoriaDadosPessoais(),
+    },
+    habitos: {
+      habitos: emptyItemCategoriaDadosPessoais(),
+      estiloVida: emptyItemCategoriaDadosPessoais(),
+      viagensDeslocamento: emptyItemCategoriaDadosPessoais(),
+      contatosSociais: emptyItemCategoriaDadosPessoais(),
+      posses: emptyItemCategoriaDadosPessoais(),
+      denunciasIncidentesAcidentes: emptyItemCategoriaDadosPessoais(),
+      distincoes: emptyItemCategoriaDadosPessoais(),
+      usoMidia: emptyItemCategoriaDadosPessoais(),
+    },
+    caracteristicasPsicologicas: {
+      descricaoPsi: emptyItemCategoriaDadosPessoais(),
+    },
+    composicaoFamiliar: {
+      casamentoCoabitacao: emptyItemCategoriaDadosPessoais(),
+      historicoConjugal: emptyItemCategoriaDadosPessoais(),
+      membrosFamilia: emptyItemCategoriaDadosPessoais(),
+    },
+    interessesLazer: {
+      atividadesInteressesLaz: emptyItemCategoriaDadosPessoais(),
+    },
+    associacoes: {
+      outrasAssociacoesNaoSensiveis: emptyItemCategoriaDadosPessoais(),
+    },
+    processoJudAdmCrim: {
+      suspeitas: emptyItemCategoriaDadosPessoais(),
+      condenacoesSentencas: emptyItemCategoriaDadosPessoais(),
+      acoesJud: emptyItemCategoriaDadosPessoais(),
+      penalidadesAdm: emptyItemCategoriaDadosPessoais(),
+    },
+    habitosConsumo: {
+      dadosBensServicos: emptyItemCategoriaDadosPessoais(),
+    },
+    residenciais: {
+      dadosResidencia: emptyItemCategoriaDadosPessoais(),
+    },
+    educacaoTreinamento: {
+      academicosEscolares: emptyItemCategoriaDadosPessoais(),
+      registroFinanceiro: emptyItemCategoriaDadosPessoais(),
+      qualificacaoExperienciaProf: emptyItemCategoriaDadosPessoais(),
+    },
+    profissaoEmprego: {
+      empregoAtual: emptyItemCategoriaDadosPessoais(),
+      recrutamento: emptyItemCategoriaDadosPessoais(),
+      rescisao: emptyItemCategoriaDadosPessoais(),
+      carreira: emptyItemCategoriaDadosPessoais(),
+      absenteismoDisciplina: emptyItemCategoriaDadosPessoais(),
+      avaliacaoDesempenho: emptyItemCategoriaDadosPessoais(),
+    },
+    regVideoImgVoz: {
+      videoImagem: emptyItemCategoriaDadosPessoais(),
+      imagemVigilancia: emptyItemCategoriaDadosPessoais(),
+      voz: emptyItemCategoriaDadosPessoais(),
+    },
+    outros: {
+      outros: [],
+    },
+  },
+  dadosPessoaisSensiveis: false,
+  categoriaDadosPessoaisSensiveis: {
+    origemRacialEtnica: emptyItemCategoriaDadosPessoais(),
+    conviccaoReligiosa: emptyItemCategoriaDadosPessoais(),
+    opiniaoPolitica: emptyItemCategoriaDadosPessoais(),
+    filiacaoSindicato: emptyItemCategoriaDadosPessoais(),
+    filiacaoOrganizacaoReligiosa: emptyItemCategoriaDadosPessoais(),
+    filiacaoCrencaFilosofica: emptyItemCategoriaDadosPessoais(),
+    filiacaoPreferenciaPolitica: emptyItemCategoriaDadosPessoais(),
+    saudeVidaSexual: emptyItemCategoriaDadosPessoais(),
+    geneticos: emptyItemCategoriaDadosPessoais(),
+    biometricos: emptyItemCategoriaDadosPessoais(),
+  },
+  frequenciaTratamento: "",
+  quantidadeDadosTratados: "",
+  categoriasTitulares: {
+    categorias: [emptyItemCategoriaTitulares()],
+    criancasAdolescentes: [],
+    outrosGruposVulneraveis: [],
+  },
+  compartilhamentoDadosPessoais: [],
+  medidasSegurancaPrivacidade: [],
+  transferenciaInternacional: [],
+  contratoServicosTITratamentoDados: [],
+  riscosPrivacidade: [],
+  observacoesProcesso: [],
+});
+
+export const emptyBaseFullCaseObject = (): BaseFullCaseObject => ({
+  nome: "",
+  ref: "",
+  area: "",
+  aprovado: false,
+  criador: "",
   dataCriacao: new Date().toDateString(),
   dataAtualizacao: new Date().toDateString(),
   controlador: emptyAgenteTratamento(),

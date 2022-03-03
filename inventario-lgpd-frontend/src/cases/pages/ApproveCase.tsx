@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
@@ -7,77 +7,45 @@ import Row from "react-bootstrap/Row";
 import { CONNSTR } from "../../App";
 import {
   emptyFullCaseObject,
-  FullCaseObject,
+  BaseFullCaseObject,
 } from "../../shared/models/cases.model";
+import { AuthContext } from "../../shared/context/auth-context";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 import CaseForm from "../components/CaseForm";
 
 const ApproveCase = () => {
-  const cid = useParams().cid;
-
-  let navigate = useNavigate();
-
-  const [fullCase, setFullCase] = useState<FullCaseObject>(
+  const [fullCase, setFullCase] = useState<BaseFullCaseObject>(
     emptyFullCaseObject()
   );
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  const { token } = useContext(AuthContext);
+
+  const { isLoading, error, isWarning, sendRequest, clearError } =
+    useHttpClient();
+
+  const cid = useParams().cid;
+  let navigate = useNavigate();
 
   useEffect(() => {
-    const getAllCases = async () => {
-      setIsLoading(true);
-      setError(null);
+    const getCaseToApprove = async () => {
+      console.log(token);
 
-      const response = await fetch(`${CONNSTR}cases/${cid}.json`);
+      const responseData = await sendRequest(
+        `${CONNSTR}/cases/${cid}`,
+        undefined,
+        undefined,
+        { Authorization: "Bearer " + token }
+      );
 
-      if (!response.ok) {
-        throw new Error("Algo deu errado!");
-      }
-
-      console.log(response);
-
-      const responseData = await response.json();
-
-      let loadedCase: FullCaseObject = emptyFullCaseObject();
-
-      console.log(loadedCase.fasesCicloTratamento.verbos);
-      console.log(responseData.fasesCicloTratamento.verbos);
-
-      loadedCase = {
-        ...loadedCase,
-        ...responseData,
-        fasesCicloTratamento: {
-          ...loadedCase.fasesCicloTratamento,
-          ...responseData.fasesCicloTratamento,
-          verbos:
-            responseData.fasesCicloTratamento.verbos ??
-            loadedCase.fasesCicloTratamento.verbos,
-        },
-        categoriaDadosPessoais: {
-          ...responseData.categoriaDadosPessoais,
-          outros: {
-            ...loadedCase.categoriaDadosPessoais.outros,
-            ...responseData.categoriaDadosPessoais.outros,
-          },
-        },
-      };
-
-      console.log(loadedCase.fasesCicloTratamento.verbos);
+      let loadedCase = responseData.case;
 
       setFullCase(loadedCase);
-      setIsLoading(false);
     };
 
-    getAllCases().catch((error) => {
-      setIsLoading(false);
-      setError(error.message);
+    getCaseToApprove().catch((error) => {
+      console.log(error);
     });
-
-    return () => {
-      setFullCase(emptyFullCaseObject());
-      setIsLoading(false);
-      setError(null);
-    };
-  }, [cid]);
+  }, [cid, sendRequest, token]);
 
   if (isLoading) {
     return (
@@ -89,38 +57,39 @@ const ApproveCase = () => {
     );
   }
 
-  if (error) {
-    return (
-      <Row className="justify-content-center">
-        <Alert variant="danger">{error}</Alert>
-      </Row>
-    );
-  }
-
-  const submitFormHandler = async (item: FullCaseObject) => {
-    console.log(item);
+  const submitFormHandler = async (item: BaseFullCaseObject) => {
     item.aprovado = true;
 
-    console.log(item);
-    console.log(`${CONNSTR}cases.json/${cid}.json`);
+    try {
+      await sendRequest(
+        `${CONNSTR}/cases/${cid}`,
+        "PUT",
+        JSON.stringify(item),
+        {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        }
+      );
 
-    const response = await fetch(`${CONNSTR}cases/${cid}.json`, {
-      method: "PUT",
-      body: JSON.stringify(item),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const data = await response.json();
-    console.log(data);
-
-    navigate(`/comite/cases`);
+      navigate(`/comite/cases`);
+    } catch (err) {
+      console.log(err);
+      setFullCase(item);
+    }
   };
 
   return (
     <React.Fragment>
       <h1>Aprovar Item</h1>
+      {error && (
+        <Alert
+          variant={isWarning ? "warning" : "danger"}
+          onClose={clearError}
+          dismissible
+        >
+          Ocorreu um erro: {error}
+        </Alert>
+      )}
       <CaseForm item={fullCase} approve={true} onSubmit={submitFormHandler} />
     </React.Fragment>
   );

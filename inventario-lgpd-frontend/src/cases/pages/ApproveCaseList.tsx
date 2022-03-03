@@ -1,49 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 
 import { CONNSTR } from "../../App";
-import {
-  CaseItemObject,
-  reduceCaseObject,
-} from "../../shared/models/cases.model";
+import { CaseItemObject } from "../../shared/models/cases.model";
+import { AuthContext } from "../../shared/context/auth-context";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 import CasesList from "./../components/CasesList";
 
 const ApproveCaseList = () => {
   const [cases, setCases] = useState<CaseItemObject[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  const { token } = useContext(AuthContext);
+
+  const { isLoading, error, isWarning, sendRequest, clearError } =
+    useHttpClient();
 
   useEffect(() => {
     const getAllCases = async () => {
-      setIsLoading(true);
-      setError(null);
-
-      const response = await fetch(`${CONNSTR}cases.json`);
-      if (!response.ok) {
-        throw new Error("Algo deu errado!");
-      }
-
-      const responseData = await response.json();
-
-      const loadedCases: CaseItemObject[] = [];
-
-      for (const key in responseData) {
-        loadedCases.push({ ...reduceCaseObject(responseData[key]), id: key });
-      }
-
-      console.log(loadedCases);
-
+      const responseData = await sendRequest(
+        `${CONNSTR}/cases/`,
+        undefined,
+        undefined,
+        { Authorization: "Bearer " + token }
+      );
+      const loadedCases: CaseItemObject[] = responseData.cases;
       setCases(loadedCases);
-      setIsLoading(false);
     };
 
     getAllCases().catch((error) => {
-      setIsLoading(false);
-      setError(error.message);
+      console.log(error);
     });
-  }, []);
+  }, [sendRequest, token]);
 
   if (isLoading) {
     return (
@@ -55,19 +44,20 @@ const ApproveCaseList = () => {
     );
   }
 
-  if (error) {
-    return (
-      <Row className="justify-content-center">
-        <Alert variant="danger">{error}</Alert>
-      </Row>
-    );
-  }
-
   const notApprovedCases = cases.filter((item) => !item.aprovado);
 
   return (
     <React.Fragment>
       <h1>Aprovações Pendentes</h1>
+      {error && (
+        <Alert
+          variant={isWarning ? "warning" : "danger"}
+          onClose={clearError}
+          dismissible
+        >
+          {error}
+        </Alert>
+      )}
       <CasesList items={notApprovedCases} />
     </React.Fragment>
   );

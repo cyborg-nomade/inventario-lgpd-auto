@@ -1,8 +1,4 @@
-import Table from "react-bootstrap/Table";
-import Alert from "react-bootstrap/Alert";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-
+import { useNavigate } from "react-router-dom";
 import {
   DatatableWrapper,
   Filter,
@@ -11,13 +7,16 @@ import {
   TableBody,
   TableHeader,
 } from "react-bs-datatable";
+import Table from "react-bootstrap/Table";
+import Alert from "react-bootstrap/Alert";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 import {
   CaseItemObject,
   headersCaseItemObjectReduced,
+  reduceCaseObjectToList,
 } from "../../shared/models/cases.model";
-import { useNavigate } from "react-router-dom";
-import { reduceCaseObjectToList } from "./../../shared/models/cases.model";
 
 const headers: {
   title: string;

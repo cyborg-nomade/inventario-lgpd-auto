@@ -1,7 +1,8 @@
-# db + POC frontend deploy to Firebase
+# create authentication / authorization
 
-1- CRUD cases api, with mongoose (OK)
-2- CRUD users api, with mongoose (OK)
-3- dummy login function, using db users (OK)
-4- models perfected (OK)
-5- plug frontend app to Firebase for demo purposes (OK)
+1- hash passwords on the backend (OK)
+2- create tokens on login route (OK)
+3- adapt frontend to receive and store tokens (OK)
+4- use tokens in requests to the backend (OK)
+5- add auto-login (OK)
+6- manage token expiration (OK)

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
+import { NavLink } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 
-import { NavLink } from "react-router-dom";
 import { AuthContext } from "./../../context/auth-context";
 
 const NavLinks = () => {
@@ -15,7 +15,7 @@ const NavLinks = () => {
         </Nav.Link>
       )}
       {authContext.isLoggedIn && !authContext.isComite && (
-        <Nav.Link as={NavLink} to={`${authContext.userCode}/cases/new`}>
+        <Nav.Link as={NavLink} to={`${authContext.userId}/cases/new`}>
           Novo
         </Nav.Link>
       )}

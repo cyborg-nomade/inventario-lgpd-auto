@@ -1,11 +1,10 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
 import { AuthContext } from "./shared/context/auth-context";
+import { useAuth } from "./shared/hooks/auth-hook";
 import MainHeader from "./shared/components/nav/MainHeader";
-import "./App.css";
-
 import AllCasesList from "./cases/pages/AllCasesList";
 import ApproveCaseList from "./cases/pages/ApproveCaseList";
 import EditCase from "./cases/pages/EditCase";
@@ -16,39 +15,23 @@ import UserPage from "./users/pages/UserPage";
 import ApproveCase from "./cases/pages/ApproveCase";
 import ApprovePage from "./cases/pages/ApprovePage";
 import AllCasesPage from "./cases/pages/AllCasesPage";
+import "./App.css";
 
-export const CONNSTR =
-  "https://inventario-lgpd-auto-default-rtdb.firebaseio.com/";
+export const CONNSTR = "http://localhost:7000/api";
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isComite, setIsComite] = useState(false);
-  const [userCode, setUserCode] = useState("");
-
-  const login = useCallback((uc: string, ic: boolean) => {
-    console.log(uc, ic);
-
-    setIsLoggedIn(true);
-    setUserCode(uc);
-    setIsComite(ic);
-  }, []);
-
-  const logout = useCallback(() => {
-    setIsLoggedIn(false);
-    setIsComite(false);
-    setUserCode("");
-  }, []);
+  const { token, login, logout, userId, username, isComite } = useAuth();
 
   let routes;
 
-  if (!isLoggedIn) {
+  if (!token) {
     routes = (
       <React.Fragment>
         <Route path="/" element={<Login />} />
         <Route path="*" element={<Navigate to="/" />} />
       </React.Fragment>
     );
-  } else if (isLoggedIn && !isComite) {
+  } else if (token && !isComite) {
     routes = (
       <React.Fragment>
         <Route path="/:uid/cases" element={<UserPage />}>
@@ -56,8 +39,8 @@ const App = () => {
           <Route path="new" element={<NewCase />} />
           <Route path=":cid" element={<EditCase />} />
         </Route>
-        <Route path="/" element={<Navigate to={`../${userCode}/cases`} />} />
-        <Route path="/*" element={<Navigate to={`../${userCode}/cases`} />} />
+        <Route path="/" element={<Navigate to={`../${userId}/cases`} />} />
+        <Route path="/*" element={<Navigate to={`../${userId}/cases`} />} />
       </React.Fragment>
     );
   } else {
@@ -79,7 +62,15 @@ const App = () => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, login, logout, isComite, userCode }}
+      value={{
+        isLoggedIn: !!token,
+        login,
+        logout,
+        isComite,
+        userId,
+        token,
+        username,
+      }}
     >
       <MainHeader />
       <Container className="mt-5">
