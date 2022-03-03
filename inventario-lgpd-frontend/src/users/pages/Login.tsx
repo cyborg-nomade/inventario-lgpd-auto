@@ -49,6 +49,7 @@ const Login = () => {
 
       authContext.login(
         receivedUser.id,
+        receivedUser.username,
         receivedUser.isComite,
         responseData.token
       );

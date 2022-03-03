@@ -24,6 +24,7 @@ let logoutTimer: NodeJS.Timeout;
 interface storageObject {
   token: string;
   uid: string;
+  username: string;
   isComite: boolean;
   expirationDate: string;
 }
@@ -32,13 +33,21 @@ const App = () => {
   const [token, setToken] = useState("");
   const [isComite, setIsComite] = useState(false);
   const [userId, setUserId] = useState("");
+  const [username, setUsername] = useState("");
   const [tokenExpirationDate, setTokenExpirationDate] = useState<Date>();
 
   const login = useCallback(
-    (uid: string, ic: boolean, token: string, expirationDate?: Date) => {
+    (
+      uid: string,
+      username: string,
+      ic: boolean,
+      token: string,
+      expirationDate?: Date
+    ) => {
       setToken(token);
       setUserId(uid);
       setIsComite(ic);
+      setUsername(username);
       const expDate =
         expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
       setTokenExpirationDate(expDate);
@@ -46,6 +55,7 @@ const App = () => {
       const userToStore: storageObject = {
         token,
         uid,
+        username,
         isComite: ic,
         expirationDate: expDate.toISOString(),
       };
@@ -59,6 +69,7 @@ const App = () => {
     setToken("");
     setIsComite(false);
     setUserId("");
+    setUsername("");
     localStorage.removeItem("userData");
   }, []);
 
@@ -89,6 +100,7 @@ const App = () => {
     ) {
       login(
         userDataObject.uid,
+        userDataObject.username,
         userDataObject.isComite,
         userDataObject.token,
         storedExpirationDate
@@ -136,7 +148,15 @@ const App = () => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn: !!token, login, logout, isComite, userId, token }}
+      value={{
+        isLoggedIn: !!token,
+        login,
+        logout,
+        isComite,
+        userId,
+        token,
+        username,
+      }}
     >
       <MainHeader />
       <Container className="mt-5">

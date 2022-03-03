@@ -5,6 +5,12 @@ export const AuthContext = createContext({
   userId: "",
   isLoggedIn: false,
   token: "",
-  login: (uid: string, isComite: boolean, token: string) => {},
+  username: "",
+  login: (
+    uid: string,
+    username: string,
+    isComite: boolean,
+    token: string
+  ) => {},
   logout: () => {},
 });
