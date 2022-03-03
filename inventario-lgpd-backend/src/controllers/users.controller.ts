@@ -12,6 +12,7 @@ export const getUsers = async (req: Request, res: Response) => {
 
     res.status(200).send({ users: users });
   } catch (error: any) {
+    console.log(error);
     res.status(error.status).send({ message: error.message });
   }
 };
@@ -23,6 +24,7 @@ export const getUserById = async (req: Request, res: Response) => {
 
     return res.status(200).send({ user: reqUser });
   } catch (error: any) {
+    console.log(error);
     res.status(error.status).send({ message: error.message });
   }
 };
@@ -39,6 +41,7 @@ export const registerUser = async (req: Request, res: Response) => {
     const newUser = await UserService.create(receivedUser);
     res.status(201).send({ user: newUser });
   } catch (error: any) {
+    console.log(error);
     res.status(error.status).send({ message: error.message });
   }
 };
@@ -51,6 +54,7 @@ export const updateUser = async (req: Request, res: Response) => {
     const updatedUser = await UserService.update(id, userUpdate);
     return res.status(200).send({ user: updatedUser });
   } catch (error: any) {
+    console.log(error);
     res.status(error.status).send({ message: error.message });
   }
 };
@@ -68,6 +72,7 @@ export const removeUser = async (req: Request, res: Response) => {
 
     res.status(404).send({ message: "Usuário não encontrado" });
   } catch (error: any) {
+    console.log(error);
     res.status(error.status).send({ message: error.message });
   }
 };
@@ -108,6 +113,7 @@ export const loginUser = async (req: Request, res: Response) => {
         { expiresIn: "1h" }
       );
     } catch (err) {
+      console.log(err);
       return res.status(500).send({ message: "Erro no login!" });
     }
 
@@ -115,6 +121,7 @@ export const loginUser = async (req: Request, res: Response) => {
       .status(200)
       .send({ message: "Usuário logado!", user: identifiedUser.user, token });
   } catch (error: any) {
+    console.log(error);
     res.status(error.status).send({ message: error.message });
   }
 };

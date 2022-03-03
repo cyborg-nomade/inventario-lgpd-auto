@@ -10,6 +10,7 @@ export const getCases = async (req: Request, res: Response) => {
 
     res.status(200).send({ cases: cases });
   } catch (error: any) {
+    console.log(error);
     res.status(error.status).send({ message: error.message });
   }
 };
@@ -21,6 +22,7 @@ export const getCasesByUser = async (req: Request, res: Response) => {
 
     res.status(200).send({ cases: userCases });
   } catch (error: any) {
+    console.log(error);
     res.status(error.status).send({ message: error.message });
   }
 };
@@ -32,6 +34,7 @@ export const getCasesById = async (req: Request, res: Response) => {
 
     return res.status(200).send({ case: reqCase });
   } catch (error: any) {
+    console.log(error);
     res.status(error.status).send({ message: error.message });
   }
 };
@@ -43,6 +46,7 @@ export const registerCase = async (req: Request, res: Response) => {
     const newCase = await CaseService.create(receivedCase, req.userData.userId);
     res.status(201).send({ case: newCase });
   } catch (error: any) {
+    console.log(error);
     res.status(error.status).send({ message: error.message });
   }
 };
@@ -66,6 +70,7 @@ export const updateCase = async (req: Request, res: Response) => {
     const updatedCase = await CaseService.update(id, caseUpdate);
     return res.status(200).send({ case: updatedCase });
   } catch (error: any) {
+    console.log(error);
     res.status(error.status).send({ message: error.message });
   }
 };
@@ -91,6 +96,7 @@ export const removeCase = async (req: Request, res: Response) => {
       .status(200)
       .send({ message: "Caso deletado com sucesso", case: removedCase });
   } catch (error: any) {
+    console.log(error);
     res.status(error.status).send({ message: error.message });
   }
 };
