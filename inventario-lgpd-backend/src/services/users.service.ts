@@ -1,11 +1,12 @@
+import mongoose, { Types } from "mongoose";
 import bcrypt from "bcryptjs";
+
+import HttpException from "./../common/http-exception";
 
 /**
  * Data Model Interfaces
  */
-import mongoose, { Types } from "mongoose";
 import { BaseUser, User, UserModel } from "../models/users.model";
-import HttpException from "./../common/http-exception";
 
 /**
  * Service Methods
@@ -15,6 +16,7 @@ export const findAll = async (): Promise<User[]> => {
   try {
     users = await UserModel.find({}, "-password");
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -32,7 +34,6 @@ export const find = async (id: string): Promise<User> => {
     foundUser = await UserModel.findById(id);
   } catch (error) {
     console.log(error);
-
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -53,6 +54,7 @@ export const findByUserName = async (
       username: username,
     });
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -74,6 +76,7 @@ export const create = async (receivedUser: BaseUser): Promise<User> => {
       username: receivedUser.username,
     });
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -86,6 +89,7 @@ export const create = async (receivedUser: BaseUser): Promise<User> => {
   try {
     hashedPassword = await bcrypt.hash(receivedUser.password, 12);
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível criar o usuário");
   }
 
@@ -100,7 +104,6 @@ export const create = async (receivedUser: BaseUser): Promise<User> => {
     await newUser.save();
   } catch (error) {
     console.log(error);
-
     throw new HttpException(500, "Não foi possível salvar dados na base");
   }
 
@@ -116,6 +119,7 @@ export const update = async (
   try {
     updatedUser = await UserModel.findById(id);
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -129,12 +133,14 @@ export const update = async (
   try {
     await updatedUser.updateOne(userUpdate);
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
   try {
     updatedUser = await UserModel.findById(id);
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -154,6 +160,7 @@ export const remove = async (id: string): Promise<null | User> => {
   try {
     userToRemove = await UserModel.findById(id);
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -164,6 +171,7 @@ export const remove = async (id: string): Promise<null | User> => {
   try {
     await userToRemove.remove();
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Erro na conexão de banco de dados");
   }
 
