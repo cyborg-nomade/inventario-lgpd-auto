@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
@@ -11,21 +11,30 @@ import {
 } from "../../shared/models/cases.model";
 import CaseForm from "../components/CaseForm";
 import { useHttpClient } from "../../shared/hooks/http-hook";
+import { AuthContext } from "../../shared/context/auth-context";
 
 const ApproveCase = () => {
   const cid = useParams().cid;
-
   let navigate = useNavigate();
+  const { token } = useContext(AuthContext);
 
   const [fullCase, setFullCase] = useState<BaseFullCaseObject>(
     emptyFullCaseObject()
   );
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, isWarning, sendRequest, clearError } =
+    useHttpClient();
 
   useEffect(() => {
     const getCaseToApprove = async () => {
-      const responseData = await sendRequest(`${CONNSTR}/cases/${cid}`);
+      console.log(token);
+
+      const responseData = await sendRequest(
+        `${CONNSTR}/cases/${cid}`,
+        undefined,
+        undefined,
+        { Authorization: "Bearer " + token }
+      );
 
       let loadedCase = responseData.case;
 
@@ -40,7 +49,7 @@ const ApproveCase = () => {
     //   setFullCase(emptyFullCaseObject());
 
     // };
-  }, [cid, sendRequest]);
+  }, [cid, sendRequest, token]);
 
   if (isLoading) {
     return (
@@ -65,6 +74,7 @@ const ApproveCase = () => {
         JSON.stringify(item),
         {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         }
       );
 
@@ -80,11 +90,13 @@ const ApproveCase = () => {
     <React.Fragment>
       <h1>Aprovar Item</h1>
       {error && (
-        <Row className="justify-content-center">
-          <Alert variant="danger" onClose={clearError} dismissible>
-            Ocorreu um erro: {error}
-          </Alert>
-        </Row>
+        <Alert
+          variant={isWarning ? "warning" : "danger"}
+          onClose={clearError}
+          dismissible
+        >
+          Ocorreu um erro: {error}
+        </Alert>
       )}
       <CaseForm item={fullCase} approve={true} onSubmit={submitFormHandler} />
     </React.Fragment>

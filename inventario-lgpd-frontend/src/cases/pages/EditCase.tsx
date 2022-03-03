@@ -16,7 +16,7 @@ import CaseForm from "../components/CaseForm";
 const EditCase = () => {
   const cid = useParams().cid || "";
 
-  const uid = useContext(AuthContext).userId;
+  const { userId: uid, token } = useContext(AuthContext);
 
   let navigate = useNavigate();
 
@@ -24,11 +24,17 @@ const EditCase = () => {
     emptyBaseFullCaseObject()
   );
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, isWarning, sendRequest, clearError } =
+    useHttpClient();
 
   useEffect(() => {
     const getCaseToEdit = async () => {
-      const responseData = await sendRequest(`${CONNSTR}/cases/${cid}`);
+      const responseData = await sendRequest(
+        `${CONNSTR}/cases/${cid}`,
+        undefined,
+        undefined,
+        { Authorization: "Bearer " + token }
+      );
       let loadedCase = responseData.case;
       setFullCase(loadedCase);
     };
@@ -40,7 +46,7 @@ const EditCase = () => {
     // return () => {
     //   setFullCase(emptyFullCaseObject());
     // };
-  }, [cid, sendRequest]);
+  }, [cid, sendRequest, token]);
 
   if (isLoading) {
     return (
@@ -72,6 +78,7 @@ const EditCase = () => {
         JSON.stringify(item),
         {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         }
       );
 
@@ -87,11 +94,13 @@ const EditCase = () => {
     <React.Fragment>
       <h1>Editar Item</h1>
       {error && (
-        <Row className="justify-content-center">
-          <Alert variant="danger" onClose={clearError} dismissible>
-            Ocorreu um erro: {error}
-          </Alert>
-        </Row>
+        <Alert
+          variant={isWarning ? "warning" : "danger"}
+          onClose={clearError}
+          dismissible
+        >
+          Ocorreu um erro: {error}
+        </Alert>
       )}
       <CaseForm item={fullCase} edit={true} onSubmit={submitFormHandler} />
     </React.Fragment>

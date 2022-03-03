@@ -10,15 +10,27 @@ import { useHttpClient } from "./../../shared/hooks/http-hook";
 import CasesList from "../../cases/components/CasesList";
 
 const UserCasesList = () => {
-  const uid = useContext(AuthContext).userId;
+  const { userId: uid, token, username } = useContext(AuthContext);
 
   const [cases, setCases] = useState<CaseItemObject[]>([]);
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading, error, isWarning, sendRequest, clearError } =
+    useHttpClient();
 
   useEffect(() => {
     const getUserCases = async () => {
-      const responseData = await sendRequest(`${CONNSTR}/cases/user/${uid}`);
+      console.log(token);
+
+      const responseData = await sendRequest(
+        `${CONNSTR}/cases/user/${uid}`,
+        undefined,
+        undefined,
+        {
+          Authorization: "Bearer " + token,
+        }
+      );
+      console.log(responseData);
+
       const loadedCases: CaseItemObject[] = responseData.cases;
       setCases(loadedCases);
     };
@@ -26,7 +38,7 @@ const UserCasesList = () => {
     getUserCases().catch((error) => {
       console.log(error);
     });
-  }, [uid, sendRequest]);
+  }, [uid, sendRequest, token]);
 
   if (isLoading) {
     return (
@@ -40,13 +52,17 @@ const UserCasesList = () => {
 
   return (
     <React.Fragment>
+      <h1>Olá, {username}</h1>
+
       <h1>Página Inicial - Todos os seus itens</h1>
       {error && (
-        <Row className="justify-content-center">
-          <Alert variant="danger" onClose={clearError} dismissible>
-            {error}
-          </Alert>
-        </Row>
+        <Alert
+          variant={isWarning ? "warning" : "danger"}
+          onClose={clearError}
+          dismissible
+        >
+          {error}
+        </Alert>
       )}
       <CasesList items={cases} />
     </React.Fragment>

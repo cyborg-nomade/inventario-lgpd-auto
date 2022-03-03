@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
@@ -16,38 +16,23 @@ import UserPage from "./users/pages/UserPage";
 import ApproveCase from "./cases/pages/ApproveCase";
 import ApprovePage from "./cases/pages/ApprovePage";
 import AllCasesPage from "./cases/pages/AllCasesPage";
+import { useAuth } from "./shared/hooks/auth-hook";
 
 export const CONNSTR = "http://localhost:7000/api";
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isComite, setIsComite] = useState(false);
-  const [userId, setUserId] = useState("");
-
-  const login = useCallback((uid: string, ic: boolean) => {
-    console.log(uid, ic);
-
-    setIsLoggedIn(true);
-    setUserId(uid);
-    setIsComite(ic);
-  }, []);
-
-  const logout = useCallback(() => {
-    setIsLoggedIn(false);
-    setIsComite(false);
-    setUserId("");
-  }, []);
+  const { token, login, logout, userId, username, isComite } = useAuth();
 
   let routes;
 
-  if (!isLoggedIn) {
+  if (!token) {
     routes = (
       <React.Fragment>
         <Route path="/" element={<Login />} />
         <Route path="*" element={<Navigate to="/" />} />
       </React.Fragment>
     );
-  } else if (isLoggedIn && !isComite) {
+  } else if (token && !isComite) {
     routes = (
       <React.Fragment>
         <Route path="/:uid/cases" element={<UserPage />}>
@@ -78,7 +63,15 @@ const App = () => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, login, logout, isComite, userId }}
+      value={{
+        isLoggedIn: !!token,
+        login,
+        logout,
+        isComite,
+        userId,
+        token,
+        username,
+      }}
     >
       <MainHeader />
       <Container className="mt-5">

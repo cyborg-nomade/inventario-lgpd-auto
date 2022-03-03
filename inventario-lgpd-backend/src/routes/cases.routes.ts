@@ -11,6 +11,7 @@ import {
   removeCase,
   updateCase,
 } from "../controllers/cases.controller";
+import { checkAuth } from "../middleware/check-auth.middleware";
 
 /**
  * Router Definition
@@ -20,6 +21,8 @@ export const casesRouter = express.Router();
 /**
  * Controller Definitions
  */
+casesRouter.use(checkAuth);
+
 // - GET cases/
 //   - retorna todos os casos de uso de dados cadastrados
 casesRouter.get("/", getCases);

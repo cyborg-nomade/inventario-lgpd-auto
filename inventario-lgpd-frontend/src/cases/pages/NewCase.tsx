@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Alert from "react-bootstrap/Alert";
@@ -14,16 +14,20 @@ import { useHttpClient } from "./../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 
 const NewCase = () => {
-  const uid = useContext(AuthContext).userId;
+  const { token } = useContext(AuthContext);
   let navigate = useNavigate();
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const [fullCase, setFullCase] = useState<BaseFullCaseObject>(
+    emptyBaseFullCaseObject()
+  );
+
+  const { isLoading, error, isWarning, sendRequest, clearError } =
+    useHttpClient();
 
   const submitFormHandler = async (item: BaseFullCaseObject) => {
     console.log(item);
 
     item.area = item.extensaoEncarregado.area || "";
-    item.criador = uid;
     for (const value of Object.values(item.categoriaDadosPessoaisSensiveis)) {
       if (value.descricao !== "Não se aplica") {
         item.dadosPessoaisSensiveis = true;
@@ -39,6 +43,7 @@ const NewCase = () => {
         JSON.stringify(item),
         {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         }
       );
 
@@ -46,10 +51,9 @@ const NewCase = () => {
       navigate(`/`);
     } catch (err) {
       console.log(err);
+      setFullCase(item);
     }
   };
-
-  const emptyItem = emptyBaseFullCaseObject();
 
   if (isLoading) {
     return (
@@ -65,13 +69,15 @@ const NewCase = () => {
     <React.Fragment>
       <h1>Registrar Novo Item</h1>
       {error && (
-        <Row className="justify-content-center">
-          <Alert variant="danger" onClose={clearError} dismissible>
-            Ocorreu um erro: {error}
-          </Alert>
-        </Row>
+        <Alert
+          variant={isWarning ? "warning" : "danger"}
+          onClose={clearError}
+          dismissible
+        >
+          Ocorreu um erro: {error}
+        </Alert>
       )}
-      <CaseForm new={true} onSubmit={submitFormHandler} item={emptyItem} />
+      <CaseForm new={true} onSubmit={submitFormHandler} item={fullCase} />
     </React.Fragment>
   );
 };

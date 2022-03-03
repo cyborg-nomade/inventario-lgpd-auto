@@ -4,6 +4,13 @@ export const AuthContext = createContext({
   isComite: false,
   userId: "",
   isLoggedIn: false,
-  login: (uc: string, isComite: boolean) => {},
+  token: "",
+  username: "",
+  login: (
+    uid: string,
+    username: string,
+    isComite: boolean,
+    token: string
+  ) => {},
   logout: () => {},
 });
