@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
@@ -19,26 +19,82 @@ import AllCasesPage from "./cases/pages/AllCasesPage";
 
 export const CONNSTR = "http://localhost:7000/api";
 
+let logoutTimer: NodeJS.Timeout;
+
+interface storageObject {
+  token: string;
+  uid: string;
+  isComite: boolean;
+  expirationDate: string;
+}
+
 const App = () => {
   const [token, setToken] = useState("");
   const [isComite, setIsComite] = useState(false);
   const [userId, setUserId] = useState("");
+  const [tokenExpirationDate, setTokenExpirationDate] = useState<Date>();
 
-  const login = useCallback((uid: string, ic: boolean, token: string) => {
-    setToken(token);
-    setUserId(uid);
-    setIsComite(ic);
-    localStorage.setItem(
-      "userData",
-      JSON.stringify({ token, uid, isComite: ic })
-    );
-  }, []);
+  const login = useCallback(
+    (uid: string, ic: boolean, token: string, expirationDate?: Date) => {
+      setToken(token);
+      setUserId(uid);
+      setIsComite(ic);
+      const expDate =
+        expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
+      setTokenExpirationDate(expDate);
+
+      const userToStore: storageObject = {
+        token,
+        uid,
+        isComite: ic,
+        expirationDate: expDate.toISOString(),
+      };
+
+      localStorage.setItem("userData", JSON.stringify(userToStore));
+    },
+    []
+  );
 
   const logout = useCallback(() => {
     setToken("");
     setIsComite(false);
     setUserId("");
+    localStorage.removeItem("userData");
   }, []);
+
+  useEffect(() => {
+    if (token && tokenExpirationDate) {
+      const remainingTime =
+        tokenExpirationDate.getTime() - new Date().getTime();
+      logoutTimer = setTimeout(logout, remainingTime);
+    } else {
+      clearTimeout(logoutTimer);
+    }
+    return () => {};
+  }, [token, logout, tokenExpirationDate]);
+
+  useEffect(() => {
+    const userData = localStorage.getItem("userData");
+    const userDataObject: storageObject = userData
+      ? JSON.parse(userData)
+      : null;
+    const storedExpirationDate = userDataObject
+      ? new Date(userDataObject.expirationDate)
+      : undefined;
+    if (
+      userDataObject &&
+      userDataObject.token &&
+      storedExpirationDate &&
+      storedExpirationDate > new Date()
+    ) {
+      login(
+        userDataObject.uid,
+        userDataObject.isComite,
+        userDataObject.token,
+        storedExpirationDate
+      );
+    }
+  }, [login]);
 
   let routes;
 
