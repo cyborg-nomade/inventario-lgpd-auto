@@ -3,9 +3,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
 import { AuthContext } from "./shared/context/auth-context";
+import { useAuth } from "./shared/hooks/auth-hook";
 import MainHeader from "./shared/components/nav/MainHeader";
-import "./App.css";
-
 import AllCasesList from "./cases/pages/AllCasesList";
 import ApproveCaseList from "./cases/pages/ApproveCaseList";
 import EditCase from "./cases/pages/EditCase";
@@ -16,7 +15,7 @@ import UserPage from "./users/pages/UserPage";
 import ApproveCase from "./cases/pages/ApproveCase";
 import ApprovePage from "./cases/pages/ApprovePage";
 import AllCasesPage from "./cases/pages/AllCasesPage";
-import { useAuth } from "./shared/hooks/auth-hook";
+import "./App.css";
 
 export const CONNSTR = "http://localhost:7000/api";
 
