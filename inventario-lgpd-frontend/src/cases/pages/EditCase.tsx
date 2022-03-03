@@ -4,7 +4,6 @@ import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 
-import { CONNSTR } from "./../../App";
 import {
   BaseFullCaseObject,
   emptyBaseFullCaseObject,
@@ -29,7 +28,7 @@ const EditCase = () => {
   useEffect(() => {
     const getCaseToEdit = async () => {
       const responseData = await sendRequest(
-        `${CONNSTR}/cases/${cid}`,
+        `${process.env.REACT_APP_CONNSTR}/cases/${cid}`,
         undefined,
         undefined,
         { Authorization: "Bearer " + token }
@@ -64,7 +63,7 @@ const EditCase = () => {
 
     try {
       await sendRequest(
-        `${CONNSTR}/cases/${cid}`,
+        `${process.env.REACT_APP_CONNSTR}/cases/${cid}`,
         "PUT",
         JSON.stringify(item),
         {

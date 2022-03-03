@@ -17,8 +17,6 @@ import ApprovePage from "./cases/pages/ApprovePage";
 import AllCasesPage from "./cases/pages/AllCasesPage";
 import "./App.css";
 
-export const CONNSTR = "http://localhost:7000/api";
-
 const App = () => {
   const { token, login, logout, userId, username, isComite } = useAuth();
 

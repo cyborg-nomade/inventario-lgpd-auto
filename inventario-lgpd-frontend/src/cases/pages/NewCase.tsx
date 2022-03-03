@@ -4,7 +4,6 @@ import Row from "react-bootstrap/Row";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 
-import { CONNSTR } from "./../../App";
 import {
   emptyBaseFullCaseObject,
   BaseFullCaseObject,
@@ -34,10 +33,15 @@ const NewCase = () => {
     }
 
     try {
-      await sendRequest(`${CONNSTR}/cases/`, "POST", JSON.stringify(item), {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      });
+      await sendRequest(
+        `${process.env.REACT_APP_CONNSTR}/cases/`,
+        "POST",
+        JSON.stringify(item),
+        {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        }
+      );
 
       navigate(`/`);
     } catch (err) {
