@@ -84,18 +84,19 @@ export const find = async (id: string): Promise<FullCaseObject> => {
 };
 
 export const create = async (
-  receivedCase: FullCaseObject
+  receivedCase: FullCaseObject,
+  userId: string
 ): Promise<FullCaseObject> => {
-  const newCase = new FullCaseObjectModel({ ...receivedCase });
+  const newCase = new FullCaseObjectModel({ ...receivedCase, criador: userId });
 
   let newCaseUser;
 
-  if (!mongoose.isValidObjectId(newCase.criador)) {
+  if (!mongoose.isValidObjectId(userId)) {
     throw new HttpException(400, "Id de usuário referido inválida!");
   }
 
   try {
-    newCaseUser = await UserModel.findById(newCase.criador);
+    newCaseUser = await UserModel.findById(userId);
   } catch (error) {
     throw new HttpException(500, "Erro na conexão de banco de dados");
   }

@@ -40,7 +40,7 @@ export const registerCase = async (req: Request, res: Response) => {
   try {
     const receivedCase: FullCaseObject = req.body;
 
-    const newCase = await CaseService.create(receivedCase);
+    const newCase = await CaseService.create(receivedCase, req.userData.userId);
     res.status(201).send({ case: newCase });
   } catch (error: any) {
     res.status(error.status).send({ message: error.message });

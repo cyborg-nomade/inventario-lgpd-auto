@@ -14,7 +14,7 @@ import { useHttpClient } from "./../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 
 const NewCase = () => {
-  const { userId: uid, token } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
   let navigate = useNavigate();
 
   const [fullCase, setFullCase] = useState<BaseFullCaseObject>(
@@ -28,7 +28,6 @@ const NewCase = () => {
     console.log(item);
 
     item.area = item.extensaoEncarregado.area || "";
-    item.criador = uid;
     for (const value of Object.values(item.categoriaDadosPessoaisSensiveis)) {
       if (value.descricao !== "Não se aplica") {
         item.dadosPessoaisSensiveis = true;
