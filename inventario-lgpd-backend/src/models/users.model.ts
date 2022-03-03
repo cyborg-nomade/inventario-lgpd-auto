@@ -27,11 +27,3 @@ export const UserSchema = new Schema<User, UserModelType>({
 UserSchema.plugin(uniqueValidator);
 
 export const UserModel = model<User, UserModelType>("User", UserSchema);
-
-// export const emptyUser = (): User => ({
-//   username: "",
-//   password: "",
-//   userCode: "",
-//   isComite: false,
-//   cases: "",
-// });
