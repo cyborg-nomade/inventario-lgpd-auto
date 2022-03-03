@@ -27,6 +27,7 @@ import {
   BaseFullCaseObject,
   verbosTratamento,
 } from "../../shared/models/cases.model";
+import { AuthContext } from "../../shared/context/auth-context";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import TagPicker from "../../shared/components/UI/TagPicker";
 import Section6FormRow from "./form-items/Section6FormRow";
@@ -38,7 +39,6 @@ import Section13FormRow from "./form-items/Section13FormRow";
 import Section14FormRow from "./form-items/Section14FormRow";
 import Section15FormRow from "./form-items/Section15FormRow";
 import Section16FormRow from "./form-items/Section16FormRow";
-import { AuthContext } from "../../shared/context/auth-context";
 
 type onSubmitFn = (item: BaseFullCaseObject) => void;
 
@@ -607,31 +607,22 @@ const CaseForm = (props: {
   approve?: boolean;
   onSubmit: onSubmitFn;
 }) => {
-  const { token } = useContext(AuthContext);
-
   const [isEditing, setIsEditing] = useState(props.new || false);
   const [showModal, setShowModal] = useState(false);
+
+  const { token } = useContext(AuthContext);
+
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
   let navigate = useNavigate();
   const cid = useParams().cid || "";
 
   const onStartEditing = () => {
     setIsEditing(true);
   };
-
   const onCancel = () => {
     navigate(`/`);
   };
-
-  const handleShowDeleteModal = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
-
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
-
   const onDelete = async (itemId: string) => {
     console.log(itemId);
 
@@ -652,6 +643,13 @@ const CaseForm = (props: {
       console.log(err);
       handleCloseModal();
     }
+  };
+
+  const handleShowDeleteModal = () => {
+    setShowModal(true);
+  };
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
   if (isLoading) {

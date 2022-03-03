@@ -1,5 +1,6 @@
-import { v4 as uuidv4 } from "uuid";
 import mongoose from "mongoose";
+
+import HttpException from "./../common/http-exception";
 
 /**
  * Data Model Interfaces
@@ -11,7 +12,6 @@ import {
   reduceCaseObject,
 } from "../models/cases.model";
 import { UserModel } from "../models/users.model";
-import HttpException from "./../common/http-exception";
 
 /**
  * Service Methods
@@ -22,6 +22,7 @@ export const findAll = async (): Promise<CaseItemObject[]> => {
   try {
     allStoredCases = await FullCaseObjectModel.find({});
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -49,6 +50,7 @@ export const findByUser = async (uid: string): Promise<CaseItemObject[]> => {
       criador: uid,
     });
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -73,6 +75,7 @@ export const find = async (id: string): Promise<FullCaseObject> => {
   try {
     foundCase = await FullCaseObjectModel.findById(id);
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -98,6 +101,7 @@ export const create = async (
   try {
     newCaseUser = await UserModel.findById(userId);
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Erro na conexão de banco de dados");
   }
 
@@ -116,6 +120,7 @@ export const create = async (
     await newCaseUser.save({ session: session, validateBeforeSave: false }); // workaround because mongoose-unique-validator creates error
     await session.commitTransaction();
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Erro na conexão de banco de dados");
   }
 
@@ -135,6 +140,7 @@ export const update = async (
   try {
     updatedCase = await FullCaseObjectModel.findById(id);
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -149,13 +155,13 @@ export const update = async (
     await updatedCase.updateOne(caseUpdate);
   } catch (error) {
     console.log(error);
-
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
   try {
     updatedCase = await FullCaseObjectModel.findById(id);
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -180,6 +186,7 @@ export const remove = async (id: string): Promise<FullCaseObject> => {
   try {
     caseToRemove = await FullCaseObjectModel.findById(id);
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Não foi possível recuperar dados da base");
   }
 
@@ -190,6 +197,7 @@ export const remove = async (id: string): Promise<FullCaseObject> => {
   try {
     caseToRemoveUser = await UserModel.findById(caseToRemove.criador);
   } catch (error) {
+    console.log(error);
     throw new HttpException(500, "Erro na conexão de banco de dados");
   }
 
@@ -212,7 +220,6 @@ export const remove = async (id: string): Promise<FullCaseObject> => {
     await session.commitTransaction();
   } catch (error) {
     console.log(error);
-
     throw new HttpException(500, "Erro na conexão de banco de dados");
   }
 

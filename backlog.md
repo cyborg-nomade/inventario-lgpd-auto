@@ -1,4 +1,4 @@
-# create authentication / authoriation
+# create authentication / authorization
 
 1- hash passwords on the backend (OK)
 2- create tokens on login route (OK)

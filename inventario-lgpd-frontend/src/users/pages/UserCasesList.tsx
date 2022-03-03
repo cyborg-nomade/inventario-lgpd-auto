@@ -10,17 +10,15 @@ import { useHttpClient } from "./../../shared/hooks/http-hook";
 import CasesList from "../../cases/components/CasesList";
 
 const UserCasesList = () => {
-  const { userId: uid, token, username } = useContext(AuthContext);
-
   const [cases, setCases] = useState<CaseItemObject[]>([]);
+
+  const { userId: uid, token, username } = useContext(AuthContext);
 
   const { isLoading, error, isWarning, sendRequest, clearError } =
     useHttpClient();
 
   useEffect(() => {
     const getUserCases = async () => {
-      console.log(token);
-
       const responseData = await sendRequest(
         `${CONNSTR}/cases/user/${uid}`,
         undefined,
@@ -29,7 +27,6 @@ const UserCasesList = () => {
           Authorization: "Bearer " + token,
         }
       );
-      console.log(responseData);
 
       const loadedCases: CaseItemObject[] = responseData.cases;
       setCases(loadedCases);
@@ -53,7 +50,6 @@ const UserCasesList = () => {
   return (
     <React.Fragment>
       <h1>Olá, {username}</h1>
-
       <h1>Página Inicial - Todos os seus itens</h1>
       {error && (
         <Alert

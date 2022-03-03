@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from "react";
+
 import HttpException from "./../common/http-exception";
 
 export const useHttpClient = () => {
@@ -26,8 +27,6 @@ export const useHttpClient = () => {
           headers,
           signal: httpAbortController.signal,
         });
-
-        console.log(response);
 
         const responseData = await response.json();
 

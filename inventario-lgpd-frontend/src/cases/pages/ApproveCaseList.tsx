@@ -5,14 +5,14 @@ import Row from "react-bootstrap/Row";
 
 import { CONNSTR } from "../../App";
 import { CaseItemObject } from "../../shared/models/cases.model";
+import { AuthContext } from "../../shared/context/auth-context";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import CasesList from "./../components/CasesList";
-import { AuthContext } from "../../shared/context/auth-context";
 
 const ApproveCaseList = () => {
-  const { token } = useContext(AuthContext);
-
   const [cases, setCases] = useState<CaseItemObject[]>([]);
+
+  const { token } = useContext(AuthContext);
 
   const { isLoading, error, isWarning, sendRequest, clearError } =
     useHttpClient();

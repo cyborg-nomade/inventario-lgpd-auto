@@ -11,7 +11,7 @@
   - v1.2: funcionalidade de registro criada (OK)
   - v1.3: funcionalidade de consulta criada (OK)
   - v1.4: funcionalidade de login criada (OK)
-  - v1.5: vinculadas apps de front e backend
+  - v1.5: vinculadas apps de front e backend (OK)
 - v2: adicionado servidor de banco de dados (OK)
 - v3: correção de bugs e deploy para AWS ou Firebase para apresentação (POC)
 - v4: dockerizado e encaminhado para implantação em produção

@@ -9,24 +9,23 @@ import {
   emptyBaseFullCaseObject,
   BaseFullCaseObject,
 } from "./../../shared/models/cases.model";
-import CaseForm from "../components/CaseForm";
-import { useHttpClient } from "./../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
+import { useHttpClient } from "./../../shared/hooks/http-hook";
+import CaseForm from "../components/CaseForm";
 
 const NewCase = () => {
-  const { token } = useContext(AuthContext);
-  let navigate = useNavigate();
-
   const [fullCase, setFullCase] = useState<BaseFullCaseObject>(
     emptyBaseFullCaseObject()
   );
 
+  const { token } = useContext(AuthContext);
+
   const { isLoading, error, isWarning, sendRequest, clearError } =
     useHttpClient();
 
-  const submitFormHandler = async (item: BaseFullCaseObject) => {
-    console.log(item);
+  let navigate = useNavigate();
 
+  const submitFormHandler = async (item: BaseFullCaseObject) => {
     item.area = item.extensaoEncarregado.area || "";
     for (const value of Object.values(item.categoriaDadosPessoaisSensiveis)) {
       if (value.descricao !== "Não se aplica") {
@@ -34,20 +33,12 @@ const NewCase = () => {
       }
     }
 
-    console.log(item);
-
     try {
-      const responseData = await sendRequest(
-        `${CONNSTR}/cases/`,
-        "POST",
-        JSON.stringify(item),
-        {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        }
-      );
+      await sendRequest(`${CONNSTR}/cases/`, "POST", JSON.stringify(item), {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      });
 
-      console.log(responseData);
       navigate(`/`);
     } catch (err) {
       console.log(err);

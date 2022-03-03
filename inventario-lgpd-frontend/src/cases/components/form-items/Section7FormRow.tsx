@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
+import { useFormikContext, getIn } from "formik";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
-import { useFormikContext, getIn } from "formik";
 import {
   fontesRetencao,
   FullCaseObject,
@@ -25,11 +25,9 @@ const Section7FormRow = (props: {
   const [descricao, setDescricao] = useState(
     getIn(values, `${props.name}.descricao`)
   );
-
   const [tempoRetencao, setTempoRetencao] = useState(
     getIn(values, `${props.name}.tempoRetencao`)
   );
-
   const [caminhoRedeSistema, setCaminhoRedeSistema] = useState(
     getIn(values, `${props.name}.caminhoRedeSistema`)
   );
@@ -39,24 +37,16 @@ const Section7FormRow = (props: {
   ) => {
     setDescricao(event.currentTarget.value);
   };
+  const handleBlurDescricao = (event: React.FocusEvent<HTMLInputElement>) => {
+    handleBlur(event);
+    setFieldValue(`${props.name}.descricao`, descricao, true);
+  };
 
   const handleChangeTempoRetencao = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setTempoRetencao(event.currentTarget.value);
   };
-
-  const handleChangeCaminhoRedeSistema = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setCaminhoRedeSistema(event.currentTarget.value);
-  };
-
-  const handleBlurDescricao = (event: React.FocusEvent<HTMLInputElement>) => {
-    handleBlur(event);
-    setFieldValue(`${props.name}.descricao`, descricao, true);
-  };
-
   const handleBlurTempoRetencao = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {
@@ -64,6 +54,11 @@ const Section7FormRow = (props: {
     setFieldValue(`${props.name}.tempoRetencao`, tempoRetencao, true);
   };
 
+  const handleChangeCaminhoRedeSistema = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCaminhoRedeSistema(event.currentTarget.value);
+  };
   const handleBlurCaminhoRedeSistema = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {

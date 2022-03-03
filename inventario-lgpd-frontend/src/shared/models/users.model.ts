@@ -8,11 +8,3 @@ export interface User extends BaseUser {
   isComite: boolean;
   id: string;
 }
-
-// export const emptyUser = (): User => ({
-//   username: "",
-//   password: "",
-//   userCode: "",
-//   isComite: false,
-//   id: "",
-// });

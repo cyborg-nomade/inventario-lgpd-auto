@@ -54,6 +54,7 @@ export const useAuth = () => {
     localStorage.removeItem("userData");
   }, []);
 
+  //handle token expiration & auto-logout
   useEffect(() => {
     if (token && tokenExpirationDate) {
       const remainingTime =
@@ -65,6 +66,7 @@ export const useAuth = () => {
     return () => {};
   }, [token, logout, tokenExpirationDate]);
 
+  // auto-login
   useEffect(() => {
     const userData = localStorage.getItem("userData");
     const userDataObject: storageObject = userData

@@ -10,9 +10,9 @@ import Card from "react-bootstrap/Card";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 
+import { CONNSTR } from "./../../App";
 import { BaseUser, User } from "./../../shared/models/users.model";
 import { AuthContext } from "./../../shared/context/auth-context";
-import { CONNSTR } from "./../../App";
 import { useHttpClient } from "./../../shared/hooks/http-hook";
 
 const schema = yup.object().shape({
@@ -30,9 +30,10 @@ const initialValues: BaseUser = {
 
 const Login = () => {
   const authContext = useContext(AuthContext);
-  let navigate = useNavigate();
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+  let navigate = useNavigate();
 
   const submitLoginHandler = async (user: BaseUser) => {
     try {
@@ -53,6 +54,7 @@ const Login = () => {
         receivedUser.isComite,
         responseData.token
       );
+
       navigate(`/${receivedUser.id}/cases`);
     } catch (error) {
       console.log(error);

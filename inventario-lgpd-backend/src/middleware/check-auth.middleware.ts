@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
+
 import HttpException from "./../common/http-exception";
 
 declare global {
@@ -42,9 +43,7 @@ export const checkAuth = (req: Request, res: Response, next: NextFunction) => {
     next();
   } catch (err: any) {
     console.log("auth error:");
-
     console.log(err);
-
     return res.status(401).send({ message: "Falha na autenticação" });
   }
 };

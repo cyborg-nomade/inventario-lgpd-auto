@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
+import { useFormikContext, getIn } from "formik";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { useFormikContext, getIn } from "formik";
 import {
   FullCaseObject,
   tipoMedidaSegurancaPrivacidade,
@@ -28,7 +28,6 @@ const Section12FormRow = (props: {
   ) => {
     setDescricaoControles(event.currentTarget.value);
   };
-
   const handleBlurDescricaoControles = (
     event: React.FocusEvent<HTMLInputElement>
   ) => {
