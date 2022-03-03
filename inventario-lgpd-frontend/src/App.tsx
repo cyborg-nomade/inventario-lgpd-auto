@@ -1,21 +1,36 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Spinner from "react-bootstrap/Spinner";
 
 import { AuthContext } from "./shared/context/auth-context";
 import { useAuth } from "./shared/hooks/auth-hook";
 import MainHeader from "./shared/components/nav/MainHeader";
-import AllCasesList from "./cases/pages/AllCasesList";
-import ApproveCaseList from "./cases/pages/ApproveCaseList";
-import EditCase from "./cases/pages/EditCase";
-import NewCase from "./cases/pages/NewCase";
-import Login from "./users/pages/Login";
-import UserCasesList from "./users/pages/UserCasesList";
-import UserPage from "./users/pages/UserPage";
-import ApproveCase from "./cases/pages/ApproveCase";
-import ApprovePage from "./cases/pages/ApprovePage";
-import AllCasesPage from "./cases/pages/AllCasesPage";
+// import AllCasesList from "./cases/pages/AllCasesList";
+// import ApproveCaseList from "./cases/pages/ApproveCaseList";
+// import EditCase from "./cases/pages/EditCase";
+// import NewCase from "./cases/pages/NewCase";
+// import Login from "./users/pages/Login";
+// import UserCasesList from "./users/pages/UserCasesList";
+// import UserPage from "./users/pages/UserPage";
+// import ApproveCase from "./cases/pages/ApproveCase";
+// import ApprovePage from "./cases/pages/ApprovePage";
+// import AllCasesPage from "./cases/pages/AllCasesPage";
 import "./App.css";
+
+const AllCasesList = React.lazy(() => import("./cases/pages/AllCasesList"));
+const ApproveCaseList = React.lazy(
+  () => import("./cases/pages/ApproveCaseList")
+);
+const EditCase = React.lazy(() => import("./cases/pages/EditCase"));
+const NewCase = React.lazy(() => import("./cases/pages/NewCase"));
+const Login = React.lazy(() => import("./users/pages/Login"));
+const UserCasesList = React.lazy(() => import("./users/pages/UserCasesList"));
+const UserPage = React.lazy(() => import("./users/pages/UserPage"));
+const ApproveCase = React.lazy(() => import("./cases/pages/ApproveCase"));
+const ApprovePage = React.lazy(() => import("./cases/pages/ApprovePage"));
+const AllCasesPage = React.lazy(() => import("./cases/pages/AllCasesPage"));
 
 const App = () => {
   const { token, login, logout, userId, username, isComite } = useAuth();
@@ -72,7 +87,17 @@ const App = () => {
     >
       <MainHeader />
       <Container className="mt-5">
-        <Routes>{routes}</Routes>
+        <Suspense
+          fallback={
+            <Row className="justify-content-center">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </Row>
+          }
+        >
+          <Routes>{routes}</Routes>
+        </Suspense>
       </Container>
     </AuthContext.Provider>
   );
