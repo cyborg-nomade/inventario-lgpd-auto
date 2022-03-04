@@ -4,7 +4,6 @@ import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 
-import { CONNSTR } from "../../App";
 import {
   emptyFullCaseObject,
   BaseFullCaseObject,
@@ -31,7 +30,7 @@ const ApproveCase = () => {
       console.log(token);
 
       const responseData = await sendRequest(
-        `${CONNSTR}/cases/${cid}`,
+        `${process.env.REACT_APP_CONNSTR}/cases/${cid}`,
         undefined,
         undefined,
         { Authorization: "Bearer " + token }
@@ -62,7 +61,7 @@ const ApproveCase = () => {
 
     try {
       await sendRequest(
-        `${CONNSTR}/cases/${cid}`,
+        `${process.env.REACT_APP_CONNSTR}/cases/${cid}`,
         "PUT",
         JSON.stringify(item),
         {

@@ -10,7 +10,6 @@ import Card from "react-bootstrap/Card";
 import Alert from "react-bootstrap/Alert";
 import Spinner from "react-bootstrap/Spinner";
 
-import { CONNSTR } from "./../../App";
 import { BaseUser, User } from "./../../shared/models/users.model";
 import { AuthContext } from "./../../shared/context/auth-context";
 import { useHttpClient } from "./../../shared/hooks/http-hook";
@@ -38,7 +37,7 @@ const Login = () => {
   const submitLoginHandler = async (user: BaseUser) => {
     try {
       const responseData = await sendRequest(
-        `${CONNSTR}/users/login`,
+        `${process.env.REACT_APP_CONNSTR}/users/login`,
         "POST",
         JSON.stringify(user),
         {
