@@ -3,7 +3,6 @@ import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import Row from "react-bootstrap/Row";
 
-import { CONNSTR } from "./../../App";
 import { CaseItemObject } from "../../shared/models/cases.model";
 import { AuthContext } from "../../shared/context/auth-context";
 import { useHttpClient } from "./../../shared/hooks/http-hook";
@@ -20,7 +19,7 @@ const AllCasesList = () => {
   useEffect(() => {
     const getAllCases = async () => {
       const responseData = await sendRequest(
-        `${CONNSTR}/cases/`,
+        `${process.env.REACT_APP_CONNSTR}/cases/`,
         undefined,
         undefined,
         { Authorization: "Bearer " + token }

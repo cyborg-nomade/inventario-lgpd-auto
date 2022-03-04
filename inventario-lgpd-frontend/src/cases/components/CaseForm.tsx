@@ -14,7 +14,6 @@ import Modal from "react-bootstrap/Modal";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 
-import { CONNSTR } from "../../App";
 import {
   emptyItemCategoriaDadosPessoais,
   emptyItemCategoriaTitulares,
@@ -628,7 +627,7 @@ const CaseForm = (props: {
 
     try {
       const responseData = await sendRequest(
-        `${CONNSTR}/cases/${itemId}`,
+        `${process.env.REACT_APP_CONNSTR}/cases/${itemId}`,
         "DELETE",
         undefined,
         {

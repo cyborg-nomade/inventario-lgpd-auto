@@ -5,12 +5,20 @@ import Nav from "react-bootstrap/Nav";
 
 import NavLinks from "./NavLinks";
 
+import logo from "../../assets/logo_cptm.png";
+
 const MainHeader = () => {
   return (
     <header>
       <Navbar bg="light" expand={"md"} collapseOnSelect>
         <Container fluid>
           <Navbar.Brand as={Link} to="/">
+            {/* <img
+              src={logo}
+              alt="logo-cptm"
+              width="30%"
+              className="d-inline-block align-top"
+            /> */}
             Inventário LGPD
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
